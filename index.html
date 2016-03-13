@@ -3,57 +3,209 @@
 <head>
   <meta charset="utf-8" />
   <title>A descriptive blogtitle</title>
-  <link media="all" href="/style.css" rel="stylesheet" />
   <link href="/favicon.ico" rel="shortcut icon" />
-    <link href="/sitemap.xml" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="/sitemap.xml" type="application/xml" rel="sitemap" title="Sitemap">
   <link href="/" rel="home start" />
   <link href="/atom/" type="application/atom+xml" rel="alternate" title="Atom Feed" />
   <link href="/rss/" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!-- Latest compiled and minified CSS -->
+<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 </head>
 <body>
+
   <header>
-    <h1><a href="/" rel="home start" class="blogtitle">A descriptive blogtitle</a></h1>
-    <nav>
-      <ul>
-        <li><a href="/" rel="home start">blog</a></li>
-        <li><a href="/atom/" rel="alternate">atom</a></li>
-        <li><a href="/rss/" rel="alternate">rss</a></li>
-        <li><a href="/articles/" rel="contents">articles</a></li>
-      </ul>
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <p class="navbar-text navbar-right">Elijah Caine</p>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Brand</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            
+               
+                <li><a href="/code/">code</a></li>
+              
+            
+               
+                <li><a href="/reading/">reading</a></li>
+              
+            
+               
+                <li><a href="/writing/">writing</a></li>
+              
+            
+          </ul>
+        </div>
+      </div>
     </nav>
   </header>
     
         <article>
     <header>
-        <time datetime="2012-03-31">31.03.2012, 14:02</time>
+        <time datetime="2016-02-15">15.02.2016, 00:00</time>
         <h1>
-            <a href="/post/die-verwandlung/" rel="bookmark canonical">Die Verwandlung</a>
+            <a href="/post/running-firefox-in-docker/" rel="bookmark canonical">Running Firefox in Docker</a>
         </h1>
     </header>
-    <p>Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in
-seinem Bett zu einem unge&shy;heueren Ungeziefer verwandelt. Er lag auf seinem
-panz&shy;er&shy;ar&shy;tig harten Rücken und sah, wenn er den Kopf ein wenig hob, seinen
-gewölbten, braunen, von bo&shy;gen&shy;för&shy;mi&shy;gen Ver&shy;stei&shy;fun&shy;gen geteilten Bauch, auf
-dessen Höhe sich die Bettdecke, zum gänzlichen Nieder&shy;gleit&shy;en bereit, kaum noch
-erhalten konnte. Seine vielen, im Vergleich zu seinem sonstigen Umfang
-kläglich dünnen Beine flimmerten ihm hilflos vor den Augen.</p>
-<p>»Was ist mit mir geschehen?« dachte er. Es war kein Traum, sein Zimmer, ein
-richtiges, nur etwas zu kleines Men&shy;schen&shy;z&shy;im&shy;mer, lag ruhig zwischen den vier
-wohlbekan&shy;nten Wänden, über dem Tisch, auf dem eine au&shy;seinan&shy;dergepack&shy;te
-Musterkollek&shy;tion <span>&#8230;<a href="/post/die-verwandlung/" class="continue">continue</a>.</span></p>
+    <p>Turns out you can run Firefox in Docker. It's actually pretty easy:</p>
+<div class="section" id="code">
+<h2>Code</h2>
+<p><strong>From</strong> <a class="reference external" href="https://gist.github.com/ElijahCaine/29e7e829341d58abe370">my github gist</a>.</p>
+<script src="https://gist.github.com/ElijahCaine/29e7e829341d58abe370.js"></script><p>In&shy;stal&shy;la&shy;tion in&shy;struc&shy;tions (on Linux):</p>
+
+<pre class="brush: text">
+# install docker and start the docker daemon
+$ git clone https://gist.github.com/29e7e829341d58abe370.git docker-firefox
+$ ln docker-firefox/ff-docker /some/path/for/binaries
+$ ff-docker -b  # -b pulls & builds container, etc used for first time startup.
+</pre>
+
+</div>
+<div class="section" id="notes">
+<h2>Notes</h2>
+<p>I attempted to use <a class="reference external" href="http://alpinelinux.org/">Alpine Linux</a> as a proof-of-usability, since it's the hip
+new kid on the con&shy;tainer&shy;iza&shy;tion block <a class="footnote-reference" href="/post/running-firefox-in-docker/#id3" id="id1">[1]</a>, but as it turns out Alpine's
+Firefox package is pretty fucked <a class="footnote-reference" href="/post/running-firefox-in-docker/#id4" id="id2">[2]</a>.</p>
+<p>I use <a class="reference external" href="https://wiki.archlinux.org/index.php/Dmenu">dmenu</a>, this means I can run <tt class="docutils literal"><span class="pre">ff-docker</span></tt> from my desktop without
+opening a terminal, ef&shy;fec&shy;tive&shy;ly making it a super-private-yet-convenient
+drop-in for Firefox.  Pretty neat <span>&#8230;<a href="/post/running-firefox-in-docker/" class="continue">continue</a>.</span></p></div>
     <footer>
         
         
-            <p>tagged as
-                <a href="/tag/franz-kafka/" rel="tag">Franz Kafka</a>
-                    and
-                    
-                <a href="/tag/die-verwandlung/" rel="tag">Die Verwandlung</a>
-                
-            </p>
+            <p>untagged</p>
+        
+    </footer>
+    <div class="comments"></div>
+</article>
+    
+        <article>
+    <header>
+        <time datetime="2015-10-22">22.10.2015, 00:00</time>
+        <h1>
+            <a href="/post/induction/" rel="bookmark canonical">Induction</a>
+        </h1>
+    </header>
+    <span title="∴ Profit"><div class="figure align-center">
+
+</div>
+</span>
+    <footer>
+        
+        
+            <p>untagged</p>
+        
+    </footer>
+    <div class="comments"></div>
+</article>
+    
+        <article>
+    <header>
+        <time datetime="2015-10-12">12.10.2015, 00:00</time>
+        <h1>
+            <a href="/post/cat-barcamp-2015/" rel="bookmark canonical">Cat Barcamp 2015</a>
+        </h1>
+    </header>
+    <p>This weekend I went to <a class="reference external" href="http://catbarcamp.org/">Cat Barcamp 2015</a>, an un&shy;con&shy;fer&shy;ence run by the PSU
+<a class="reference external" href="http://cat.pdx.edu/">Computer Action Team</a>. I went to some awesome talks (and gave one myself).</p>
+<p>I enjoyed every talk I went to. Here they are in order:</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt><strong>History of Cryp&shy;tog&shy;ra&shy;phy.</strong></dt>
+<dd><p class="first last">This was given by one of my OSL co-workers. It didn't contain a ton of new
+in&shy;for&shy;ma&shy;tion for me, but was delivered very well and focused on different
+types of cryp&shy;tog&shy;ra&shy;phy and the context in which each one was developed. I
+enjoyed it.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Haskell on Steroids.</strong></dt>
+<dd><p class="first last">I kinda checked out during this talk because I wanted to write my slides...
+Wooops. It looked very in&shy;ter&shy;est&shy;ing and mathey though...</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>In&shy;tro&shy;duc&shy;tion <span>&#8230;<a href="/post/cat-barcamp-2015/" class="continue">continue</a>.</span></strong></dt></dl></li></ol>
+    <footer>
+        
+        
+            <p>untagged</p>
+        
+    </footer>
+    <div class="comments"></div>
+</article>
+    
+        <article>
+    <header>
+        <time datetime="2015-10-07">07.10.2015, 00:00</time>
+        <h1>
+            <a href="/post/covertly-installing-packages-with-docker/" rel="bookmark canonical">Covertly Installing Packages with Docker</a>
+        </h1>
+    </header>
+    <p><a class="reference external" href="/post/covertly-installing-packages-with-docker/#the-deets-dockerfile-and-commands">Jump to the codey bits</a></p>
+<div class="section" id="the-problem-workstations">
+<h2>The Problem: Work&shy;sta&shy;tions</h2>
+<p>At the OSL I use work&shy;sta&shy;tions which are pro&shy;vi&shy;sioned by <a class="reference external" href="https://en.wikipedia.org/wiki/Chef_%28software%29">Chef</a> to look more or
+less identical (packages are the same and global config files are consistent
+from machine to machine). This is nice because it allows everybody at the lab
+to jump from work&shy;sta&shy;tion to work&shy;sta&shy;tion without dreading the inevitable setup
+that usually comes with going to a new computer.</p>
+<p>The only downside here is that to install a package you have to make a pull
+request to a GitHub Repository in which you modify a JSON file. This is almost
+always for my own good, but as a dev <span>&#8230;<a href="/post/covertly-installing-packages-with-docker/" class="continue">continue</a>.</span></p></div>
+    <footer>
+        
+        
+            <p>untagged</p>
+        
+    </footer>
+    <div class="comments"></div>
+</article>
+    
+        <article>
+    <header>
+        <time datetime="2015-09-21">21.09.2015, 00:00</time>
+        <h1>
+            <a href="/post/how-to-possibly-kinda-sorta-write-a-travelblog/" rel="bookmark canonical">How To Possibly Kinda Sorta Write a Travelblog</a>
+        </h1>
+    </header>
+    <p><strong>First thing's First: I went on a trip and wrote a travelblog.</strong></p>
+<blockquote>
+<p><strong>For a link to that travelblog itself check out</strong> <a class="reference external" href="http://elijahcaine.me/eurotrip-2015">eli&shy;jah&shy;caine.me/eurotrip-2015</a></p>
+<p><strong>This post is _about_ that travelblog.</strong></p>
+</blockquote>
+<p>I went on a whirlwind two week trip to Europe; first to Amsterdam ('because
+Amsterdam' seems like a reasonable jus&shy;ti&shy;fi&shy;ca&shy;tion for doing this according to
+most people) and second to Prague to speak at the <a class="reference external" href="http://www.writethedocs.org/conf/eu/2015/schedule/">European Write the Docs
+conference</a>.</p>
+<p>I've traveled before and I wanted to avoid the inevitable that tends to happen:</p>
+<ol class="arabic simple">
+<li>I go on a trip.</li>
+<li>Have a wonderful time and make lots of memories.</li>
+<li>Get back from trip.</li>
+<li>Get asked &quot;Tell me about your trip!&quot;</li>
+<li>Forget everything that happened on <span>&#8230;<a href="/post/how-to-possibly-kinda-sorta-write-a-travelblog/" class="continue">continue</a>.</span></li></ol>
+    <footer>
+        
+        
+            <p>untagged</p>
         
     </footer>
     <div class="comments"></div>
@@ -63,14 +215,8 @@ Musterkollek&shy;tion <span>&#8230;<a href="/post/die-verwandlung/" class="conti
     
 <footer>
     
-    
     <p>written by <a href="mailto:elijahcainemv@gmail.com">Elijah Caine</a></p>
-    <a href="http://creativecommons.org/licenses/by-nc-sa/2.0/de/" rel="copyright license">
-        <img src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" alt="by-nc-sa" />
-    </a>
     
-    
-
   </footer>
 </body>
 </html>

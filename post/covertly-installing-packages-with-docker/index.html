@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Covertly Installing Packages with Docker</title>
+  <link href="/favicon.ico" rel="shortcut icon" />
+  <link href="/sitemap.xml" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="/" rel="home start" />
+  <link href="/atom/" type="application/atom+xml" rel="alternate" title="Atom Feed" />
+  <link href="/rss/" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!-- Latest compiled and minified CSS -->
+<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+    <meta name="description" content="`Jump to the codey bits`_
+
+.. _Jump to the codey b..." />
+    <meta name="keywords" content="" />
+</head>
+<body>
+
+  <header>
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <p class="navbar-text navbar-right">Elijah Caine</p>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Brand</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            
+               
+                <li><a href="/code/">code</a></li>
+              
+            
+               
+                <li><a href="/reading/">reading</a></li>
+              
+            
+               
+                <li><a href="/writing/">writing</a></li>
+              
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+    
+        <article>
+    <header>
+        <time datetime="2015-10-07">07.10.2015, 00:00</time>
+        <h1>
+            <a href="/post/covertly-installing-packages-with-docker/" rel="bookmark canonical">Covertly Installing Packages with Docker</a>
+        </h1>
+    </header>
+    <p><a class="reference external" href="#the-deets-dockerfile-and-commands">Jump to the codey bits</a></p>
+<div class="section" id="the-problem-workstations">
+<h2>The Problem: Work&shy;sta&shy;tions</h2>
+<p>At the OSL I use work&shy;sta&shy;tions which are pro&shy;vi&shy;sioned by <a class="reference external" href="https://en.wikipedia.org/wiki/Chef_%28software%29">Chef</a> to look more or
+less identical (packages are the same and global config files are consistent
+from machine to machine). This is nice because it allows everybody at the lab
+to jump from work&shy;sta&shy;tion to work&shy;sta&shy;tion without dreading the inevitable setup
+that usually comes with going to a new computer.</p>
+<p>The only downside here is that to install a package you have to make a pull
+request to a GitHub Repository in which you modify a JSON file. This is almost
+always for my own good, but as a dev I am prone to avoiding things that the
+admins say are good for me (like broccoli, milk, and consistent work&shy;sta&shy;tion
+en&shy;vi&shy;ron&shy;ments).</p>
+<p>For instance, yesterday I wanted to use <a class="reference external" href="http://rg3.github.io/youtube-dl/">youtube-dl</a> to grab a video I was
+watching on repeat*. I could have made a pull request to add the package,
+waited until 30 after for the work&shy;sta&shy;tions to refresh, used the package, and
+went about my day. This would have been the correct and bu&shy;reau&shy;crat&shy;ic way to do
+things.</p>
+<p>I <em>could</em> have, and probably <em>should</em> have, done that... but I didn't.</p>
+<p>* firefox kept crashing, I wasn't just stealing music for the sake of it.</p>
+</div>
+<div class="section" id="enter-docker">
+<h2>Enter: Docker</h2>
+<p>In this case the solution to the 'problem' was <a class="reference external" href="https://en.wikipedia.org/wiki/Docker_%28software%29">Docker</a>. I wrote a Dockerfile
+which pro&shy;vi&shy;sioned a container to have <tt class="docutils literal"><span class="pre">youtube-dl</span></tt> installed, spun up the
+container with a shared directory (<tt class="docutils literal"><span class="pre">$PWD:/home/</span></tt>), and executed the
+youtube-dl command. The .mp4 video was downloaded to my current working
+directory and I was able to play it with my media player of choice, all without
+installing <tt class="docutils literal"><span class="pre">youtube-dl</span></tt> locally.</p>
+</div>
+<div class="section" id="the-deets-dockerfile-and-commands">
+<h2>The Deets: Dockerfile and Commands</h2>
+<p><tt class="docutils literal">Dockerfile</tt></p>
+<pre class="code literal-block">
+FROM ubuntu:latest
+
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get -y install python-pip
+RUN pip install youtube-dl
+
+WORKDIR /home
+RUN alias youtube-dl='/usr/local/bin/youtube-dl'
+</pre>
+<p>If you are in the directory containing the above Dockerfile, build the
+container with:</p>
+<pre class="code literal-block">
+$ docker build -t yt-dl .
+</pre>
+<p>and run it with:</p>
+<pre class="code literal-block">
+$ docker run -v $PWD:/home/ yt-dl youtube-dl &lt;YOUTUBE-VID-URL&gt;
+</pre>
+<p>This will download any url's video into the current working directory.</p>
+</div>
+<div class="section" id="pro-tip-add-an-alias">
+<h2>Pro-Tip: Add an <tt class="docutils literal">Alias</tt></h2>
+<p>Add the following content to your <tt class="docutils literal"><span class="pre">~/.bashrc</span></tt> file and then run <tt class="docutils literal">source
+<span class="pre">~/.bashrc</span></tt> to get rid the of long Docker bits of the above command.</p>
+<pre class="code literal-block">
+export $VID_DIR=/path/to/downloaded/videos/
+alias yt-dl='docker run -v $VID_DIR:/home/ yt-dl youtube-dl'
+</pre>
+</div>
+<div class="section" id="wait-this-is-overly-complicated">
+<h2>Wait This is Overly Com&shy;pli&shy;cat&shy;ed</h2>
+<p>You're probably thinking: &quot;Hey, couldn't you have just run <tt class="docutils literal">pip install <span class="pre">--user</span>
+<span class="pre">youtube-dl</span></tt>?</p>
+<p>Yes. I could have. But that wouldn't be fun and wouldn't have given me an
+excuse to write a blog, post now would it Ms. Smarty Pantz.</p>
+<hr class="docutils"/>
+<p><strong>drink the coolaid. come to the docker side.</strong></p>
+</div>
+
+    <footer>
+        
+        
+            <p>untagged</p>
+        
+    </footer>
+    <div class="comments"></div>
+</article>
+    
+    
+        <a href="/post/how-to-possibly-kinda-sorta-write-a-travelblog//" class="page floatright">
+        How To Possibly Kinda Sorta Write a Travelblog &raquo;
+        </a>
+    
+    
+        <a href="/post/cat-barcamp-2015//" class="page floatleft">
+        &laquo; Cat Barcamp 2015
+        </a>
+<footer>
+    
+    <p>written by <a href="mailto:elijahcainemv@gmail.com">Elijah Caine</a></p>
+    
+  </footer>
+</body>
+</html>

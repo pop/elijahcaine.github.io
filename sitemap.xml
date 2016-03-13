@@ -1,39 +1,71 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://elijahcaine.me/tag/die-verwandlung/</loc>
-    <lastmod>2016-03-12</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>http://elijahcaine.me/rss/</loc>
-    <lastmod>2016-03-12</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>http://elijahcaine.me/tag/franz-kafka/</loc>
-    <lastmod>2016-03-12</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>http://elijahcaine.me/</loc>
-    <lastmod>2016-03-12</lastmod>
+    <lastmod>2016-03-13</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>http://elijahcaine.me/atom/</loc>
-    <lastmod>2016-03-12</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>http://elijahcaine.me/post/die-verwandlung/</loc>
-    <lastmod>2016-03-12</lastmod>
+    <loc>http://elijahcaine.me/post/covertly-installing-packages-with-docker/</loc>
+    <lastmod>2016-03-13</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://elijahcaine.me/articles/</loc>
-    <lastmod>2016-03-12</lastmod>
+    <loc>http://elijahcaine.me/post/cat-barcamp-2015/</loc>
+    <lastmod>2016-03-13</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/rss/</loc>
+    <lastmod>2016-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/post/running-firefox-in-docker/</loc>
+    <lastmod>2016-03-13</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/post/how-to-possibly-kinda-sorta-write-a-travelblog/</loc>
+    <lastmod>2016-03-13</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/atom/</loc>
+    <lastmod>2016-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/writing/</loc>
+    <lastmod>2016-03-13</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/code/</loc>
+    <lastmod>2016-03-13</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/reading/</loc>
+    <lastmod>2016-03-13</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/post/induction/</loc>
+    <lastmod>2016-03-13</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/posts/</loc>
+    <lastmod>2016-03-13</lastmod>
     <changefreq>weekly</changefreq>
   </url>
 </urlset>

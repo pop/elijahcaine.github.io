@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>How To Possibly Kinda Sorta Write a Travelblog</title>
+  <link href="/favicon.ico" rel="shortcut icon" />
+  <link href="/sitemap.xml" type="application/xml" rel="sitemap" title="Sitemap">
+  <link href="/" rel="home start" />
+  <link href="/atom/" type="application/atom+xml" rel="alternate" title="Atom Feed" />
+  <link href="/rss/" type="application/rss+xml" rel="alternate" title="RSS Feed" />
+  <!-- Latest compiled and minified CSS -->
+<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+    <meta name="description" content="**First thing&#39;s First: I went on a trip and wrote..." />
+    <meta name="keywords" content="" />
+</head>
+<body>
+
+  <header>
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <p class="navbar-text navbar-right">Elijah Caine</p>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Brand</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            
+               
+                <li><a href="/code/">code</a></li>
+              
+            
+               
+                <li><a href="/reading/">reading</a></li>
+              
+            
+               
+                <li><a href="/writing/">writing</a></li>
+              
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+    
+        <article>
+    <header>
+        <time datetime="2015-09-21">21.09.2015, 00:00</time>
+        <h1>
+            <a href="/post/how-to-possibly-kinda-sorta-write-a-travelblog/" rel="bookmark canonical">How To Possibly Kinda Sorta Write a Travelblog</a>
+        </h1>
+    </header>
+    <p><strong>First thing's First: I went on a trip and wrote a travelblog.</strong></p>
+<blockquote>
+<p><strong>For a link to that travelblog itself check out</strong> <a class="reference external" href="http://elijahcaine.me/eurotrip-2015">eli&shy;jah&shy;caine.me/eurotrip-2015</a></p>
+<p><strong>This post is _about_ that travelblog.</strong></p>
+</blockquote>
+<p>I went on a whirlwind two week trip to Europe; first to Amsterdam ('because
+Amsterdam' seems like a reasonable jus&shy;ti&shy;fi&shy;ca&shy;tion for doing this according to
+most people) and second to Prague to speak at the <a class="reference external" href="http://www.writethedocs.org/conf/eu/2015/schedule/">European Write the Docs
+conference</a>.</p>
+<p>I've traveled before and I wanted to avoid the inevitable that tends to happen:</p>
+<ol class="arabic simple">
+<li>I go on a trip.</li>
+<li>Have a wonderful time and make lots of memories.</li>
+<li>Get back from trip.</li>
+<li>Get asked &quot;Tell me about your trip!&quot;</li>
+<li>Forget everything that happened on the trip and sum it up with 'It was
+great.'</li>
+</ol>
+<p>To combat this seemingly inevitable outcome I decided to write a blog about
+<strong>this</strong> trip as the trip was happening. Similar to how some might make daily
+Facebook posts or Tweets, I could use this as a way to not only spend time each
+day processing what happened but I could also refer friends and family to the
+blog's url so they could follow along vic&shy;ar&shy;i&shy;ous&shy;ly if they chose. I wanted to
+make a website where I updated the world on my where&shy;abouts and shenani&shy;gans.</p>
+<p>And so I did.</p>
+<div class="section" id="the-technical-parts">
+<h2>The Technical Parts</h2>
+<p>I'm an engineer. Like many engineers I like to tinker and build things.</p>
+<p>A while ago I built a tool called <a class="reference external" href="https://github.com/elijahcaine/pageup#pageup-init-pageup-build">PageUp</a>; it takes a <a class="reference external" href="https://en.wikipedia.org/wiki/ReStructuredText">re&shy;Struc&shy;tured&shy;Text</a>
+formatted <a class="reference external" href="https://en.wikipedia.org/wiki/Markup_language">markup file</a>, an <a class="reference external" href="https://en.wikipedia.org/wiki/Web_template_system">html template</a>, as well as some other files that
+make the web go 'round and look half-way decent.</p>
+<p>Using that tool (PageUp) I created a blog that I could update from my phone
+using <a class="reference external" href="https://gist.github.com/ElijahCaine/352cb120743af2dde7c8">a Github Gist</a> and a slick <a class="reference external" href="http://www.git-scm.com/">Git Source Control</a> program for my phone.
+I could write a re&shy;Struc&shy;tured&shy;Text formatted blog post, sync it to the web, have
+my personal server pull the updated version of the <a class="reference external" href="https://gist.github.com/ElijahCaine/352cb120743af2dde7c8">git repository</a>, and
+au&shy;to&shy;mat&shy;i&shy;cal&shy;ly rebuild the website.</p>
+</div>
+<div class="section" id="the-writing-parts">
+<h2>The Writing Parts</h2>
+<p>Updates were sur&shy;pris&shy;ing&shy;ly painless-- and I'm not just saying that to sell
+PageUp, I'm honestly just impressed that I made something which actually made
+my life easier. Feels good.</p>
+<p>I wasn't as consistent with writing posts as I had envisioned. I wrote posts
+the day after the events occurred, which wasn't too bad, until I went to Write
+the Docs got completely torn away from my rigorous 'Drink Coffee, Write
+Blogpost, Adventure' regimen; I kept getting distracted by meeting new people
+and so&shy;cial&shy;iz&shy;ing. Ugh, the worst.</p>
+</div>
+<div class="section" id="thoughts-and-conclusions">
+<h2>Thoughts and Con&shy;clu&shy;sions</h2>
+<p>All in all I suspect I'll continue doing liveblogs when I go to events, it's a
+great way to share the experience with others and augment one's memory with a
+written record of the time you spent.</p>
+<p>Plus it's just fun an nerdy to write scripts and programs to make this whole
+experience as user friendly as possible. If I poured even more time into this
+it could even be a startup...</p>
+</div>
+
+    <footer>
+        
+        
+            <p>untagged</p>
+        
+    </footer>
+    <div class="comments"></div>
+</article>
+    
+    
+    
+        <a href="/post/covertly-installing-packages-with-docker//" class="page floatleft">
+        &laquo; Covertly Installing Packages with Docker
+        </a>
+<footer>
+    
+    <p>written by <a href="mailto:elijahcainemv@gmail.com">Elijah Caine</a></p>
+    
+  </footer>
+</body>
+</html>
