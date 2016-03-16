@@ -3,78 +3,38 @@
 <head>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css>
-<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js ></script>
-<style>
-.main {
-  margin: 0 auto;
-  width: 95%;
-  max-width: 1000px;
-}
-nav {
-  padding-top: 1em;
-  width: 100%;
-}
-footer {
-  margin-top: 1em;
-  margin-bottom: 1em;
-  border-top: .1em solid;
-}
-.banner {
-  margin: 0 0 0 0;
-}
-.banner img {
-  width: 100%;
-  position: relative;
-  z-index: -1;
-}
-.banner h1 {
-  position: absolute;
-  z-index: 1;
-  color: white;
-  opacity: 0.75;
-  font-size: 3em;
-}
-.banner:hover h1 {
-  position: absolute;
-  z-index: 1;
-  color: white;
-  opacity: 1;
-  font-size: 3em;
-}
-.my-buttons {
-  padding-right: 1em;
-}
-</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js "></script>
+<link rel="stylesheet" href="/style.css">
 </head>
 </body>
   <div class="main">
-    <a href="#">
+    <a href="/">
     <div class="banner">
-      <h1 class="banner">Elijah C. Voigt</h1>
+      <h1 class="banner">elijah caine</h1>
       <img src="https://farm6.staticflickr.com/5813/20476814090_97752519fb_o.jpg" class="banner"></img>
     </div>
     </a>
     <nav>
       <div class="dropdown navbar-right my-buttons">
         <div class="btn-group">
-          <button type="button" class="btn btn-default">Main</button>
-          <button type="button" class="btn btn-info">Blog</button>
+          <a href="/" class="btn btn-default">main</a>
+          <a href="/blog" class="btn btn-info">blog</a>
           <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             More
           <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
-            <li><a  href="#">Reading</a></li>
-            <li><a  href="#">Liveblog</a></li>
-            <li><a  href="#">NaNoWriMo</a></li>
+            <li><a href="#">reading</a></li>
+            <li><a href="#">liveblog</a></li>
+            <li><a href="#">naNoWriMo</a></li>
+            <li role="separator"  class="divider"></li>
+            <li><a href="#">code</a></li>
+            <li><a href="#">video</a></li>
+            <li><a href="#">render</a></li>
             <li  role="separator"  class="divider"></li>
-            <li><a  href="#">Code</a></li>
-            <li><a  href="#">Video</a></li>
-            <li><a  href="#">Render</a></li>
-            <li  role="separator"  class="divider"></li>
-            <li><a  href="#">Open  Soruce  Lab</a></li>
-            <li><a  href="#">Linux  Users  Group</a></li>
+            <li><a href="#">open  soruce  lab</a></li>
+            <li><a href="#">linux  users  group</a></li>
           </ul>
         </div>
         <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuLinks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -82,25 +42,82 @@ footer {
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLinks">
-          <li><a href="#">Github</a></li>
+          <li><a href="https://github.com/ElijahCaine">Github</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Resume</a></li>
+          <li><a href="/resume.pdf">Resume</a></li>
         </ul>
       </div>
       <ol class="breadcrumb">
-        <li><a href="#">Elijah C.</a></li>
-        <li class="active">Main</li>
+        
+    
+        <li><a href="/">elijahcaine.me</a></li>
+        
+    <li><a href="/blog">blog</a></li>
+    <li class="active"><a href="/blog/running-firefox-in-docker/">running-firefox-in-docker</a></li>
+
       </ol>
     </nav>
 
     
-  post
+  <article>
+    <div class="section" id="running-firefox-in-docker">
+<h2>Running Firefox in Docker</h2>
+<p>Turns out you can run Firefox in Docker. It's actually pretty easy:</p>
+<div class="section" id="code">
+<h3>Code</h3>
+<p><strong>From</strong> <a class="reference external" href="https://gist.github.com/ElijahCaine/29e7e829341d58abe370">my github gist</a>.</p>
+<script src="https://gist.github.com/ElijahCaine/29e7e829341d58abe370.js"></script><p>In&shy;stal&shy;la&shy;tion in&shy;struc&shy;tions (on Linux):</p>
+
+<pre class="brush: text">
+# install docker and start the docker daemon
+$ git clone https://gist.github.com/29e7e829341d58abe370.git docker-firefox
+$ ln docker-firefox/ff-docker /some/path/for/binaries
+$ ff-docker -b  # -b pulls & builds container, etc used for first time startup.
+</pre>
+
+</div>
+<div class="section" id="notes">
+<h3>Notes</h3>
+<p>I attempted to use <a class="reference external" href="http://alpinelinux.org/">Alpine Linux</a> as a proof-of-usability, since it's the hip
+new kid on the con&shy;tainer&shy;iza&shy;tion block <a class="footnote-reference" href="#id3" id="id1">[1]</a>, but as it turns out Alpine's
+Firefox package is pretty fucked <a class="footnote-reference" href="#id4" id="id2">[2]</a>.</p>
+<p>I use <a class="reference external" href="https://wiki.archlinux.org/index.php/Dmenu">dmenu</a>, this means I can run <tt class="docutils literal"><span class="pre">ff-docker</span></tt> from my desktop without
+opening a terminal, ef&shy;fec&shy;tive&shy;ly making it a super-private-yet-convenient
+drop-in for Firefox.  Pretty neat right?</p>
+</div>
+<div class="section" id="conclusion">
+<h3>Conclusion</h3>
+<p>This was pretty simple but effective in terms of giving me the option to have
+more privacy. I can see it being extended to add even more security; e.g.,
+routing all of the traffic in the container through a VPN would be easy enough.
+Food for thought [citation needed].</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label"/><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>5mb containers sounds pretty nice to me.
+<a class="reference external" href="http://gliderlabs.viewdocs.io/docker-alpine/">http://gliderlabs.viewdocs.io/docker-alpine/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label"/><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>I get a segfault every time I try to start Firefox. More info here:
+<a class="reference external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11">https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+  </article>
 
 
     <footer>
       
-      Written by Me |
+  This page last updated on <time datetime="2015-03-05">2015-03-05</time> |
+  
+      Written by Me | Photo Credit to <a href="https://www.flickr.com/photos/123432654@N05/">Sam Hall</a>
       
+
     </footer>
   </div>
 <body>
