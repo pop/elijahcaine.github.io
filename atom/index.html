@@ -1,105 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
     <author>
-        <name>Elijah Caine</name>
-        <uri>http://elijahcaine.me/</uri>
-        <email>elijahcainemv@gmail.com</email>
+        <name>Anonymous</name>
+        <uri>http://example.com/</uri>
+        <email>mail@example.com</email>
     </author>
-    <title>A descriptive blogtitle</title>
-    <id>tag:elijahcaine.me,2011-06-11:/atom/</id>
-    <link rel="alternate" type="text/html" href="http://elijahcaine.me/" />
-    <link rel="self" type="application/atom+xml" href="http://elijahcaine.me/atom/" />
-    <icon>http://elijahcaine.me/favicon.ico</icon>
-    <logo>http://elijahcaine.me/feed-logo.png</logo>
-    <updated>2016-02-15T08:00:00Z</updated>
+    <title>A descriptive blog title</title>
+    <id>tag:example.com,2011-06-11:/atom/</id>
+    <link rel="alternate" type="text/html" href="http://example.com/" />
+    <link rel="self" type="application/atom+xml" href="http://example.com/atom/" />
+    <icon>http://example.com/favicon.ico</icon>
+    <logo>http://example.com/feed-logo.png</logo>
+    <updated>2015-10-22T07:00:00Z</updated>
     <generator uri="https://github.com/posativ/acrylamid/" version="0.7.10">acrylamid</generator>
         <entry>
-        <title>Running Firefox in Docker</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/post/running-firefox-in-docker/" />
-        <id>tag:elijahcaine.me,2016-02-15:/post/running-firefox-in-docker</id>
-        <updated>2016-02-15T08:00:00Z</updated>
+        <title>induction</title>
+        <link rel="alternate" type="text/html" href="http://example.com/blog/induction/" />
+        <id>tag:example.com,2015-10-22:/blog/induction</id>
+        <updated>2015-10-22T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fbbed042720>" />
         
         <author>
-            <name>Elijah Caine</name>
-            <uri>http://elijahcaine.me/</uri>
-            <email>elijahcainemv@gmail.com</email>
+            <name>Anonymous</name>
+            <uri>http://example.com/</uri>
+            <email>mail@example.com</email>
         </author>
-        <content type="html">&lt;p&gt;Turns out you can run Firefox in Docker. It&#39;s actually pretty easy:&lt;/p&gt;
-&lt;div class=&#34;section&#34; id=&#34;code&#34;&gt;
-&lt;h3&gt;Code&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;From&lt;/strong&gt; &lt;a class=&#34;reference external&#34; href=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370&#34;&gt;my github gist&lt;/a&gt;.&lt;/p&gt;
-&lt;script src=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370.js&#34;&gt;&lt;/script&gt;&lt;p&gt;Installation instructions (on Linux):&lt;/p&gt;
-
-&lt;pre class=&#34;brush: text&#34;&gt;
-# install docker and start the docker daemon
-$ git clone https://gist.github.com/29e7e829341d58abe370.git docker-firefox
-$ ln docker-firefox/ff-docker /some/path/for/binaries
-$ ff-docker -b  # -b pulls &amp; builds container, etc used for first time startup.
-&lt;/pre&gt;
-
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;induction&#34;&gt;
+&lt;h3&gt;Induction&lt;/h3&gt;
+&lt;span title=&#34;∴ Profit&#34;&gt;&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;/static/comics/induction.png&#34; src=&#34;http://example.com/static/comics/induction.png&#34;/&gt;
 &lt;/div&gt;
-&lt;div class=&#34;section&#34; id=&#34;notes&#34;&gt;
-&lt;h3&gt;Notes&lt;/h3&gt;
-&lt;p&gt;I attempted to use &lt;a class=&#34;reference external&#34; href=&#34;http://alpinelinux.org/&#34;&gt;Alpine Linux&lt;/a&gt; as a proof-of-usability, since it&#39;s the hip
-new kid on the containerization block &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/post/running-firefox-in-docker/#id3&#34; id=&#34;id1&#34;&gt;[1]&lt;/a&gt;, but as it turns out Alpine&#39;s
-Firefox package is pretty fucked &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/post/running-firefox-in-docker/#id4&#34; id=&#34;id2&#34;&gt;[2]&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I use &lt;a class=&#34;reference external&#34; href=&#34;https://wiki.archlinux.org/index.php/Dmenu&#34;&gt;dmenu&lt;/a&gt;, this means I can run &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;ff-docker&lt;/span&gt;&lt;/tt&gt; from my desktop without
-opening a terminal, effectively making it a super-private-yet-convenient
-drop-in for Firefox.  Pretty neat right?&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section&#34; id=&#34;conclusion&#34;&gt;
-&lt;h3&gt;Conclusion&lt;/h3&gt;
-&lt;p&gt;This was pretty simple but effective in terms of giving me the option to have
-more privacy. I can see it being extended to add even more security; e.g.,
-routing all of the traffic in the container through a VPN would be easy enough.
-Food for thought [citation needed].&lt;/p&gt;
-&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id3&#34; rules=&#34;none&#34;&gt;
-&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
-&lt;tbody valign=&#34;top&#34;&gt;
-&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/post/running-firefox-in-docker/#id1&#34;&gt;[1]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;5mb containers sounds pretty nice to me.
-&lt;a class=&#34;reference external&#34; href=&#34;http://gliderlabs.viewdocs.io/docker-alpine/&#34;&gt;http://gliderlabs.viewdocs.io/docker-alpine/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id4&#34; rules=&#34;none&#34;&gt;
-&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
-&lt;tbody valign=&#34;top&#34;&gt;
-&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/post/running-firefox-in-docker/#id2&#34;&gt;[2]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;I get a segfault every time I try to start Firefox. More info here:
-&lt;a class=&#34;reference external&#34; href=&#34;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&#34;&gt;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/div&gt;
 </content>
     </entry>
     
         <entry>
-        <title>Induction</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/post/induction/" />
-        <id>tag:elijahcaine.me,2015-10-22:/post/induction</id>
-        <updated>2015-10-22T08:00:00Z</updated>
-        
-        <author>
-            <name>Elijah Caine</name>
-            <uri>http://elijahcaine.me/</uri>
-            <email>elijahcainemv@gmail.com</email>
-        </author>
-        <content type="html">&lt;span title=&#34;∴ Profit&#34;&gt;&lt;div class=&#34;figure align-center&#34;&gt;
-&lt;img alt=&#34;/static/comics/induction.png&#34; src=&#34;http://elijahcaine.me/static/comics/induction.png&#34;/&gt;
-&lt;/div&gt;
-&lt;/span&gt;</content>
-    </entry>
-    
-        <entry>
         <title>Cat Barcamp 2015</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/post/cat-barcamp-2015/" />
-        <id>tag:elijahcaine.me,2015-10-12:/post/cat-barcamp-2015</id>
-        <updated>2015-10-12T08:00:00Z</updated>
+        <link rel="alternate" type="text/html" href="http://example.com/blog/cat-barcamp-2015/" />
+        <id>tag:example.com,2015-10-12:/blog/cat-barcamp-2015</id>
+        <updated>2015-10-12T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fbbed042b10>" />
         
         <author>
-            <name>Elijah Caine</name>
-            <uri>http://elijahcaine.me/</uri>
-            <email>elijahcainemv@gmail.com</email>
+            <name>Anonymous</name>
+            <uri>http://example.com/</uri>
+            <email>mail@example.com</email>
         </author>
-        <content type="html">&lt;p&gt;This weekend I went to &lt;a class=&#34;reference external&#34; href=&#34;http://catbarcamp.org/&#34;&gt;Cat Barcamp 2015&lt;/a&gt;, an unconference run by the PSU
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;catbarcamp-2015&#34;&gt;
+&lt;h3&gt;CatBarcamp 2015&lt;/h3&gt;
+&lt;p&gt;This weekend I went to &lt;a class=&#34;reference external&#34; href=&#34;http://catbarcamp.org/&#34;&gt;Cat Barcamp 2015&lt;/a&gt;, an unconference run by the PSU
 &lt;a class=&#34;reference external&#34; href=&#34;http://cat.pdx.edu/&#34;&gt;Computer Action Team&lt;/a&gt;. I went to some awesome talks (and gave one myself).&lt;/p&gt;
 &lt;p&gt;I enjoyed every talk I went to. Here they are in order:&lt;/p&gt;
 &lt;ol class=&#34;arabic&#34;&gt;
@@ -128,7 +77,7 @@ ever expected to know).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;dl class=&#34;first docutils&#34;&gt;
 &lt;dt&gt;&lt;strong&gt;MY TALK.&lt;/strong&gt;&lt;/dt&gt;
-&lt;dd&gt;&lt;p class=&#34;first last&#34;&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/post/cat-barcamp-2015/#my-talk&#34;&gt;(see below)&lt;/a&gt;&lt;/p&gt;
+&lt;dd&gt;&lt;p class=&#34;first last&#34;&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://example.com/blog/cat-barcamp-2015/#my-talk&#34;&gt;(see below)&lt;/a&gt;&lt;/p&gt;
 &lt;/dd&gt;
 &lt;/dl&gt;
 &lt;/li&gt;
@@ -153,7 +102,7 @@ this talk, he&#39;s a cool guy... you might even say he&#39;s TheMostAwesomeDude
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;div class=&#34;section&#34; id=&#34;my-talk&#34;&gt;
-&lt;h3&gt;My Talk&lt;/h3&gt;
+&lt;h4&gt;My Talk&lt;/h4&gt;
 &lt;p&gt;I decided on the spur of the moment to give a talk &#39;How to Write a (very
 mediocre) Static Site Generator&#39; and with only 40 minutes of prep work I was
 able to fill an hour pretty well.&lt;/p&gt;
@@ -166,28 +115,32 @@ session (epilepsy warning... no seriously).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;tldr&#34;&gt;
-&lt;h3&gt;TLDR&lt;/h3&gt;
+&lt;h4&gt;TLDR&lt;/h4&gt;
 &lt;p&gt;The CAT is an awesome group of people. I&#39;m glad I was able to get a few LUG
 members to come to the event. If I went to PSU I would be honored to work with
 the CAT. They throw a hellofan event.&lt;/p&gt;
+&lt;/div&gt;
 &lt;/div&gt;
 </content>
     </entry>
     
         <entry>
         <title>Covertly Installing Packages with Docker</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/post/covertly-installing-packages-with-docker/" />
-        <id>tag:elijahcaine.me,2015-10-07:/post/covertly-installing-packages-with-docker</id>
-        <updated>2015-10-07T08:00:00Z</updated>
+        <link rel="alternate" type="text/html" href="http://example.com/blog/covertly-installing-packages-with-docker/" />
+        <id>tag:example.com,2015-10-07:/blog/covertly-installing-packages-with-docker</id>
+        <updated>2015-10-07T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fbbed042d20>" />
         
         <author>
-            <name>Elijah Caine</name>
-            <uri>http://elijahcaine.me/</uri>
-            <email>elijahcainemv@gmail.com</email>
+            <name>Anonymous</name>
+            <uri>http://example.com/</uri>
+            <email>mail@example.com</email>
         </author>
-        <content type="html">&lt;p&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/post/covertly-installing-packages-with-docker/#the-deets-dockerfile-and-commands&#34;&gt;Jump to the codey bits&lt;/a&gt;&lt;/p&gt;
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;covertly-installing-packages-with-docker&#34;&gt;
+&lt;h3&gt;Covertly Installing Packages with Docker&lt;/h3&gt;
+&lt;p&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://example.com/blog/covertly-installing-packages-with-docker/#the-deets-dockerfile-and-commands&#34;&gt;Jump to the codey bits&lt;/a&gt;&lt;/p&gt;
 &lt;div class=&#34;section&#34; id=&#34;the-problem-workstations&#34;&gt;
-&lt;h3&gt;The Problem: Workstations&lt;/h3&gt;
+&lt;h4&gt;The Problem: Workstations&lt;/h4&gt;
 &lt;p&gt;At the OSL I use workstations which are provisioned by &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Chef_%28software%29&#34;&gt;Chef&lt;/a&gt; to look more or
 less identical (packages are the same and global config files are consistent
 from machine to machine). This is nice because it allows everybody at the lab
@@ -207,7 +160,7 @@ things.&lt;/p&gt;
 &lt;p&gt;* firefox kept crashing, I wasn&#39;t just stealing music for the sake of it.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;enter-docker&#34;&gt;
-&lt;h3&gt;Enter: Docker&lt;/h3&gt;
+&lt;h4&gt;Enter: Docker&lt;/h4&gt;
 &lt;p&gt;In this case the solution to the &#39;problem&#39; was &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Docker_%28software%29&#34;&gt;Docker&lt;/a&gt;. I wrote a Dockerfile
 which provisioned a container to have &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;youtube-dl&lt;/span&gt;&lt;/tt&gt; installed, spun up the
 container with a shared directory (&lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;$PWD:/home/&lt;/span&gt;&lt;/tt&gt;), and executed the
@@ -216,10 +169,9 @@ directory and I was able to play it with my media player of choice, all without
 installing &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;youtube-dl&lt;/span&gt;&lt;/tt&gt; locally.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;the-deets-dockerfile-and-commands&#34;&gt;
-&lt;h3&gt;The Deets: Dockerfile and Commands&lt;/h3&gt;
+&lt;h4&gt;The Deets: Dockerfile and Commands&lt;/h4&gt;
 &lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;Dockerfile&lt;/tt&gt;&lt;/p&gt;
-&lt;pre class=&#34;code literal-block&#34;&gt;
-FROM ubuntu:latest
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;FROM ubuntu:latest
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
@@ -227,30 +179,27 @@ RUN apt-get -y install python-pip
 RUN pip install youtube-dl
 
 WORKDIR /home
-RUN alias youtube-dl=&#39;/usr/local/bin/youtube-dl&#39;
-&lt;/pre&gt;
+RUN alias youtube-dl=&amp;#39;/usr/local/bin/youtube-dl&amp;#39;
+&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;If you are in the directory containing the above Dockerfile, build the
 container with:&lt;/p&gt;
-&lt;pre class=&#34;code literal-block&#34;&gt;
-$ docker build -t yt-dl .
-&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ docker build -t yt-dl .
+&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;and run it with:&lt;/p&gt;
-&lt;pre class=&#34;code literal-block&#34;&gt;
-$ docker run -v $PWD:/home/ yt-dl youtube-dl &amp;lt;YOUTUBE-VID-URL&amp;gt;
-&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ docker run -v $PWD:/home/ yt-dl youtube-dl &amp;lt;YOUTUBE-VID-URL&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This will download any url&#39;s video into the current working directory.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;pro-tip-add-an-alias&#34;&gt;
-&lt;h3&gt;Pro-Tip: Add an &lt;tt class=&#34;docutils literal&#34;&gt;Alias&lt;/tt&gt;&lt;/h3&gt;
+&lt;h4&gt;Pro-Tip: Add an &lt;tt class=&#34;docutils literal&#34;&gt;Alias&lt;/tt&gt;&lt;/h4&gt;
 &lt;p&gt;Add the following content to your &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;~/.bashrc&lt;/span&gt;&lt;/tt&gt; file and then run &lt;tt class=&#34;docutils literal&#34;&gt;source
 &lt;span class=&#34;pre&#34;&gt;~/.bashrc&lt;/span&gt;&lt;/tt&gt; to get rid the of long Docker bits of the above command.&lt;/p&gt;
-&lt;pre class=&#34;code literal-block&#34;&gt;
-export $VID_DIR=/path/to/downloaded/videos/
-alias yt-dl=&#39;docker run -v $VID_DIR:/home/ yt-dl youtube-dl&#39;
-&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$VID_DIR&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/path/to/downloaded/videos/
+&lt;span class=&#34;nb&#34;&gt;alias&lt;/span&gt; yt-dl&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;docker run -v $VID_DIR:/home/ yt-dl youtube-dl&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;wait-this-is-overly-complicated&#34;&gt;
-&lt;h3&gt;Wait This is Overly Complicated&lt;/h3&gt;
+&lt;h4&gt;Wait This is Overly Complicated&lt;/h4&gt;
 &lt;p&gt;You&#39;re probably thinking: &amp;quot;Hey, couldn&#39;t you have just run &lt;tt class=&#34;docutils literal&#34;&gt;pip install &lt;span class=&#34;pre&#34;&gt;--user&lt;/span&gt;
 &lt;span class=&#34;pre&#34;&gt;youtube-dl&lt;/span&gt;&lt;/tt&gt;?&lt;/p&gt;
 &lt;p&gt;Yes. I could have. But that wouldn&#39;t be fun and wouldn&#39;t have given me an
@@ -258,22 +207,26 @@ excuse to write a blog, post now would it Ms. Smarty Pantz.&lt;/p&gt;
 &lt;hr class=&#34;docutils&#34;/&gt;
 &lt;p&gt;&lt;strong&gt;drink the coolaid. come to the docker side.&lt;/strong&gt;&lt;/p&gt;
 &lt;/div&gt;
+&lt;/div&gt;
 </content>
     </entry>
     
         <entry>
-        <title>How To Possibly Kinda Sorta Write a Travelblog</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/post/how-to-possibly-kinda-sorta-write-a-travelblog/" />
-        <id>tag:elijahcaine.me,2015-09-21:/post/how-to-possibly-kinda-sorta-write-a-travelblog</id>
-        <updated>2015-09-21T08:00:00Z</updated>
+        <title>How to Possibly Kinda Sorta Write a Travelblog</title>
+        <link rel="alternate" type="text/html" href="http://example.com/blog/how-to-possibly-kinda-sorta-write-a-travelblog/" />
+        <id>tag:example.com,2015-09-29:/blog/how-to-possibly-kinda-sorta-write-a-travelblog</id>
+        <updated>2015-09-29T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fbbed0423c0>" />
         
         <author>
-            <name>Elijah Caine</name>
-            <uri>http://elijahcaine.me/</uri>
-            <email>elijahcainemv@gmail.com</email>
+            <name>Anonymous</name>
+            <uri>http://example.com/</uri>
+            <email>mail@example.com</email>
         </author>
-        <content type="html">&lt;p&gt;&lt;strong&gt;First thing&#39;s First: I went on a trip and wrote a travelblog.&lt;/strong&gt;&lt;/p&gt;
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;how-to-possibly-kinda-sorta-write-a-travelblog&#34;&gt;
+&lt;h3&gt;How To Possibly Kinda Sorta Write a Travelblog&lt;/h3&gt;
 &lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;First thing&#39;s First: I went on a trip and wrote a travelblog.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;For a link to that travelblog itself check out&lt;/strong&gt; &lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/eurotrip-2015&#34;&gt;elijahcaine.me/eurotrip-2015&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;This post is _about_ that travelblog.&lt;/strong&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -298,7 +251,7 @@ blog&#39;s url so they could follow along vicariously if they chose. I wanted to
 make a website where I updated the world on my whereabouts and shenanigans.&lt;/p&gt;
 &lt;p&gt;And so I did.&lt;/p&gt;
 &lt;div class=&#34;section&#34; id=&#34;the-technical-parts&#34;&gt;
-&lt;h3&gt;The Technical Parts&lt;/h3&gt;
+&lt;h4&gt;The Technical Parts&lt;/h4&gt;
 &lt;p&gt;I&#39;m an engineer. Like many engineers I like to tinker and build things.&lt;/p&gt;
 &lt;p&gt;A while ago I built a tool called &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/elijahcaine/pageup#pageup-init-pageup-build&#34;&gt;PageUp&lt;/a&gt;; it takes a &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/ReStructuredText&#34;&gt;reStructuredText&lt;/a&gt;
 formatted &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Markup_language&#34;&gt;markup file&lt;/a&gt;, an &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Web_template_system&#34;&gt;html template&lt;/a&gt;, as well as some other files that
@@ -310,7 +263,7 @@ my personal server pull the updated version of the &lt;a class=&#34;reference ex
 automatically rebuild the website.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;the-writing-parts&#34;&gt;
-&lt;h3&gt;The Writing Parts&lt;/h3&gt;
+&lt;h4&gt;The Writing Parts&lt;/h4&gt;
 &lt;p&gt;Updates were surprisingly painless-- and I&#39;m not just saying that to sell
 PageUp, I&#39;m honestly just impressed that I made something which actually made
 my life easier. Feels good.&lt;/p&gt;
@@ -321,13 +274,76 @@ Blogpost, Adventure&#39; regimen; I kept getting distracted by meeting new peopl
 and socializing. Ugh, the worst.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;thoughts-and-conclusions&#34;&gt;
-&lt;h3&gt;Thoughts and Conclusions&lt;/h3&gt;
+&lt;h4&gt;Thoughts and Conclusions&lt;/h4&gt;
 &lt;p&gt;All in all I suspect I&#39;ll continue doing liveblogs when I go to events, it&#39;s a
 great way to share the experience with others and augment one&#39;s memory with a
 written record of the time you spent.&lt;/p&gt;
 &lt;p&gt;Plus it&#39;s just fun an nerdy to write scripts and programs to make this whole
 experience as user friendly as possible. If I poured even more time into this
 it could even be a startup...&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>Running Firefox in Docker</title>
+        <link rel="alternate" type="text/html" href="http://example.com/blog/running-firefox-in-docker/" />
+        <id>tag:example.com,2015-03-05:/blog/running-firefox-in-docker</id>
+        <updated>2015-03-05T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fbbed042630>" />
+        
+        <author>
+            <name>Anonymous</name>
+            <uri>http://example.com/</uri>
+            <email>mail@example.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;running-firefox-in-docker&#34;&gt;
+&lt;h3&gt;Running Firefox in Docker&lt;/h3&gt;
+&lt;p&gt;Turns out you can run Firefox in Docker. It&#39;s actually pretty easy:&lt;/p&gt;
+&lt;div class=&#34;section&#34; id=&#34;code&#34;&gt;
+&lt;h4&gt;Code&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;From&lt;/strong&gt; &lt;a class=&#34;reference external&#34; href=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370&#34;&gt;my github gist&lt;/a&gt;.&lt;/p&gt;
+&lt;script src=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370.js&#34;&gt;&lt;/script&gt;&lt;p&gt;Installation instructions (on Linux):&lt;/p&gt;
+
+&lt;pre class=&#34;brush: text&#34;&gt;
+# install docker and start the docker daemon
+$ git clone https://gist.github.com/29e7e829341d58abe370.git docker-firefox
+$ ln docker-firefox/ff-docker /some/path/for/binaries
+$ ff-docker -b  # -b pulls &amp; builds container, etc used for first time startup.
+&lt;/pre&gt;
+
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;notes&#34;&gt;
+&lt;h4&gt;Notes&lt;/h4&gt;
+&lt;p&gt;I attempted to use &lt;a class=&#34;reference external&#34; href=&#34;http://alpinelinux.org/&#34;&gt;Alpine Linux&lt;/a&gt; as a proof-of-usability, since it&#39;s the hip
+new kid on the containerization block &lt;a class=&#34;footnote-reference&#34; href=&#34;http://example.com/blog/running-firefox-in-docker/#id3&#34; id=&#34;id1&#34;&gt;[1]&lt;/a&gt;, but as it turns out Alpine&#39;s
+Firefox package is pretty fucked &lt;a class=&#34;footnote-reference&#34; href=&#34;http://example.com/blog/running-firefox-in-docker/#id4&#34; id=&#34;id2&#34;&gt;[2]&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I use &lt;a class=&#34;reference external&#34; href=&#34;https://wiki.archlinux.org/index.php/Dmenu&#34;&gt;dmenu&lt;/a&gt;, this means I can run &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;ff-docker&lt;/span&gt;&lt;/tt&gt; from my desktop without
+opening a terminal, effectively making it a super-private-yet-convenient
+drop-in for Firefox.  Pretty neat right?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;conclusion&#34;&gt;
+&lt;h4&gt;Conclusion&lt;/h4&gt;
+&lt;p&gt;This was pretty simple but effective in terms of giving me the option to have
+more privacy. I can see it being extended to add even more security; e.g.,
+routing all of the traffic in the container through a VPN would be easy enough.
+Food for thought [citation needed].&lt;/p&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id3&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://example.com/blog/running-firefox-in-docker/#id1&#34;&gt;[1]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;5mb containers sounds pretty nice to me.
+&lt;a class=&#34;reference external&#34; href=&#34;http://gliderlabs.viewdocs.io/docker-alpine/&#34;&gt;http://gliderlabs.viewdocs.io/docker-alpine/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id4&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://example.com/blog/running-firefox-in-docker/#id2&#34;&gt;[2]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;I get a segfault every time I try to start Firefox. More info here:
+&lt;a class=&#34;reference external&#34; href=&#34;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&#34;&gt;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
 &lt;/div&gt;
 </content>
     </entry>
