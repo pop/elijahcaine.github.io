@@ -1,55 +1,115 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://example.com/blog/</loc>
-    <lastmod>2016-03-16</lastmod>
+    <loc>http://elijahcaine.me/blog/</loc>
+    <lastmod>2016-03-18</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://example.com/</loc>
-    <lastmod>2016-03-16</lastmod>
+    <loc>http://elijahcaine.me/videos/</loc>
+    <lastmod>2016-03-18</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://example.com/blog/induction/</loc>
-    <lastmod>2016-03-16</lastmod>
+    <loc>http://elijahcaine.me/osl/</loc>
+    <lastmod>2016-03-18</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://example.com/rss/</loc>
-    <lastmod>2016-03-16</lastmod>
+    <loc>http://elijahcaine.me/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/reading/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/blog/induction/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/atom/</loc>
+    <lastmod>2016-03-18</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>http://example.com/blog/cat-barcamp-2015/</loc>
-    <lastmod>2016-03-16</lastmod>
+    <loc>http://elijahcaine.me/slides/</loc>
+    <lastmod>2016-03-18</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://example.com/blog/running-firefox-in-docker/</loc>
-    <lastmod>2016-03-16</lastmod>
+    <loc>http://elijahcaine.me/blog/cat-barcamp-2015/</loc>
+    <lastmod>2016-03-18</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://example.com/atom/</loc>
-    <lastmod>2016-03-16</lastmod>
+    <loc>http://elijahcaine.me/liveblog/euro-trip-well-after-the-fact-blog/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/code/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/liveblog/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/blog/running-firefox-in-docker/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/lug/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/renders/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/blog/how-to-possibly-kinda-sorta-write-a-travelblog/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/blog/covertly-installing-packages-with-docker/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/other/</loc>
+    <lastmod>2016-03-18</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/rss/</loc>
+    <lastmod>2016-03-18</lastmod>
     <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>http://example.com/blog/how-to-possibly-kinda-sorta-write-a-travelblog/</loc>
-    <lastmod>2016-03-16</lastmod>
-    <changefreq>never</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>http://example.com/blog/covertly-installing-packages-with-docker/</loc>
-    <lastmod>2016-03-16</lastmod>
-    <changefreq>never</changefreq>
-    <priority>1.0</priority>
   </url>
 </urlset>

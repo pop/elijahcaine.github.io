@@ -1,31 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Elijah&#39;s Webiste</title>
-        <link>http://example.com/</link>
+        <title>Elijah&#39;s Website</title>
+        <link>http://elijahcaine.me/</link>
         <description></description>
         <language>en</language>
-        <pubDate>Thu, 22 Oct 2015 07:00:00 GMT</pubDate>
-        <docs>http://example.com/rss/</docs>
+        <pubDate>Thu, 17 Mar 2016 07:00:00 GMT</pubDate>
+        <docs>http://elijahcaine.me/rss/</docs>
         <generator>acrylamid 0.7.10</generator>
         
             <item>
+        <title>reading</title>
+        <link>http://elijahcaine.me/blog/reading/</link>
+        <description>&lt;p&gt;I am currently reading &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/The_Name_of_the_Rose&#34;&gt;The Name of the Rose&lt;/a&gt; by &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Umberto_Eco&#34;&gt;Umberto Eco&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;a class=&#34;reference external image-reference&#34; href=&#34;https://en.wikipedia.org/wiki/The_Name_of_the_Rose&#34;&gt;&lt;img alt=&#34;The Name of the Rose Cover&#34; src=&#34;https://upload.wikimedia.org/wikipedia/en/e/eb/The_Name_of_the_Rose.jpg&#34;/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;p&gt;Protip: read it with Sean Connery&#39;s voice. 10/10 enjoyment.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 17 Mar 2016 07:00:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:elijahcaine.me,2016-03-17:/blog/reading</guid>
+    </item>
+        
+            <item>
+        <title>Running Firefox in Docker</title>
+        <link>http://elijahcaine.me/blog/running-firefox-in-docker/</link>
+        <description>&lt;div class=&#34;section&#34; id=&#34;running-firefox-in-docker&#34;&gt;
+&lt;h3&gt;Running Firefox in Docker&lt;/h3&gt;
+&lt;p&gt;Turns out you can run Firefox in Docker. It&#39;s actually pretty easy:&lt;/p&gt;
+&lt;div class=&#34;section&#34; id=&#34;code&#34;&gt;
+&lt;h4&gt;Code&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;From&lt;/strong&gt; &lt;a class=&#34;reference external&#34; href=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370&#34;&gt;my github gist&lt;/a&gt;.&lt;/p&gt;
+&lt;script src=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370.js&#34;&gt;&lt;/script&gt;&lt;p&gt;Installation instructions (on Linux):&lt;/p&gt;
+
+&lt;pre class=&#34;brush: text&#34;&gt;
+# install docker and start the docker daemon
+$ git clone https://gist.github.com/29e7e829341d58abe370.git docker-firefox
+$ ln docker-firefox/ff-docker /some/path/for/binaries
+$ ff-docker -b  # -b pulls &amp; builds container, etc used for first time startup.
+&lt;/pre&gt;
+
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;notes&#34;&gt;
+&lt;h4&gt;Notes&lt;/h4&gt;
+&lt;p&gt;I attempted to use &lt;a class=&#34;reference external&#34; href=&#34;http://alpinelinux.org/&#34;&gt;Alpine Linux&lt;/a&gt; as a proof-of-usability, since it&#39;s the hip
+new kid on the containerization block &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/#id3&#34; id=&#34;id1&#34;&gt;[1]&lt;/a&gt;, but as it turns out Alpine&#39;s
+Firefox package is pretty fucked &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/#id4&#34; id=&#34;id2&#34;&gt;[2]&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I use &lt;a class=&#34;reference external&#34; href=&#34;https://wiki.archlinux.org/index.php/Dmenu&#34;&gt;dmenu&lt;/a&gt;, this means I can run &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;ff-docker&lt;/span&gt;&lt;/tt&gt; from my desktop without
+opening a terminal, effectively making it a super-private-yet-convenient
+drop-in for Firefox.  Pretty neat right?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;conclusion&#34;&gt;
+&lt;h4&gt;Conclusion&lt;/h4&gt;
+&lt;p&gt;This was pretty simple but effective in terms of giving me the option to have
+more privacy. I can see it being extended to add even more security; e.g.,
+routing all of the traffic in the container through a VPN would be easy enough.
+Food for thought [citation needed].&lt;/p&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id3&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/#id1&#34;&gt;[1]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;5mb containers sounds pretty nice to me.
+&lt;a class=&#34;reference external&#34; href=&#34;http://gliderlabs.viewdocs.io/docker-alpine/&#34;&gt;http://gliderlabs.viewdocs.io/docker-alpine/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id4&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/#id2&#34;&gt;[2]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;I get a segfault every time I try to start Firefox. More info here:
+&lt;a class=&#34;reference external&#34; href=&#34;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&#34;&gt;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Sat, 05 Mar 2016 07:00:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:elijahcaine.me,2016-03-05:/blog/running-firefox-in-docker</guid>
+    </item>
+        
+            <item>
         <title>induction</title>
-        <link>http://example.com/blog/induction/</link>
+        <link>http://elijahcaine.me/blog/induction/</link>
         <description>&lt;div class=&#34;section&#34; id=&#34;induction&#34;&gt;
 &lt;h3&gt;Induction&lt;/h3&gt;
 &lt;span title=&#34;∴ Profit&#34;&gt;&lt;div class=&#34;figure align-center&#34;&gt;
-&lt;img alt=&#34;/static/comics/induction.png&#34; src=&#34;http://example.com/static/comics/induction.png&#34;/&gt;
+&lt;img alt=&#34;/static/comics/induction.png&#34; src=&#34;http://elijahcaine.me/static/comics/induction.png&#34;/&gt;
 &lt;/div&gt;
 &lt;/span&gt;&lt;/div&gt;
 </description>
         <pubDate>Thu, 22 Oct 2015 07:00:00 GMT</pubDate>
-        <guid isPermaLink="false">tag:example.com,2015-10-22:/blog/induction</guid>
+        <guid isPermaLink="false">tag:elijahcaine.me,2015-10-22:/blog/induction</guid>
     </item>
         
             <item>
         <title>Cat Barcamp 2015</title>
-        <link>http://example.com/blog/cat-barcamp-2015/</link>
+        <link>http://elijahcaine.me/blog/cat-barcamp-2015/</link>
         <description>&lt;div class=&#34;section&#34; id=&#34;catbarcamp-2015&#34;&gt;
 &lt;h3&gt;CatBarcamp 2015&lt;/h3&gt;
 &lt;p&gt;This weekend I went to &lt;a class=&#34;reference external&#34; href=&#34;http://catbarcamp.org/&#34;&gt;Cat Barcamp 2015&lt;/a&gt;, an unconference run by the PSU
@@ -57,7 +125,7 @@ ever expected to know).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;dl class=&#34;first docutils&#34;&gt;
 &lt;dt&gt;&lt;strong&gt;MY TALK.&lt;/strong&gt;&lt;/dt&gt;
-&lt;dd&gt;&lt;p class=&#34;first last&#34;&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://example.com/blog/cat-barcamp-2015/#my-talk&#34;&gt;(see below)&lt;/a&gt;&lt;/p&gt;
+&lt;dd&gt;&lt;p class=&#34;first last&#34;&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/blog/cat-barcamp-2015/#my-talk&#34;&gt;(see below)&lt;/a&gt;&lt;/p&gt;
 &lt;/dd&gt;
 &lt;/dl&gt;
 &lt;/li&gt;
@@ -103,15 +171,15 @@ the CAT. They throw a hellofan event.&lt;/p&gt;
 &lt;/div&gt;
 </description>
         <pubDate>Mon, 12 Oct 2015 07:00:00 GMT</pubDate>
-        <guid isPermaLink="false">tag:example.com,2015-10-12:/blog/cat-barcamp-2015</guid>
+        <guid isPermaLink="false">tag:elijahcaine.me,2015-10-12:/blog/cat-barcamp-2015</guid>
     </item>
         
             <item>
         <title>Covertly Installing Packages with Docker</title>
-        <link>http://example.com/blog/covertly-installing-packages-with-docker/</link>
+        <link>http://elijahcaine.me/blog/covertly-installing-packages-with-docker/</link>
         <description>&lt;div class=&#34;section&#34; id=&#34;covertly-installing-packages-with-docker&#34;&gt;
 &lt;h3&gt;Covertly Installing Packages with Docker&lt;/h3&gt;
-&lt;p&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://example.com/blog/covertly-installing-packages-with-docker/#the-deets-dockerfile-and-commands&#34;&gt;Jump to the codey bits&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/blog/covertly-installing-packages-with-docker/#the-deets-dockerfile-and-commands&#34;&gt;Jump to the codey bits&lt;/a&gt;&lt;/p&gt;
 &lt;div class=&#34;section&#34; id=&#34;the-problem-workstations&#34;&gt;
 &lt;h4&gt;The Problem: Workstations&lt;/h4&gt;
 &lt;p&gt;At the OSL I use workstations which are provisioned by &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Chef_%28software%29&#34;&gt;Chef&lt;/a&gt; to look more or
@@ -183,12 +251,12 @@ excuse to write a blog, post now would it Ms. Smarty Pantz.&lt;/p&gt;
 &lt;/div&gt;
 </description>
         <pubDate>Wed, 07 Oct 2015 07:00:00 GMT</pubDate>
-        <guid isPermaLink="false">tag:example.com,2015-10-07:/blog/covertly-installing-packages-with-docker</guid>
+        <guid isPermaLink="false">tag:elijahcaine.me,2015-10-07:/blog/covertly-installing-packages-with-docker</guid>
     </item>
         
             <item>
         <title>How to Possibly Kinda Sorta Write a Travelblog</title>
-        <link>http://example.com/blog/how-to-possibly-kinda-sorta-write-a-travelblog/</link>
+        <link>http://elijahcaine.me/blog/how-to-possibly-kinda-sorta-write-a-travelblog/</link>
         <description>&lt;div class=&#34;section&#34; id=&#34;how-to-possibly-kinda-sorta-write-a-travelblog&#34;&gt;
 &lt;h3&gt;How To Possibly Kinda Sorta Write a Travelblog&lt;/h3&gt;
 &lt;blockquote&gt;
@@ -251,62 +319,7 @@ it could even be a startup...&lt;/p&gt;
 &lt;/div&gt;
 </description>
         <pubDate>Tue, 29 Sep 2015 07:00:00 GMT</pubDate>
-        <guid isPermaLink="false">tag:example.com,2015-09-29:/blog/how-to-possibly-kinda-sorta-write-a-travelblog</guid>
-    </item>
-        
-            <item>
-        <title>Running Firefox in Docker</title>
-        <link>http://example.com/blog/running-firefox-in-docker/</link>
-        <description>&lt;div class=&#34;section&#34; id=&#34;running-firefox-in-docker&#34;&gt;
-&lt;h3&gt;Running Firefox in Docker&lt;/h3&gt;
-&lt;p&gt;Turns out you can run Firefox in Docker. It&#39;s actually pretty easy:&lt;/p&gt;
-&lt;div class=&#34;section&#34; id=&#34;code&#34;&gt;
-&lt;h4&gt;Code&lt;/h4&gt;
-&lt;p&gt;&lt;strong&gt;From&lt;/strong&gt; &lt;a class=&#34;reference external&#34; href=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370&#34;&gt;my github gist&lt;/a&gt;.&lt;/p&gt;
-&lt;script src=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370.js&#34;&gt;&lt;/script&gt;&lt;p&gt;Installation instructions (on Linux):&lt;/p&gt;
-
-&lt;pre class=&#34;brush: text&#34;&gt;
-# install docker and start the docker daemon
-$ git clone https://gist.github.com/29e7e829341d58abe370.git docker-firefox
-$ ln docker-firefox/ff-docker /some/path/for/binaries
-$ ff-docker -b  # -b pulls &amp; builds container, etc used for first time startup.
-&lt;/pre&gt;
-
-&lt;/div&gt;
-&lt;div class=&#34;section&#34; id=&#34;notes&#34;&gt;
-&lt;h4&gt;Notes&lt;/h4&gt;
-&lt;p&gt;I attempted to use &lt;a class=&#34;reference external&#34; href=&#34;http://alpinelinux.org/&#34;&gt;Alpine Linux&lt;/a&gt; as a proof-of-usability, since it&#39;s the hip
-new kid on the containerization block &lt;a class=&#34;footnote-reference&#34; href=&#34;http://example.com/blog/running-firefox-in-docker/#id3&#34; id=&#34;id1&#34;&gt;[1]&lt;/a&gt;, but as it turns out Alpine&#39;s
-Firefox package is pretty fucked &lt;a class=&#34;footnote-reference&#34; href=&#34;http://example.com/blog/running-firefox-in-docker/#id4&#34; id=&#34;id2&#34;&gt;[2]&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;I use &lt;a class=&#34;reference external&#34; href=&#34;https://wiki.archlinux.org/index.php/Dmenu&#34;&gt;dmenu&lt;/a&gt;, this means I can run &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;ff-docker&lt;/span&gt;&lt;/tt&gt; from my desktop without
-opening a terminal, effectively making it a super-private-yet-convenient
-drop-in for Firefox.  Pretty neat right?&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section&#34; id=&#34;conclusion&#34;&gt;
-&lt;h4&gt;Conclusion&lt;/h4&gt;
-&lt;p&gt;This was pretty simple but effective in terms of giving me the option to have
-more privacy. I can see it being extended to add even more security; e.g.,
-routing all of the traffic in the container through a VPN would be easy enough.
-Food for thought [citation needed].&lt;/p&gt;
-&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id3&#34; rules=&#34;none&#34;&gt;
-&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
-&lt;tbody valign=&#34;top&#34;&gt;
-&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://example.com/blog/running-firefox-in-docker/#id1&#34;&gt;[1]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;5mb containers sounds pretty nice to me.
-&lt;a class=&#34;reference external&#34; href=&#34;http://gliderlabs.viewdocs.io/docker-alpine/&#34;&gt;http://gliderlabs.viewdocs.io/docker-alpine/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id4&#34; rules=&#34;none&#34;&gt;
-&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
-&lt;tbody valign=&#34;top&#34;&gt;
-&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://example.com/blog/running-firefox-in-docker/#id2&#34;&gt;[2]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;I get a segfault every time I try to start Firefox. More info here:
-&lt;a class=&#34;reference external&#34; href=&#34;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&#34;&gt;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Thu, 05 Mar 2015 07:00:00 GMT</pubDate>
-        <guid isPermaLink="false">tag:example.com,2015-03-05:/blog/running-firefox-in-docker</guid>
+        <guid isPermaLink="false">tag:elijahcaine.me,2015-09-29:/blog/how-to-possibly-kinda-sorta-write-a-travelblog</guid>
     </item>
         </channel>
 </rss>

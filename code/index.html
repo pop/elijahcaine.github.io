@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>How to Write a Book with reStructuredText | Elijah's Website</title>
+<title>code | Elijah's Website</title>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -55,30 +55,60 @@
         
         <li><a href="/">elijahcaine.me</a></li>
         
-        <li class="active"><a href="/blog/how-to-write-a-book-with-restructuredtext/">how-to-write-a-book-with-restructuredtext</a></li>
+        <li class="active"><a href="/liveblog/code/">code</a></li>
         
       </ol>
     </nav>
 
     
   <article>
-    <div class="section" id="how-to-write-a-book-with-restructuredtext">
-<h2>How to Write a Book With re&shy;Struc&shy;tured&shy;Text</h2>
-<p>Lessons learned:</p>
-<ul class="simple">
-<li>The <tt class="docutils literal">..include:: $TEXT_FILE</tt> is pretty powerful (but not as powerful as I
-had hoped)</li>
-<li>Writing is hard.</li>
-<li>It can be about <em>literally anything</em>. Get weird.</li>
-</ul>
+      <header>
+          <h1>
+              <a href="/liveblog/code/" rel="bookmark canonical">code</a>
+          </h1>
+      </header>
+
+  
+
+      <p>Below is a curated list of my development endeavors:</p>
+<div class="section" id="timesync-node">
+<h3><a class="reference external" href="https://github.com/osuosl/timesync-node/">TimeSync-Node</a></h3>
+<p>A <a class="reference external" href="https://nodejs.org/en/">NodeJS</a> based project for keeping track of time for internal and externally
+funded projects at the <a class="reference external" href="http://osuosl.org">Open Source Lab</a>. Uses <a class="reference external" href="http://expressjs.com/">ExpressJS</a>, <a class="reference external" href="http://knexjs.org/">KnexJS</a>
+libraries and a <a class="reference external" href="http://www.postgresql.org/">Postgres</a> backend.</p>
+<p>My part in this project was largely in the design of the <a class="reference external" href="https://github.com/osuosl/timesync/">TimeSync API</a> and in
+the implementation of the actual backends; myself and a team of coworkers
+worked on this part time to get it implemented in about six months, including a
+full unit-test suite, compatibility with sqlite, and a thorough set of
+documentation.</p>
 </div>
+<hr class="docutils" />
+<div class="section" id="hurandom">
+<h3><a class="reference internal" href="#hurandom">HuRandom</a></h3>
+<p>A Python <a class="reference external" href="http://flask.pocoo.org/">Flask</a> webapp with a <a class="reference external" href="https://www.sqlite.org/">Sqlite</a> backend built to collect data in the
+pursuit of answering the question &quot;When people think of a <em>random number</em> what
+do they usually come up with?&quot;</p>
+<p>The short answer: Usually something between 1 and 100.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="go-to-zzz">
+<h3><a class="reference external" href="https://github.com/ElijahCaine/go-to-zzz">go-to-zzz</a></h3>
+<p>A simple <a class="reference external" href="https://golang.org">Golang</a> application for calculating when one should go to sleep. Not
+the most exciting application on the planet, but it gave me an excute to write
+some Go.</p>
+<p class="align-center"><em>I also have a</em> <a class="reference external" href="https://github.com/ElijahCaine/">Github Profile</a>.</p>
+<div class="figure align-center">
+<a class="reference external image-reference" href="https://github.com/ElijahCaine/"><img alt="Chell Octocat" src="https://octodex.github.com/images/chellocat.jpg" style="width: 200px;" /></a>
+</div>
+</div>
+
 
   </article>
 
 
     <footer>
       
-  This page last updated on <time datetime="2016-04-01">2016-04-01</time> |
+  This page last updated on <time datetime="2016-03-16">2016-03-16</time> |
   
       Photo Credit to <a href="https://www.flickr.com/photos/123432654@N05/">Sam Hall</a> |
       <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
