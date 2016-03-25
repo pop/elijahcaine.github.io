@@ -12,13 +12,16 @@
     <icon>http://elijahcaine.me/favicon.ico</icon>
     <logo>http://elijahcaine.me/feed-logo.png</logo>
     <updated>2016-03-05T07:00:00Z</updated>
-    <generator uri="https://github.com/posativ/acrylamid/" version="0.7.10">acrylamid</generator>
+    <generator uri="https://github.com/posativ/acrylamid/" version="0.8.dev0">acrylamid</generator>
         <entry>
         <title>Running Firefox in Docker</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/running-firefox-in-docker/" />
-        <id>tag:elijahcaine.me,2016-03-05:/blog/running-firefox-in-docker</id>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/running-firefox-in-docker/index.html" />
+        <id>tag:elijahcaine.me,2016-03-05:/blog/running-firefox-in-docker/index.html</id>
         <updated>2016-03-05T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fa4443023c0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f772840>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f7728a0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f7728d0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f772900>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -32,20 +35,18 @@
 &lt;h4&gt;Code&lt;/h4&gt;
 &lt;p&gt;&lt;strong&gt;From&lt;/strong&gt; &lt;a class=&#34;reference external&#34; href=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370&#34;&gt;my github gist&lt;/a&gt;.&lt;/p&gt;
 &lt;script src=&#34;https://gist.github.com/ElijahCaine/29e7e829341d58abe370.js&#34;&gt;&lt;/script&gt;&lt;p&gt;Installation instructions (on Linux):&lt;/p&gt;
-
-&lt;pre class=&#34;brush: text&#34;&gt;
+&lt;pre class=&#34;code text literal-block&#34;&gt;
 # install docker and start the docker daemon
 $ git clone https://gist.github.com/29e7e829341d58abe370.git docker-firefox
 $ ln docker-firefox/ff-docker /some/path/for/binaries
-$ ff-docker -b  # -b pulls &amp; builds container, etc used for first time startup.
+$ ff-docker -b  # -b pulls &amp;amp; builds container, etc used for first time startup.
 &lt;/pre&gt;
-
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;notes&#34;&gt;
 &lt;h4&gt;Notes&lt;/h4&gt;
 &lt;p&gt;I attempted to use &lt;a class=&#34;reference external&#34; href=&#34;http://alpinelinux.org/&#34;&gt;Alpine Linux&lt;/a&gt; as a proof-of-usability, since it&#39;s the hip
-new kid on the containerization block &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/#id3&#34; id=&#34;id1&#34;&gt;[1]&lt;/a&gt;, but as it turns out Alpine&#39;s
-Firefox package is pretty fucked &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/#id4&#34; id=&#34;id2&#34;&gt;[2]&lt;/a&gt;.&lt;/p&gt;
+new kid on the containerization block &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/index.html/#id3&#34; id=&#34;id1&#34;&gt;[1]&lt;/a&gt;, but as it turns out Alpine&#39;s
+Firefox package is pretty fucked &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/index.html/#id4&#34; id=&#34;id2&#34;&gt;[2]&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;I use &lt;a class=&#34;reference external&#34; href=&#34;https://wiki.archlinux.org/index.php/Dmenu&#34;&gt;dmenu&lt;/a&gt;, this means I can run &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;ff-docker&lt;/span&gt;&lt;/tt&gt; from my desktop without
 opening a terminal, effectively making it a super-private-yet-convenient
 drop-in for Firefox.  Pretty neat right?&lt;/p&gt;
@@ -59,14 +60,14 @@ Food for thought [citation needed].&lt;/p&gt;
 &lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id3&#34; rules=&#34;none&#34;&gt;
 &lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
 &lt;tbody valign=&#34;top&#34;&gt;
-&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/#id1&#34;&gt;[1]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;5mb containers sounds pretty nice to me.
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/index.html/#id1&#34;&gt;[1]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;5mb containers sounds pretty nice to me.
 &lt;a class=&#34;reference external&#34; href=&#34;http://gliderlabs.viewdocs.io/docker-alpine/&#34;&gt;http://gliderlabs.viewdocs.io/docker-alpine/&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;id4&#34; rules=&#34;none&#34;&gt;
 &lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
 &lt;tbody valign=&#34;top&#34;&gt;
-&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/#id2&#34;&gt;[2]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;I get a segfault every time I try to start Firefox. More info here:
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/running-firefox-in-docker/index.html/#id2&#34;&gt;[2]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;I get a segfault every time I try to start Firefox. More info here:
 &lt;a class=&#34;reference external&#34; href=&#34;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&#34;&gt;https://bugzilla.mozilla.org/show_bug.cgi?id=724227#c11&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -77,10 +78,12 @@ Food for thought [citation needed].&lt;/p&gt;
     
         <entry>
         <title>induction</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/induction/" />
-        <id>tag:elijahcaine.me,2015-10-22:/blog/induction</id>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/comics/induction/index.html" />
+        <id>tag:elijahcaine.me,2015-10-22:/comics/induction/index.html</id>
         <updated>2015-10-22T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fa4443024b0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f760ab0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f760b10>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f760b40>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -98,10 +101,12 @@ Food for thought [citation needed].&lt;/p&gt;
     
         <entry>
         <title>Cat Barcamp 2015</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/cat-barcamp-2015/" />
-        <id>tag:elijahcaine.me,2015-10-12:/blog/cat-barcamp-2015</id>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/cat-barcamp-2015/index.html" />
+        <id>tag:elijahcaine.me,2015-10-12:/blog/cat-barcamp-2015/index.html</id>
         <updated>2015-10-12T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fa4443028a0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f772ba0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f772c30>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f772c90>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -139,7 +144,7 @@ ever expected to know).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;dl class=&#34;first docutils&#34;&gt;
 &lt;dt&gt;&lt;strong&gt;MY TALK.&lt;/strong&gt;&lt;/dt&gt;
-&lt;dd&gt;&lt;p class=&#34;first last&#34;&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/blog/cat-barcamp-2015/#my-talk&#34;&gt;(see below)&lt;/a&gt;&lt;/p&gt;
+&lt;dd&gt;&lt;p class=&#34;first last&#34;&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/blog/cat-barcamp-2015/index.html/#my-talk&#34;&gt;(see below)&lt;/a&gt;&lt;/p&gt;
 &lt;/dd&gt;
 &lt;/dl&gt;
 &lt;/li&gt;
@@ -188,10 +193,13 @@ the CAT. They throw a hellofan event.&lt;/p&gt;
     
         <entry>
         <title>Covertly Installing Packages with Docker</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/covertly-installing-packages-with-docker/" />
-        <id>tag:elijahcaine.me,2015-10-07:/blog/covertly-installing-packages-with-docker</id>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/covertly-installing-packages-with-docker/index.html" />
+        <id>tag:elijahcaine.me,2015-10-07:/blog/covertly-installing-packages-with-docker/index.html</id>
         <updated>2015-10-07T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fa444302ab0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f772f00>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f772f90>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f772fc0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f776060>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -200,7 +208,7 @@ the CAT. They throw a hellofan event.&lt;/p&gt;
         </author>
         <content type="html">&lt;div class=&#34;section&#34; id=&#34;covertly-installing-packages-with-docker&#34;&gt;
 &lt;h3&gt;Covertly Installing Packages with Docker&lt;/h3&gt;
-&lt;p&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/blog/covertly-installing-packages-with-docker/#the-deets-dockerfile-and-commands&#34;&gt;Jump to the codey bits&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/blog/covertly-installing-packages-with-docker/index.html/#the-deets-dockerfile-and-commands&#34;&gt;Jump to the codey bits&lt;/a&gt;&lt;/p&gt;
 &lt;div class=&#34;section&#34; id=&#34;the-problem-workstations&#34;&gt;
 &lt;h4&gt;The Problem: Workstations&lt;/h4&gt;
 &lt;p&gt;At the OSL I use workstations which are provisioned by &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Chef_%28software%29&#34;&gt;Chef&lt;/a&gt; to look more or
@@ -233,7 +241,8 @@ installing &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#3
 &lt;div class=&#34;section&#34; id=&#34;the-deets-dockerfile-and-commands&#34;&gt;
 &lt;h4&gt;The Deets: Dockerfile and Commands&lt;/h4&gt;
 &lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;Dockerfile&lt;/tt&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;FROM ubuntu:latest
+&lt;pre class=&#34;code text literal-block&#34;&gt;
+FROM ubuntu:latest
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
@@ -241,24 +250,27 @@ RUN apt-get -y install python-pip
 RUN pip install youtube-dl
 
 WORKDIR /home
-RUN alias youtube-dl=&amp;#39;/usr/local/bin/youtube-dl&amp;#39;
-&lt;/pre&gt;&lt;/div&gt;
+RUN alias youtube-dl=&#39;/usr/local/bin/youtube-dl&#39;
+&lt;/pre&gt;
 &lt;p&gt;If you are in the directory containing the above Dockerfile, build the
 container with:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ docker build -t yt-dl .
-&lt;/pre&gt;&lt;/div&gt;
+&lt;pre class=&#34;code text literal-block&#34;&gt;
+$ docker build -t yt-dl .
+&lt;/pre&gt;
 &lt;p&gt;and run it with:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ docker run -v $PWD:/home/ yt-dl youtube-dl &amp;lt;YOUTUBE-VID-URL&amp;gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;pre class=&#34;code text literal-block&#34;&gt;
+$ docker run -v $PWD:/home/ yt-dl youtube-dl &amp;lt;YOUTUBE-VID-URL&amp;gt;
+&lt;/pre&gt;
 &lt;p&gt;This will download any url&#39;s video into the current working directory.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;pro-tip-add-an-alias&#34;&gt;
 &lt;h4&gt;Pro-Tip: Add an &lt;tt class=&#34;docutils literal&#34;&gt;Alias&lt;/tt&gt;&lt;/h4&gt;
 &lt;p&gt;Add the following content to your &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;~/.bashrc&lt;/span&gt;&lt;/tt&gt; file and then run &lt;tt class=&#34;docutils literal&#34;&gt;source
 &lt;span class=&#34;pre&#34;&gt;~/.bashrc&lt;/span&gt;&lt;/tt&gt; to get rid the of long Docker bits of the above command.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$VID_DIR&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/path/to/downloaded/videos/
-&lt;span class=&#34;nb&#34;&gt;alias&lt;/span&gt; yt-dl&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;docker run -v $VID_DIR:/home/ yt-dl youtube-dl&amp;#39;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;pre class=&#34;code bash literal-block&#34;&gt;
+&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$VID_DIR&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/path/to/downloaded/videos/
+&lt;span class=&#34;nb&#34;&gt;alias&lt;/span&gt; yt-dl&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&#39;docker run -v $VID_DIR:/home/ yt-dl youtube-dl&#39;&lt;/span&gt;
+&lt;/pre&gt;
 &lt;/div&gt;
 &lt;div class=&#34;section&#34; id=&#34;wait-this-is-overly-complicated&#34;&gt;
 &lt;h4&gt;Wait This is Overly Complicated&lt;/h4&gt;
@@ -275,10 +287,12 @@ excuse to write a blog, post now would it Ms. Smarty Pantz.&lt;/p&gt;
     
         <entry>
         <title>How to Possibly Kinda Sorta Write a Travelblog</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/how-to-possibly-kinda-sorta-write-a-travelblog/" />
-        <id>tag:elijahcaine.me,2015-09-29:/blog/how-to-possibly-kinda-sorta-write-a-travelblog</id>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/how-to-possibly-kinda-sorta-write-a-travelblog/index.html" />
+        <id>tag:elijahcaine.me,2015-09-29:/blog/how-to-possibly-kinda-sorta-write-a-travelblog/index.html</id>
         <updated>2015-09-29T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fa444302150>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f7724b0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f7724e0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f772510>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -343,6 +357,647 @@ written record of the time you spent.&lt;/p&gt;
 &lt;p&gt;Plus it&#39;s just fun an nerdy to write scripts and programs to make this whole
 experience as user friendly as possible. If I poured even more time into this
 it could even be a startup...&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>Travel</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/travel/index.html" />
+        <id>tag:elijahcaine.me,2015-09-03:/liveblog/europe-2015/travel/index.html</id>
+        <updated>2015-09-03T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f768d20>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f768d80>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;thursday-2015-09-03&#34;&gt;
+&lt;h3&gt;Thursday 2015-09-03&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;travel-travel-travel&#34;&gt;
+&lt;h4&gt;Travel Travel Travel&lt;/h4&gt;
+&lt;p&gt;Travel travel travel travel travel travel travel travel travel travel travel
+travel travel travel travel travel travel travel travel travel travel travel.
+travel. Travel travel travel travel travel travel travel travel travel travel
+travel travel travel travel travel travel travel travel travel travel travel.&lt;/p&gt;
+&lt;p&gt;Travel travel travel travel travel travel travel travel travel travel travel
+travel travel travel travel travel travel travel travel travel travel travel.
+travel. Travel travel travel travel travel travel travel travel travel travel
+travel travel travel travel travel travel travel travel travel travel travel
+travel travel travel travel travel travel travel travel travel travel travel.
+travel. Travel travel travel travel travel travel travel travel travel travel
+travel travel travel travel travel travel travel travel travel travel travel.
+travel travel travel travel travel travel travel travel travel travel travel.&lt;/p&gt;
+&lt;p&gt;Travel travel travel travel travel travel. Travel travel travel travel travel
+travel travel. Travel travel travel travel travel travel travel travel travel.&lt;/p&gt;
+&lt;p&gt;Sleep.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>A Personal Day in Prague</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/a-personal-day-in-prague/index.html" />
+        <id>tag:elijahcaine.me,2015-09-02:/liveblog/europe-2015/a-personal-day-in-prague/index.html</id>
+        <updated>2015-09-02T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f765840>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f7658a0>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;wednesday-2015-09-02-rst&#34;&gt;
+&lt;h3&gt;Wednesday 2015-09-02.rst&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;a-personal-day-in-prague-almost-just-pictures&#34;&gt;
+&lt;h4&gt;A Personal Day in Prague: (Almost) Just Pictures*&lt;/h4&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img alt=&#34;Charles Bridge&#34; src=&#34;http://i.imgur.com/cK5h4Yp.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img alt=&#34;Pilot Statute&#34; src=&#34;http://i.imgur.com/INqmZvH.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img alt=&#34;View of Prague&#34; src=&#34;http://i.imgur.com/9XOJFqe.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;I went on a hike, found a great view at the top of a hill.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img alt=&#34;Oldtown Prague&#34; src=&#34;http://i.imgur.com/DLmnvZv.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img alt=&#34;Panorama with bridge&#34; src=&#34;http://i.imgur.com/sucXPOV.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img alt=&#34;&#39;Eli&#39; Starbucks Coffee&#34; src=&#34;http://i.imgur.com/YLZuriv.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&#39;Eli&#39;&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img alt=&#34;Stunning sunset&#34; src=&#34;http://i.imgur.com/ATG0VKf.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;* I swear it&#39;s not because I&#39;m lazy and don&#39;t want to write. The pictures just
+capture it better.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>Write the Docs Day 2</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/write-the-docs-day-2/index.html" />
+        <id>tag:elijahcaine.me,2015-09-01:/liveblog/europe-2015/write-the-docs-day-2/index.html</id>
+        <updated>2015-09-01T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f76d420>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f76d480>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;tuesday-2015-08-31&#34;&gt;
+&lt;h3&gt;Tuesday 2015-08-31&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;write-the-docs-day-2&#34;&gt;
+&lt;h4&gt;Write the Docs: Day 2&lt;/h4&gt;
+&lt;p&gt;Just like yesterday, I spent most of today enjoying some wonderful talks as
+well as stressing out -- I mean totally not stressing out -- about my own talk.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img alt=&#34;Write the Docs Staff Picture&#34; src=&#34;http://i.imgur.com/CeB82W5.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;The Write the Docs Staff saying thanks.&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;The first talk of the day was titled &amp;quot;Judas Priest Ate My Scrum Master&amp;quot;,
+which has almost nothing to do with Judas Priest or eating or scrum masters;
+instead it talked about things that are well known issues and a lot of laws
+(&lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Brooks%E2%80%99_law&#34;&gt;Brooks&#39; Law&lt;/a&gt;, &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Lehman&#39;s_laws_of_software_evolution&#34;&gt;Lehmann&#39;s Laws&lt;/a&gt;, &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Pareto_principle&#34;&gt;Pareto Principle&lt;/a&gt;, &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Conway&#39;s_law&#34;&gt;Conway&#39;s Law&lt;/a&gt;,
+etc) that nobody talks about that much but can be super helpful to consider
+when working in an industry.&lt;/li&gt;
+&lt;li&gt;The second talk covered different types of user interfaces and what to
+consider when writing error messages, troubleshooting pages, product tours.
+It was something I hadn&#39;t considered having primarily written command line
+tools with pretty limited and well established interface guidelines.&lt;/li&gt;
+&lt;li&gt;Then I gave a talk. It was a talk. I&#39;ll post a video of it once those
+get put up online and you can decide if it was good or bad.&lt;/li&gt;
+&lt;li&gt;The talk after mine was a nice history lesson and wanted the audience to
+reflect on what documentations can learn from documentation practices of the
+past. The TLDR on that one is that it used to suck to write technical docs
+even more than it sucks now.&lt;/li&gt;
+&lt;li&gt;Then there were a bunch of lightning talks. One talk from a twitter employee
+(there&#39;s a fun name for them I&#39;m sure) mentioned that gathering metrics are
+is important because without metrics everything you do is just guess and
+check.&lt;/li&gt;
+&lt;li&gt;The next talk &amp;quot;MacGyvering your docs&amp;quot; brought up the fact that the best
+documentation toolchain will (should?) only help existing developers. A
+better toolchain won&#39;t attract new devs. That was something I think a lot of
+projects can lose sight of.&lt;/li&gt;
+&lt;li&gt;The talk after that covered a team of scientists studying clouds (water
+clouds not internet clouds) using computer simulations. They wrote and
+documented a piece of software and they ended up publishing their program&#39;s
+documentation in a scientific journal. It&#39;s already been sited and
+everything. I hadn&#39;t even considered that as a possibility (publishing docs
+as a scientific paper).&lt;/li&gt;
+&lt;li&gt;The next two talks were pretty short (15 minute) talks about putting the data
+where the users need it and an introduction to screen-casting. The first was
+good for documenting things like an API and the second was good if I ever
+need to make a screen-cast. I doubt that will happen, but you never know!&lt;/li&gt;
+&lt;li&gt;The last talk &amp;quot;All roads might not lead to docs&amp;quot; held too main takeaways for
+me: The quote &lt;em&gt;The Purpose of this document is ________&lt;/em&gt; and the &lt;a class=&#34;reference external&#34; href=&#34;http://voiceandtone.com/&#34;&gt;mailchimp
+voice &amp;amp; tone guide&lt;/a&gt;, which is a very good document I suggest you read it
+(the title is pretty self explanatory I think).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For a full list of talks given at the conference, check out the &lt;a class=&#34;reference external&#34; href=&#34;http://www.writethedocs.org/conf/eu/2015/schedule/&#34;&gt;event&#39;s
+schedule&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The after party ended up happening at two venues since we got pre-maturely
+kicked out of the first one; we made the best of it and I got to talk to Anna
+Jaruga (the cloud research scientist) as well as a &lt;a class=&#34;reference external&#34; href=&#34;https://developer.mozilla.org/en-US/&#34;&gt;Mozilla Development
+Network&lt;/a&gt; writer, both very interesting people.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>Write the Docs Day 1</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/write-the-docs-day-1/index.html" />
+        <id>tag:elijahcaine.me,2015-08-31:/liveblog/europe-2015/write-the-docs-day-1/index.html</id>
+        <updated>2015-08-31T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f76dae0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f76db40>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;monday-2015-08-31&#34;&gt;
+&lt;h3&gt;Monday 2015-08-31&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;write-the-docs-day-1&#34;&gt;
+&lt;h4&gt;Write the Docs: Day 1&lt;/h4&gt;
+&lt;p&gt;I spent most of today enjoying the Write the Docs talks and (air
+conditioned) venue. I took some notes.&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;The keynote about the imposter syndrome was very relatable. The coping
+mechanism of framing goals in &amp;quot;I want to do...&amp;quot; instead of &amp;quot;I want to be...&amp;quot;
+seems like it could be effective. I liked the quote &amp;quot;Make better mistakes
+tomorrow&amp;quot;.&lt;/li&gt;
+&lt;li&gt;The second talk about naming things was very good and got me to think about
+the structure of documentation metadata (using labels vs taxonomy vs
+thesaurus, etc). This will be useful someday I&#39;m sure.&lt;/li&gt;
+&lt;li&gt;The third talk about [emojii] and the use of emoji was [emojii]. I
+never considered using them before, but I will going forward.&lt;/li&gt;
+&lt;li&gt;The fourth talk mentioned using &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Selenium_%28software%29?wprov=sfia1&#34;&gt;Selenium&lt;/a&gt; to test docs, that just makes
+sense. It&#39;s so obvious I wish it was easier.&lt;/li&gt;
+&lt;li&gt;The API Docs talk mentioned that you should give your user the data they will
+be working with as a top level priority instead of an after thought. This
+will definitely be a priority for me. I already try to give plenty of
+examples (since I speak example natively), but I&#39;ll be more Conscience of it.&lt;/li&gt;
+&lt;li&gt;The Design Docs with Disability in Mind was interesting. The big takeaway for
+me was keeping the elderly in mind.&lt;/li&gt;
+&lt;li&gt;The meta talk about crafting a presentation was delivered very well and
+mentioned adding contrast slide decks... I should have listened to this
+advice...&lt;/li&gt;
+&lt;li&gt;The second to the last talk of the day covered the plethora of rules we place
+on documentation. Having just recently helped established some style guides
+for the OSL docs I think we did a good job of giving some leeway to the
+writers.  The extreme example of &#39;Limited rules docs&#39; (e.g., the Python
+Documentation) does not really work well for the reader in my experience.&lt;/li&gt;
+&lt;li&gt;The final talk by some &lt;a class=&#34;reference external&#34; href=&#34;https://developer.mozilla.org/en-US/&#34;&gt;MDN&lt;/a&gt; writers equated docs to a garden.  The metaphor
+worked surprisingly well.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For a full list of the talks and their descriptions, visit the &lt;a class=&#34;reference external&#34; href=&#34;http://www.writethedocs.org/conf/eu/2015/schedule/&#34;&gt;event&#39;s
+schedule&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Day 1 was pretty emojii. We ended the night with emojii at a venue called The
+Pub. Many conversations and laughs were had. I like this crowd.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>WTD City Tour of Prague</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/wtd-city-tour-of-prague/index.html" />
+        <id>tag:elijahcaine.me,2015-08-30:/liveblog/europe-2015/wtd-city-tour-of-prague/index.html</id>
+        <updated>2015-08-30T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f765bd0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f765c30>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;sunday-2015-08-30&#34;&gt;
+&lt;h3&gt;Sunday 2015-08-30&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;prague-day-1&#34;&gt;
+&lt;h4&gt;Prague Day 1&lt;/h4&gt;
+&lt;p&gt;I went on a wonderful &lt;a class=&#34;reference external&#34; href=&#34;http://www.writethedocs.org/conf/eu/2015/#events&#34;&gt;city tour&lt;/a&gt; of Prague provided by Write The Docs. We
+crossed some bridges, saw some castles, and experienced many wonderful parts of
+the city.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/CkzXuxl.jpg&#34; src=&#34;http://i.imgur.com/CkzXuxl.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Here&#39;s me in front of a church eating some gelato.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;After the tour I was very hungry and tagged along with some folks from my tour
+group on a journey to get food. We went to a restaurant that brought us beer on
+a model train.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/iJujmTR.jpg&#34; src=&#34;http://i.imgur.com/iJujmTR.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;This is the train that brought us beer.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Here are some picture I took of the buildings in the city. I like the
+architecture a lot.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/y6Rbrin.jpg&#34; src=&#34;http://i.imgur.com/y6Rbrin.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/WD6k8xa.jpg&#34; src=&#34;http://i.imgur.com/WD6k8xa.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;They are so cool. I haven&#39;t found the words to describe why, but the asthetics
+please me.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;After the tour and food there was a &lt;em&gt;Write the Docs Conference Reception&lt;/em&gt; (aka
+meet &amp;amp; greet) where I got to hang out with many of the attendees of the
+conference. There was food and fabulous people.&lt;/p&gt;
+&lt;p&gt;I did not have a hard time falling asleep that night.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>To Prague!</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/to-prague/index.html" />
+        <id>tag:elijahcaine.me,2015-08-29:/liveblog/europe-2015/to-prague/index.html</id>
+        <updated>2015-08-29T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f7654b0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f765510>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;saturday-2015-08-29&#34;&gt;
+&lt;h3&gt;Saturday 2015-08-29&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;i-strongly-dislike-travel&#34;&gt;
+&lt;h4&gt;I Strongly Dislike Travel&lt;/h4&gt;
+&lt;p&gt;I would say I hate travel, but that level of hyperbole is literally the worst
+thing on the planet...&lt;/p&gt;
+&lt;p&gt;My strong dislike for travel comes mostly from my personal inability to trust
+the systems that will get me to where I am going. If I have a flight in one
+week and I have to take a bus or train to the airport, I will spend the entire
+week running through my head &amp;quot;When is my flight? Umm days, yeesh hours, and ack
+minutes. How am I getting there? The oh God bus leaving at some time, somewhere
+bound.  Once you get there you will go through security which will take between
+5 minutes and 2 hours. Budget your time appropriately.  Any of these systems
+can fail and based on experience they have&amp;quot; over and over and over. The stress
+is compounded when people don&#39;t always speak your language and you forgot to
+eat a proper meal the morning of.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;That&lt;/em&gt; is why I am 3 hours early to my flight from Amsterdam to Prague. I
+regret nothing.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;currency-is-weird&#34;&gt;
+&lt;h4&gt;Currency is Weird&lt;/h4&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/ggDSMW9.jpg&#34; src=&#34;http://i.imgur.com/ggDSMW9.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;It is going to take me forever to remember &lt;em&gt;25 here monies is about 1 home
+monies&lt;/em&gt;. Everything is gonna feel really expensive I bet...&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;i-made-it-to-prague&#34;&gt;
+&lt;h4&gt;I Made it to Prague&lt;/h4&gt;
+&lt;p&gt;I made it to Prague just fine. They have a cool train system.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/zC5TbMQ.jpg&#34; src=&#34;http://i.imgur.com/zC5TbMQ.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;Way cooler than the underground train systems I&#39;m used to...&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>A Very Long Bike Ride</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/a-very-long-bike-ride/index.html" />
+        <id>tag:elijahcaine.me,2015-08-28:/liveblog/europe-2015/a-very-long-bike-ride/index.html</id>
+        <updated>2015-08-28T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f765f90>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f765fc0>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;friday-2015-08-28&#34;&gt;
+&lt;h3&gt;Friday 2015-08-28&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;my-butt-hurts&#34;&gt;
+&lt;h4&gt;My Butt Hurts...&lt;/h4&gt;
+&lt;p&gt;Today I went on an awesome bike ride all the way to Haarlem (15km west of
+Amsterdam). I didn&#39;t actually do anything there; I just went, picked up snacks,
+and headed back. I&#39;m 99% sure I missed out on an awesome Haarlem exclusive
+cultural experience, but if was really more about the journey (I originally set
+out to bike to the coast and Haarlem was my compromise to that).&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/T9jv0xp.jpg&#34; src=&#34;http://i.imgur.com/T9jv0xp.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/LN7incu.jpg&#34; src=&#34;http://i.imgur.com/LN7incu.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;I found a very neat park near the Western edge of Amsterdam; I ended
+up spending an hour or so there having a picnic.&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/xrVnV3e.jpg&#34; src=&#34;http://i.imgur.com/xrVnV3e.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;This was a cool abandoned building I found. I like abandoned
+buildings.&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/jCQfQdE.jpg&#34; src=&#34;http://i.imgur.com/jCQfQdE.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;I also found this awesome trash can for people riding bikes. It&#39;s
+genius.&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/1jdKr4F.jpg&#34; src=&#34;http://i.imgur.com/1jdKr4F.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;PONIES&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;After the bike ride I was very tired. I slept a lot. And yet not enough...&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;small-and-large-appreciations&#34;&gt;
+&lt;h4&gt;Small (and Large) Appreciations&lt;/h4&gt;
+&lt;p&gt;Here is a list of some of the traits of Amsterdam (and what I have experienced
+of the Netherlands at large) which I appreciate.&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;They have signs that tell you you&#39;re going the wrong direction.&lt;/li&gt;
+&lt;li&gt;You can bike to another city and be on bike paths the whole time!&lt;/li&gt;
+&lt;li&gt;Bikes are easy to use and aren&#39;t shoe-horned in as a second class mode of
+transportation.&lt;/li&gt;
+&lt;li&gt;The trains are so quiet. Why can&#39;t America have quiet trains?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This list will probably grow as I remember things. All in all I like the city
+and the country. You should visit if you haven&#39;t already.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>Van Gough Museum</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/van-gough-museum/index.html" />
+        <id>tag:elijahcaine.me,2015-08-27:/liveblog/europe-2015/van-gough-museum/index.html</id>
+        <updated>2015-08-27T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f76de70>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f76ded0>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;thursday-2015-08-27&#34;&gt;
+&lt;h3&gt;Thursday 2015-08-27&lt;/h3&gt;
+&lt;p&gt;Today I visited the Van Gough museum. I tried to get in using my mom&#39;s
+Amsterdam Museum Pass, but it didn&#39;t fly there like it did at the Rijks.&lt;/p&gt;
+&lt;p&gt;It was pretty fun, but the entire experience felt very artificial and plastic.
+The paintings were great to see in person, but everything around the pieces
+felt a little tacky. My opinion will likely change about it, but I did not
+enjoy the Van Gough museum nearly as much as I enjoyed the Rijks Museum,
+despite my love for Van Gough and his works.&lt;/p&gt;
+&lt;p&gt;I spent the rest of the day walking around and cashed in early. Jetlag + lots
+of walking = ready for bed by 3pm.&lt;/p&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>The Rijks Museum and Travel Tips</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/the-rijks-museum-and-travel-tips/index.html" />
+        <id>tag:elijahcaine.me,2015-08-26:/liveblog/europe-2015/the-rijks-museum-and-travel-tips/index.html</id>
+        <updated>2015-08-26T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f76d780>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f76d7e0>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;wednesday-2015-08-26&#34;&gt;
+&lt;h3&gt;Wednesday 2015-08-26&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;the-rijks-museum&#34;&gt;
+&lt;h4&gt;The Rijks Museum&lt;/h4&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/Dn4BeWt.jpg&#34; src=&#34;http://i.imgur.com/Dn4BeWt.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;I&#39;m not sure which street I took this panorama on, but I think it looks
+awesome. It captures the Amsterdam canal street pretty well.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Today I went to the Rijks Museum and had a bit of a culture overload.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/Ic9NAY1.jpg&#34; src=&#34;http://i.imgur.com/Ic9NAY1.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;Everybody got selfies with Van Gough, so I got a selfie The Milkmaid.  I
+realize in retrospect that it doesn&#39;t work as well.&lt;/p&gt;
+&lt;p&gt;In other news, this is my face when I realized the bathroom stalls go from
+floor to ceiling.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/EI3v0DS.jpg&#34; src=&#34;http://i.imgur.com/EI3v0DS.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Yes, this photo was taken in the bathroom stall.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;And this is a classy restaurant I found with classy lamps.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/Gqz2m7a.jpg&#34; src=&#34;http://i.imgur.com/Gqz2m7a.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;They were closed, otherwise I would have gone in.&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;some-travel-tips&#34;&gt;
+&lt;h4&gt;Some Travel Tips&lt;/h4&gt;
+&lt;p&gt;Although I have not completed my trip, I have some tips to share
+with you about travel.&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;Always bring a &#39;Go Bag&#39; when you go out for the day. Fill it with snacks and
+necessities and leave plenty of room for memorabilia you get while out and
+about.&lt;/li&gt;
+&lt;li&gt;Try something new before defaulting to your comfort zone. This is true for
+food as well as experiences.&lt;/li&gt;
+&lt;li&gt;Always being plenty of snacks and water. You will regret it if you don&#39;t.&lt;/li&gt;
+&lt;li&gt;Be patient. You invested a lot to get here, make it count.&lt;/li&gt;
+&lt;li&gt;At a museum, take a picture of the plackard after taking a picture of the
+piece so you don&#39;t forget what it&#39;s called.&lt;/li&gt;
+&lt;li&gt;Don&#39;t be afraid to sit in a café and just read for a bit. Sometimes that&#39;s as
+culturally diversifying as a day in a museum or city tour.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>To Amsterdam!</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/to-amsterdam/index.html" />
+        <id>tag:elijahcaine.me,2015-08-24:/liveblog/europe-2015/to-amsterdam/index.html</id>
+        <updated>2015-08-24T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f76d0c0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f76d120>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;monday-2015-08-24-tuesday-2015-08-24&#34;&gt;
+&lt;h3&gt;Monday 2015-08-24 &amp;amp; Tuesday 2015-08-24&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;pdx-ams&#34;&gt;
+&lt;h4&gt;PDX -&amp;gt; AMS&lt;/h4&gt;
+&lt;p&gt;The flight was uneventful. It was the longest one I&#39;ve ever been on, which is
+always a rough milestone to overcome, but actually one of the better flights
+I&#39;ve taken. TIL Delta&#39;s service does not suck.&lt;/p&gt;
+&lt;p&gt;I usually sleep the entire way to &amp;lt;insert location here&amp;gt;, but I managed to stay
+productive (coding, reading, writing) for the majority of flight. I must say,
+it was nice to have my own personal screen to catch up on Last Week Tonight.
+I&#39;ve wanted to watch that show for ages...&lt;/p&gt;
+&lt;p&gt;[&lt;em&gt;Lazy bliss not pictured&lt;/em&gt;]&lt;/p&gt;
+&lt;p&gt;So good.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;day-0-part-1&#34;&gt;
+&lt;h4&gt;Day 0: Part 1&lt;/h4&gt;
+&lt;p&gt;So I wrote down some thoughts about Amsterdam thus far:&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;People keep using fake made up words. What&#39;s up with that?&lt;/li&gt;
+&lt;li&gt;The roads are tiny but people keep driving on them. It looks like chaos but I
+haven&#39;t seen an accident yet. I&#39;m kinda impressed. People aren&#39;t even yelling
+at each other about almost getting hit.&lt;/li&gt;
+&lt;li&gt;The toilet paper squares are actually rectangles. It might just be the toilet
+paper at the place I am staying. Either way, I can&#39;t deal with this aspect
+ratio change. I might not be able to poop in Amsterdam.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;COFFEE COFFEE COFFEE COFFEE COFFEE COFFEE COFFEE COFFEE COFFEE&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;The trains are so quiet. I didn&#39;t want to get off...&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;BIKES BIKES BIKES BIKES BIKES BIKES BIKES BIKES BIKES BIKES&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here&#39;s some pictures I took:&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/gr8VYfD.jpg&#34; src=&#34;http://i.imgur.com/gr8VYfD.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;The view from the location I am staying at.&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/xZ4Kxx5.jpg&#34; src=&#34;http://i.imgur.com/xZ4Kxx5.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;A panorama from the park outside of where I am staying.&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/7kCRjew.jpg&#34; src=&#34;http://i.imgur.com/7kCRjew.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Some goats I found.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Aaaaaaaand naptime.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;day-0-part-2&#34;&gt;
+&lt;h4&gt;Day 0: Part 2&lt;/h4&gt;
+&lt;p&gt;I finished today by going to the Red Light District. There
+were a lot of half naked ladies in windows. They kept winking
+at me. I&#39;m pretty sure they liked me; it&#39;s not like they
+&lt;em&gt;definitely&lt;/em&gt; have a monetary incentive to get my attention or
+anything.&lt;/p&gt;
+&lt;p&gt;I ended up finding a bar and enjoying a Belgian White Beer.
+It tasted &lt;a class=&#34;reference external&#34; href=&#34;https://xkcd.com/1534/&#34;&gt;surprisingly good&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/ab22x3s.jpg&#34; src=&#34;http://i.imgur.com/ab22x3s.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;So this is what it feels like to drink in a bar... neat.&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>Packed and Ready to Fly</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/packed-and-ready-to-fly/index.html" />
+        <id>tag:elijahcaine.me,2015-08-23:/liveblog/europe-2015/packed-and-ready-to-fly/index.html</id>
+        <updated>2015-08-23T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f7682d0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f768330>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;sunday-2015-08-23&#34;&gt;
+&lt;h3&gt;Sunday 2015-08-23&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;all-packed&#34;&gt;
+&lt;h4&gt;All Packed&lt;/h4&gt;
+&lt;p&gt;So I&#39;m all packed up and ready to go.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;http://i.imgur.com/gtFk6YA.jpg&#34; src=&#34;http://i.imgur.com/gtFk6YA.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Left:&lt;/strong&gt; Chargers, electronics, entertainment, toiletries, water bottle,
+wallet, etc.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Center:&lt;/strong&gt; The bag, the &lt;em&gt;Write the Docs&lt;/em&gt; shirt I&#39;ll be wearing.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Right:&lt;/strong&gt; Clothing. Gameboy SP at the top.&lt;/p&gt;
+&lt;p&gt;Not the &lt;em&gt;perfect&lt;/em&gt; bag of things to bring to Europe, but certainly solid and
+most of it practical. I&#39;m packing an extra bag for all of the trinkets I&#39;ll
+bring back.&lt;/p&gt;
+&lt;p&gt;Let me know if you want anything (if you know how to contact me we&#39;re close
+enough for you to ask.)&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>Dominos are setup</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/dominos-are-setup/index.html" />
+        <id>tag:elijahcaine.me,2015-08-02:/liveblog/europe-2015/dominos-are-setup/index.html</id>
+        <updated>2015-08-02T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f768660>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f7686c0>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;sunday-2015-08-02&#34;&gt;
+&lt;h3&gt;Sunday 2015-08-02&lt;/h3&gt;
+&lt;p&gt;All of my travel is booked, plane tickets are bought, and vacation time gotten.&lt;/p&gt;
+&lt;p&gt;The only thing left to do now is to write the talk. Easy-peasy.&lt;/p&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
+        <entry>
+        <title>About the liveblog</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/about-the-liveblog/index.html" />
+        <id>tag:elijahcaine.me,2015-08-01:/liveblog/europe-2015/about-the-liveblog/index.html</id>
+        <updated>2015-08-01T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fd92f7689c0>" />
+        <category term="<built-in method title of unicode object at 0x7fd92f768a20>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;saturday-2015-08-01&#34;&gt;
+&lt;h3&gt;Saturday 2015-08-01&lt;/h3&gt;
+&lt;div class=&#34;section&#34; id=&#34;about-the-blog-this-is-a-test&#34;&gt;
+&lt;h4&gt;About the blog (this is a test)&lt;/h4&gt;
+&lt;p&gt;This blog was created in preparation for my trip to Europe in about 3 weeks. I
+wanted to see how difficult it would be to make a blog that could be updated on
+the go, version controlled with git, and would not require me to log into a
+laptop or server to make changes.&lt;/p&gt;
+&lt;p&gt;I ended up using PageUp (link in the footer), along with Github Gists (also
+linked in the footer) to make a mostly useful platform. New changes are pushed
+to Github, my personal server pulls those changes every 10 minutes, and this
+page is rebuilt pretty painlessly.&lt;/p&gt;
+&lt;p&gt;Best of all: with a git client on my phone I can make updates anywhere that has
+a signal and I don&#39;t need to bust my laptop out. I wrote this post while I was
+on the toilet!&lt;/p&gt;
+&lt;p&gt;It wasn&#39;t as easy as using an established platform like Twitter, but just like
+with everything I try to make, I put something together I would want to use and
+interact with. If a friend started a liveblog for a specific event I would
+follow it over their Twitter feed any day. Plus I don&#39;t have to deal with the
+character limit of Twitter.&lt;/p&gt;
+&lt;img alt=&#34;http://imgur.com/m0RJxCk.png&#34; src=&#34;http://imgur.com/m0RJxCk.png&#34; style=&#34;width: 100%;&#34;/&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </content>

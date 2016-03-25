@@ -51,15 +51,6 @@
           <li><a href="/resume.pdf">Resume</a></li>
         </ul>
       </div>
-      <ol class="breadcrumb">
-        
-        <li><a href="/">elijahcaine.me</a></li>
-        
-          <li class="active"><a href="/blog/">blog</a></li>
-        
-        <li class="active"><a href="/blog/covertly-installing-packages-with-docker/">covertly-installing-packages-with-docker</a></li>
-        
-      </ol>
     </nav>
 
     
@@ -99,7 +90,8 @@ installing <tt class="docutils literal"><span class="pre">youtube-dl</span></tt>
 <div class="section" id="the-deets-dockerfile-and-commands">
 <h3>The Deets: Dockerfile and Commands</h3>
 <p><tt class="docutils literal">Dockerfile</tt></p>
-<div class="highlight"><pre><span></span>FROM ubuntu:latest
+<pre class="code text literal-block">
+FROM ubuntu:latest
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
@@ -107,24 +99,27 @@ RUN apt-get -y install python-pip
 RUN pip install youtube-dl
 
 WORKDIR /home
-RUN alias youtube-dl=&#39;/usr/local/bin/youtube-dl&#39;
-</pre></div>
+RUN alias youtube-dl='/usr/local/bin/youtube-dl'
+</pre>
 <p>If you are in the directory containing the above Dockerfile, build the
 container with:</p>
-<div class="highlight"><pre><span></span>$ docker build -t yt-dl .
-</pre></div>
+<pre class="code text literal-block">
+$ docker build -t yt-dl .
+</pre>
 <p>and run it with:</p>
-<div class="highlight"><pre><span></span>$ docker run -v $PWD:/home/ yt-dl youtube-dl &lt;YOUTUBE-VID-URL&gt;
-</pre></div>
+<pre class="code text literal-block">
+$ docker run -v $PWD:/home/ yt-dl youtube-dl &lt;YOUTUBE-VID-URL&gt;
+</pre>
 <p>This will download any url's video into the current working directory.</p>
 </div>
 <div class="section" id="pro-tip-add-an-alias">
 <h3>Pro-Tip: Add an <tt class="docutils literal">Alias</tt></h3>
 <p>Add the following content to your <tt class="docutils literal"><span class="pre">~/.bashrc</span></tt> file and then run <tt class="docutils literal">source
 <span class="pre">~/.bashrc</span></tt> to get rid the of long Docker bits of the above command.</p>
-<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">$VID_DIR</span><span class="o">=</span>/path/to/downloaded/videos/
-<span class="nb">alias</span> yt-dl<span class="o">=</span><span class="s1">&#39;docker run -v $VID_DIR:/home/ yt-dl youtube-dl&#39;</span>
-</pre></div>
+<pre class="code bash literal-block">
+<span class="nb">export</span> <span class="nv">$VID_DIR</span><span class="o">=</span>/path/to/downloaded/videos/
+<span class="nb">alias</span> yt-dl<span class="o">=</span><span class="s1">'docker run -v $VID_DIR:/home/ yt-dl youtube-dl'</span>
+</pre>
 </div>
 <div class="section" id="wait-this-is-overly-complicated">
 <h3>Wait This is Overly Com&shy;pli&shy;cat&shy;ed</h3>
