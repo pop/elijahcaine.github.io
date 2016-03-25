@@ -5,9 +5,83 @@
         <link>http://elijahcaine.me/</link>
         <description></description>
         <language>en</language>
-        <pubDate>Sat, 05 Mar 2016 07:00:00 GMT</pubDate>
+        <pubDate>Fri, 25 Mar 2016 07:00:00 GMT</pubDate>
         <docs>http://elijahcaine.me/rss/</docs>
         <generator>acrylamid 0.8.dev0</generator>
+        
+            <item>
+        <title>How to Develop a Site for the Web</title>
+        <link>http://elijahcaine.me/blog/how-to-develop-a-site-for-the-web/index.html</link>
+        <description>&lt;div class=&#34;section&#34; id=&#34;how-to-develop-a-site-for-the-web&#34;&gt;
+&lt;h3&gt;How to Develop a Site for the Web&lt;/h3&gt;
+&lt;p&gt;Web Development, especially the front-endy stuff, is a great way to understand
+how computers &lt;em&gt;think&lt;/em&gt; and can be a wonderful foray into computer programming.
+Anybody that&#39;s made a website probably remembers their first time:&lt;/p&gt;
+&lt;ol class=&#34;arabic simple&#34;&gt;
+&lt;li&gt;Open up a text editor.&lt;/li&gt;
+&lt;li&gt;Type something like the following in:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;code html literal-block&#34;&gt;
+&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;h1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;Hello world!&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;h1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;This is so cool!&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;h1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;
+&lt;ol class=&#34;arabic simple&#34; start=&#34;3&#34;&gt;
+&lt;li&gt;&lt;tt class=&#34;docutils literal&#34;&gt;Save As index.html&lt;/tt&gt;.&lt;/li&gt;
+&lt;li&gt;Right click and open the file in your browser.&lt;/li&gt;
+&lt;li&gt;Marvel at what you&#39;ve created and hack away at it all night long.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;And there you go! You&#39;ve got a website made and ready to roll. It&#39;s not on a
+server, and you can&#39;t tell your friends to go to it from &lt;em&gt;their&lt;/em&gt; computer --
+but those are just technicalities. You can still celebrate doing a thing &lt;em&gt;like a
+boss&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Unfortunately, when you test your website by viewing local files you&#39;re missing
+out on a lot of advantages and quirks that you get when you host a website on a
+&lt;em&gt;real server&lt;/em&gt; using something like &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Web_server&#34;&gt;Apache or Nginx&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For instance, when you run check your website by clicking through
+&lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;file///home/username/project/files.html&lt;/span&gt;&lt;/tt&gt; all of your hyperlinks that should
+point to &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;http://mywebsite.ext/somepage/&lt;/span&gt;&lt;/tt&gt; will take you to &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;file:////somepage&lt;/span&gt;&lt;/tt&gt;
+when they should take you to
+&lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;file:///home/username/projects/myawesomesite/somepage/index.html&lt;/span&gt;&lt;/tt&gt;.&lt;/p&gt;
+&lt;div class=&#34;section&#34; id=&#34;run-a-development-server-it-s-easy&#34;&gt;
+&lt;h4&gt;Run A Development Server (it&#39;s easy!)&lt;/h4&gt;
+&lt;div class=&#34;section&#34; id=&#34;the-short-answer&#34;&gt;
+&lt;h5&gt;The Short Answer&lt;/h5&gt;
+&lt;pre class=&#34;code text literal-block&#34;&gt;
+$ python2 -m SimpleHTTPServer
+Serving HTTP on 0.0.0.0 port 8000 ...
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;the-longer-answer&#34;&gt;
+&lt;h5&gt;The Longer Answer&lt;/h5&gt;
+&lt;p&gt;You can run your own local webserver to serve files &lt;em&gt;locally&lt;/em&gt;. This gets you
+all of the developmental advantages of running a webserver without having to
+rent or run a server in the cloud. The best part is that it&#39;s very easy to run
+a development web server.&lt;/p&gt;
+&lt;p&gt;Here&#39;s how:&lt;/p&gt;
+&lt;ol class=&#34;arabic simple&#34;&gt;
+&lt;li&gt;&lt;a class=&#34;reference external&#34; href=&#34;https://python.org/downloads/&#34;&gt;Install Python&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Navigate to &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;your-awesome-website&lt;/span&gt;&lt;/tt&gt; directory/folder.&lt;/li&gt;
+&lt;li&gt;Run &lt;tt class=&#34;docutils literal&#34;&gt;python &lt;span class=&#34;pre&#34;&gt;-m&lt;/span&gt; SimpleHTTPServer&lt;/tt&gt; if you installed &lt;tt class=&#34;docutils literal&#34;&gt;python2&lt;/tt&gt; or run
+&lt;tt class=&#34;docutils literal&#34;&gt;python &lt;span class=&#34;pre&#34;&gt;-m&lt;/span&gt; http.server&lt;/tt&gt; if you installed &lt;tt class=&#34;docutils literal&#34;&gt;python3&lt;/tt&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;note&#34;&gt;
+&lt;p class=&#34;first admonition-title&#34;&gt;Note&lt;/p&gt;
+&lt;p class=&#34;last&#34;&gt;These instructions assume you are doing things in a Unix environment (OSX
+or Linux) thought the commandline. If you are using Windows you should
+check out this &lt;a class=&#34;reference external&#34; href=&#34;http://stackoverflow.com/questions/17351016/set-up-python-simplehttpserver-on-windows&#34;&gt;stack overflow post&lt;/a&gt; for Windows-specific help.&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Then in your web browser go to the address &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;http://localhost:8000&lt;/span&gt;&lt;/tt&gt; and bam!
+&lt;strong&gt;Your&lt;/strong&gt; Website.&lt;/p&gt;
+&lt;div class=&#34;figure align-center&#34;&gt;
+&lt;img alt=&#34;&#39;High Five&#39; gif&#34; src=&#34;http://media.riffsy.com/images/ba88f72dbccae632dcfd4c80a732f9b9/raw&#34;/&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Fri, 25 Mar 2016 07:00:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:elijahcaine.me,2016-03-25:/blog/how-to-develop-a-site-for-the-web/index.html</guid>
+    </item>
         
             <item>
         <title>Running Firefox in Docker</title>
