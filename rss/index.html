@@ -5,9 +5,136 @@
         <link>http://elijahcaine.me/</link>
         <description></description>
         <language>en</language>
-        <pubDate>Fri, 25 Mar 2016 07:00:00 GMT</pubDate>
+        <pubDate>Sun, 03 Apr 2016 07:00:00 GMT</pubDate>
         <docs>http://elijahcaine.me/rss/</docs>
         <generator>acrylamid 0.8.dev0</generator>
+        
+            <item>
+        <title>Python Exceptions</title>
+        <link>http://elijahcaine.me/blog/python-exceptions/index.html</link>
+        <description>&lt;div class=&#34;section&#34; id=&#34;how-to-get-the-most-out-of-your-python-exceptions&#34;&gt;
+&lt;h3&gt;How to Get the Most out of Your Python Exceptions&lt;/h3&gt;
+&lt;pre class=&#34;code python literal-block&#34;&gt;
+&lt;span class=&#34;n&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;input&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&#39;Please enter a number not equal to 0: &#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;float&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;except&lt;/span&gt; &lt;span class=&#34;ne&#34;&gt;ZeroDivisionError&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&#39;Error: &#39;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&#39;You had one job!&#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+&lt;div class=&#34;warning&#34;&gt;
+&lt;p class=&#34;first admonition-title&#34;&gt;Warning&lt;/p&gt;
+&lt;p class=&#34;last&#34;&gt;This post does not cover &lt;em&gt;what&lt;/em&gt; python exceptions are. If the above
+code doesn&#39;t make sense you should check out this &lt;a class=&#34;reference external&#34; href=&#34;https://wiki.python.org/moin/HandlingExceptions&#34;&gt;Introduction to Python
+Exceptions&lt;/a&gt; from wiki.python.org before reading this post.&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;If you&#39;ve fallen in love with Python you&#39;ve no doubt discovered exceptions:&lt;/p&gt;
+&lt;pre class=&#34;code python literal-block&#34;&gt;
+&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# do a thing&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;except&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# thing did not work,&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# do something else&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;They are endlessly useful and help one to avoid writing checks upon checks upon
+checks before getting to the meat of your project. Just try a thing, catch the
+error, keep on rolling (or fail gracefully).&lt;/p&gt;
+&lt;p&gt;As powerful as they can be, I have found a lot of folks (past me included) who
+don&#39;t know how to find python exceptions and don&#39;t know how to write their own
+exceptions! So let&#39;s do that.&lt;/p&gt;
+&lt;div class=&#34;section&#34; id=&#34;finding-exceptions&#34;&gt;
+&lt;h4&gt;Finding Exceptions&lt;/h4&gt;
+&lt;p&gt;When writing exception handling code it&#39;s kosher to explicitly state &lt;em&gt;which&lt;/em&gt;
+error you expect.&lt;/p&gt;
+&lt;pre class=&#34;code python literal-block&#34;&gt;
+&lt;span class=&#34;c1&#34;&gt;# Bad:&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# A thing that might not work&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;except&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Something else&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# Good:&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# A thing that might not work&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;except&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SpecificError&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;err&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Maybe print(err)&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Something else&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;When I first found this out I thought &lt;em&gt;Golly that does sound useful; I always
+try to be explicit in my error handling -- but how??&lt;/em&gt; Thankfully future me is
+here to answer questions like this.&lt;/p&gt;
+&lt;p&gt;The exception you are looking for (for instance, &lt;tt class=&#34;docutils literal&#34;&gt;SpecificError&lt;/tt&gt; in the above
+pseudo-code) can be found in the python traceback:&lt;/p&gt;
+&lt;pre class=&#34;code text literal-block&#34;&gt;
+$ echo &amp;quot;open(&#39;myfakefile.txt&#39;, &#39;r&#39;).close()&amp;quot; &amp;gt; my-unhandled-script.py
+$ python my-unhandled-script.py
+Traceback (most recent call last):
+  File &amp;quot;/tmp/test.py&amp;quot;, line 1, in &amp;lt;module&amp;gt;
+    open(&#39;myfakefile.txt&#39;, &#39;r&#39;).close()
+IOError: [Errno 2] No such file or directory: &#39;myfakefile.txt&#39;
+&lt;/pre&gt;
+&lt;p&gt;That bit on the last line &lt;tt class=&#34;docutils literal&#34;&gt;IOError&lt;/tt&gt; is the exception you&#39;re looking for. So
+when you write your code you&#39;ll say something like the following:&lt;/p&gt;
+&lt;pre class=&#34;code python literal-block&#34;&gt;
+&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;nb&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&#39;myfakefile.txt&#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&#39;r&#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;except&lt;/span&gt; &lt;span class=&#34;ne&#34;&gt;IOError&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&#39;File `myfakefile.txt` does not exist&#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;To recap, here is one way (and my preferred method for) &#39;doing&#39; python
+exception handling:&lt;/p&gt;
+&lt;ol class=&#34;arabic simple&#34;&gt;
+&lt;li&gt;Write breakable code.&lt;/li&gt;
+&lt;li&gt;Run breakable code, see what exceptions python spits out.&lt;/li&gt;
+&lt;li&gt;Wrap breakable code in explicit &lt;tt class=&#34;docutils literal&#34;&gt;try/except&lt;/tt&gt; blocks.&lt;/li&gt;
+&lt;li&gt;???&lt;/li&gt;
+&lt;li&gt;Profit.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;writing-your-own-exceptions&#34;&gt;
+&lt;h4&gt;Writing Your Own Exceptions&lt;/h4&gt;
+&lt;p&gt;You (who me?), yes &lt;em&gt;you&lt;/em&gt; can write custom python exceptions. It&#39;s dead easy
+too.&lt;/p&gt;
+&lt;p&gt;The long and short of it is you define an exception class which either inherits
+from the &lt;tt class=&#34;docutils literal&#34;&gt;Exception&lt;/tt&gt; class or another pre-existing exception.&lt;/p&gt;
+&lt;pre class=&#34;code python literal-block&#34;&gt;
+&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;CusssstomError&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;ne&#34;&gt;Exception&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;sd&#34;&gt;&#39;&#39;&#39;Raise when snakes&#39;&#39;&#39;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__init__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;message&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+        &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;message&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;message&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;check_for_snakes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&#39;snake&#39;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;foo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lower&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;():&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;raise&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;CusssstomError&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&#39;Snakes! I hate snakes!&#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;try&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;foo&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;input&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;Just don&#39;t mention snakes: &amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;check_for_snakes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;except&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;CusssstomError&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;message&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;Thanks. I appreciate it.&amp;quot;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;The above code defines the &lt;tt class=&#34;docutils literal&#34;&gt;CusssstomError&lt;/tt&gt; exception class which you can
+&lt;tt class=&#34;docutils literal&#34;&gt;raise&lt;/tt&gt;. Very neat and &lt;a class=&#34;reference external&#34; href=&#34;https://docs.python.org/2/glossary.html#term-pythonic&#34;&gt;pythonic&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;further-reading&#34;&gt;
+&lt;h4&gt;Further Reading&lt;/h4&gt;
+&lt;p&gt;Here are a few references I suggest you check out to get an even better grasp
+on exception handling and custom exceptions:&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;This Stack Overflow post: &lt;a class=&#34;reference external&#34; href=&#34;http://stackoverflow.com/questions/1319615/proper-way-to-declare-custom-exceptions-in-modern-python&#34;&gt;Proper way to declare custom exceptions in modern
+Python?&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;This Python doc: &lt;a class=&#34;reference external&#34; href=&#34;https://docs.python.org/2/library/exceptions.html&#34;&gt;Built-in Exceptions&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And as always, search engines are your friends.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Sun, 03 Apr 2016 07:00:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:elijahcaine.me,2016-04-03:/blog/python-exceptions/index.html</guid>
+    </item>
         
             <item>
         <title>How to Develop a Site for the Web</title>
