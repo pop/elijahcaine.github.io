@@ -3,221 +3,227 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>http://elijahcaine.me/blog/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/slides/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/osl/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/packed-and-ready-to-fly/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/to-prague/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/travel/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/blog/how-to-possibly-kinda-sorta-write-a-travelblog/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/comics/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/write-the-docs-day-2/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/a-personal-day-in-prague/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://elijahcaine.me/liveblog/europe-2015/van-gough-museum/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <loc>http://elijahcaine.me/blog/working-remote-the-fresh-pot/</loc>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/blog/cat-barcamp-2015/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/wtd-city-tour-of-prague/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/videos/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://elijahcaine.me/liveblog/europe-2015/van-gough-museum/</loc>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/write-the-docs-day-1/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/rss/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/blog/python-exceptions/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/atom/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/to-amsterdam/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/blog/covertly-installing-packages-with-docker/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/other/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/reading/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/404.html</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/blog/running-firefox-in-docker/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/renders/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/blog/how-to-develop-a-site-for-the-web/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/comics/induction/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/about-the-liveblog/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/a-very-long-bike-ride/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/lug/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/the-rijks-museum-and-travel-tips/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/liveblog/europe-2015/dominos-are-setup/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/code/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>http://elijahcaine.me/europe-2015/</loc>
-    <lastmod>2016-04-04</lastmod>
+    <lastmod>2016-06-17</lastmod>
     <changefreq>never</changefreq>
     <priority>1.0</priority>
   </url>
