@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>How to Possibly Kinda Sorta Write a Travelblog | Elijah's Website</title>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js "></script>
+<link rel="stylesheet" href="/style.css">
+</head>
+</body>
+<a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+  <div class="main">
+    <a href="/">
+    <div class="banner">
+      <h1 class="banner">elijah caine</h1>
+      <div class="avatar">
+        <img src="/static/avatar.png"></img>
+      </div>
+      <img src="https://farm6.staticflickr.com/5813/20476814090_97752519fb_o.jpg" class="banner"></img>
+    </div>
+    </a>
+    <nav>
+      <div class="dropdown navbar-right my-buttons">
+        <div class="btn-group">
+          <a href="/" class="btn btn-default">main</a>
+          <a href="/blog" class="btn btn-info">blog</a>
+          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            More
+          <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
+            <li><a href="/reading/">reading</a></li>
+            <li><a href="/liveblog/">liveblog</a></li>
+            <li><a href="/awesome-things/">awesome  things</a></li>
+            <!--li><a href="#">naNoWriMo</a></li-->
+            <li role="separator"  class="divider"></li>
+            <li><a href="/code/">code</a></li>
+            <li><a href="/videos/">videos</a></li>
+            <li><a href="/renders/">renders</a></li>
+            <li><a href="/slides/">slides</a></li>
+            <li><a href="/other/">other</a></li>
+            <li  role="separator"  class="divider"></li>
+            <li><a href="/osl/">open  soruce  lab</a></li>
+            <li><a href="/lug/">linux  users  group</a></li>
+          </ul>
+        </div>
+        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuLinks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Links
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLinks">
+          <li><a href="https://github.com/ElijahCaine">Github</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="/resume.pdf">Resume</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    
+  <nav>
+  <br>
+    <ul class="pager">
+      
+        <li class="previous disabled"><span aria-hidden="true">&larr;</span> </li>
+      
+
+      
+        <li class="next"><a href="/blog/covertly-installing-packages-with-docker/index.html">Covertly Installing Packages with Docker  <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </nav>
+  <article>
+    <div class="section" id="how-to-possibly-kinda-sorta-write-a-travelblog">
+<h2>How To Possibly Kinda Sorta Write a Travelblog</h2>
+<blockquote>
+<p><strong>First thing's First: I went on a trip and wrote a travelblog.</strong></p>
+<p><strong>For a link to that travelblog itself check out</strong> <a class="reference external" href="http://elijahcaine.me/eurotrip-2015">eli&shy;jah&shy;caine.me/eurotrip-2015</a></p>
+<p><strong>This post is _about_ that travelblog.</strong></p>
+</blockquote>
+<p>I went on a whirlwind two week trip to Europe; first to Amsterdam ('because
+Amsterdam' seems like a reasonable jus&shy;ti&shy;fi&shy;ca&shy;tion for doing this according to
+most people) and second to Prague to speak at the <a class="reference external" href="http://www.writethedocs.org/conf/eu/2015/schedule/">European Write the Docs
+conference</a>.</p>
+<p>I've traveled before and I wanted to avoid the inevitable that tends to happen:</p>
+<ol class="arabic simple">
+<li>I go on a trip.</li>
+<li>Have a wonderful time and make lots of memories.</li>
+<li>Get back from trip.</li>
+<li>Get asked &quot;Tell me about your trip!&quot;</li>
+<li>Forget everything that happened on the trip and sum it up with 'It was
+great.'</li>
+</ol>
+<p>To combat this seemingly inevitable outcome I decided to write a blog about
+<strong>this</strong> trip as the trip was happening. Similar to how some might make daily
+Facebook posts or Tweets, I could use this as a way to not only spend time each
+day processing what happened but I could also refer friends and family to the
+blog's url so they could follow along vic&shy;ar&shy;i&shy;ous&shy;ly if they chose. I wanted to
+make a website where I updated the world on my where&shy;abouts and shenani&shy;gans.</p>
+<p>And so I did.</p>
+<div class="section" id="the-technical-parts">
+<h3>The Technical Parts</h3>
+<p>I'm an engineer. Like many engineers I like to tinker and build things.</p>
+<p>A while ago I built a tool called <a class="reference external" href="https://github.com/elijahcaine/pageup#pageup-init-pageup-build">PageUp</a>; it takes a <a class="reference external" href="https://en.wikipedia.org/wiki/ReStructuredText">re&shy;Struc&shy;tured&shy;Text</a>
+formatted <a class="reference external" href="https://en.wikipedia.org/wiki/Markup_language">markup file</a>, an <a class="reference external" href="https://en.wikipedia.org/wiki/Web_template_system">html template</a>, as well as some other files that
+make the web go 'round and look half-way decent.</p>
+<p>Using that tool (PageUp) I created a blog that I could update from my phone
+using <a class="reference external" href="https://gist.github.com/ElijahCaine/352cb120743af2dde7c8">a Github Gist</a> and a slick <a class="reference external" href="http://www.git-scm.com/">Git Source Control</a> program for my phone.
+I could write a re&shy;Struc&shy;tured&shy;Text formatted blog post, sync it to the web, have
+my personal server pull the updated version of the <a class="reference external" href="https://gist.github.com/ElijahCaine/352cb120743af2dde7c8">git repository</a>, and
+au&shy;to&shy;mat&shy;i&shy;cal&shy;ly rebuild the website.</p>
+</div>
+<div class="section" id="the-writing-parts">
+<h3>The Writing Parts</h3>
+<p>Updates were sur&shy;pris&shy;ing&shy;ly painless-- and I'm not just saying that to sell
+PageUp, I'm honestly just impressed that I made something which actually made
+my life easier. Feels good.</p>
+<p>I wasn't as consistent with writing posts as I had envisioned. I wrote posts
+the day after the events occurred, which wasn't too bad, until I went to Write
+the Docs got completely torn away from my rigorous 'Drink Coffee, Write
+Blogpost, Adventure' regimen; I kept getting distracted by meeting new people
+and so&shy;cial&shy;iz&shy;ing. Ugh, the worst.</p>
+</div>
+<div class="section" id="thoughts-and-conclusions">
+<h3>Thoughts and Con&shy;clu&shy;sions</h3>
+<p>All in all I suspect I'll continue doing liveblogs when I go to events, it's a
+great way to share the experience with others and augment one's memory with a
+written record of the time you spent.</p>
+<p>Plus it's just fun an nerdy to write scripts and programs to make this whole
+experience as user friendly as possible. If I poured even more time into this
+it could even be a startup...</p>
+</div>
+</div>
+
+  </article>
+  <nav>
+  <br>
+    <ul class="pager">
+      
+        <li class="previous disabled"><span aria-hidden="true">&larr;</span> </li>
+      
+
+      
+        <li class="next"><a href="/blog/covertly-installing-packages-with-docker/index.html">Covertly Installing Packages with Docker  <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </nav>
+
+
+    <footer>
+      
+  This page last updated on <time datetime="2015-09-29">2015-09-29</time> |
+  
+      Photo Credit to <a href="https://www.flickr.com/photos/123432654@N05/">Sam Hall</a> |
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
+      </a>
+      This work is licensed under a
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+           Creative Commons Attribution 4.0 International License
+        </a>.
+      
+
+    </footer>
+  </div>
+<body>
+</html>

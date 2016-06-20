@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Covertly Installing Packages with Docker | Elijah's Website</title>
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js "></script>
+<link rel="stylesheet" href="/style.css">
+</head>
+</body>
+<a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+  <div class="main">
+    <a href="/">
+    <div class="banner">
+      <h1 class="banner">elijah caine</h1>
+      <div class="avatar">
+        <img src="/static/avatar.png"></img>
+      </div>
+      <img src="https://farm6.staticflickr.com/5813/20476814090_97752519fb_o.jpg" class="banner"></img>
+    </div>
+    </a>
+    <nav>
+      <div class="dropdown navbar-right my-buttons">
+        <div class="btn-group">
+          <a href="/" class="btn btn-default">main</a>
+          <a href="/blog" class="btn btn-info">blog</a>
+          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            More
+          <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
+            <li><a href="/reading/">reading</a></li>
+            <li><a href="/liveblog/">liveblog</a></li>
+            <li><a href="/awesome-things/">awesome  things</a></li>
+            <!--li><a href="#">naNoWriMo</a></li-->
+            <li role="separator"  class="divider"></li>
+            <li><a href="/code/">code</a></li>
+            <li><a href="/videos/">videos</a></li>
+            <li><a href="/renders/">renders</a></li>
+            <li><a href="/slides/">slides</a></li>
+            <li><a href="/other/">other</a></li>
+            <li  role="separator"  class="divider"></li>
+            <li><a href="/osl/">open  soruce  lab</a></li>
+            <li><a href="/lug/">linux  users  group</a></li>
+          </ul>
+        </div>
+        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuLinks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Links
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLinks">
+          <li><a href="https://github.com/ElijahCaine">Github</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="/resume.pdf">Resume</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    
+  <nav>
+  <br>
+    <ul class="pager">
+      
+        <li class="previous"><a href="/blog/how-to-possibly-kinda-sorta-write-a-travelblog/index.html"><span aria-hidden="true">&larr;</span> How to Possibly Kinda Sorta Write a Travelblog</a></li>
+      
+
+      
+        <li class="next"><a href="/blog/cat-barcamp-2015/index.html">Cat Barcamp 2015  <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </nav>
+  <article>
+    <div class="section" id="covertly-installing-packages-with-docker">
+<h2>Covertly Installing Packages with Docker</h2>
+<p><a class="reference external" href="#the-deets-dockerfile-and-commands">Jump to the codey bits</a></p>
+<div class="section" id="the-problem-workstations">
+<h3>The Problem: Work&shy;sta&shy;tions</h3>
+<p>At the OSL I use work&shy;sta&shy;tions which are pro&shy;vi&shy;sioned by <a class="reference external" href="https://en.wikipedia.org/wiki/Chef_%28software%29">Chef</a> to look more or
+less identical (packages are the same and global config files are consistent
+from machine to machine). This is nice because it allows everybody at the lab
+to jump from work&shy;sta&shy;tion to work&shy;sta&shy;tion without dreading the inevitable setup
+that usually comes with going to a new computer.</p>
+<p>The only downside here is that to install a package you have to make a pull
+request to a GitHub Repository in which you modify a JSON file. This is almost
+always for my own good, but as a dev I am prone to avoiding things that the
+admins say are good for me (like broccoli, milk, and consistent work&shy;sta&shy;tion
+en&shy;vi&shy;ron&shy;ments).</p>
+<p>For instance, yesterday I wanted to use <a class="reference external" href="http://rg3.github.io/youtube-dl/">youtube-dl</a> to grab a video I was
+watching on repeat*. I could have made a pull request to add the package,
+waited until 30 after for the work&shy;sta&shy;tions to refresh, used the package, and
+went about my day. This would have been the correct and bu&shy;reau&shy;crat&shy;ic way to do
+things.</p>
+<p>I <em>could</em> have, and probably <em>should</em> have, done that... but I didn't.</p>
+<p>* firefox kept crashing, I wasn't just stealing music for the sake of it.</p>
+</div>
+<div class="section" id="enter-docker">
+<h3>Enter: Docker</h3>
+<p>In this case the solution to the 'problem' was <a class="reference external" href="https://en.wikipedia.org/wiki/Docker_%28software%29">Docker</a>. I wrote a Dockerfile
+which pro&shy;vi&shy;sioned a container to have <tt class="docutils literal"><span class="pre">youtube-dl</span></tt> installed, spun up the
+container with a shared directory (<tt class="docutils literal"><span class="pre">$PWD:/home/</span></tt>), and executed the
+youtube-dl command. The .mp4 video was downloaded to my current working
+directory and I was able to play it with my media player of choice, all without
+installing <tt class="docutils literal"><span class="pre">youtube-dl</span></tt> locally.</p>
+</div>
+<div class="section" id="the-deets-dockerfile-and-commands">
+<h3>The Deets: Dockerfile and Commands</h3>
+<p><tt class="docutils literal">Dockerfile</tt></p>
+<pre class="code text literal-block">
+FROM ubuntu:latest
+
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get -y install python-pip
+RUN pip install youtube-dl
+
+WORKDIR /home
+RUN alias youtube-dl='/usr/local/bin/youtube-dl'
+</pre>
+<p>If you are in the directory containing the above Dockerfile, build the
+container with:</p>
+<pre class="code text literal-block">
+$ docker build -t yt-dl .
+</pre>
+<p>and run it with:</p>
+<pre class="code text literal-block">
+$ docker run -v $PWD:/home/ yt-dl youtube-dl &lt;YOUTUBE-VID-URL&gt;
+</pre>
+<p>This will download any url's video into the current working directory.</p>
+</div>
+<div class="section" id="pro-tip-add-an-alias">
+<h3>Pro-Tip: Add an <tt class="docutils literal">Alias</tt></h3>
+<p>Add the following content to your <tt class="docutils literal"><span class="pre">~/.bashrc</span></tt> file and then run <tt class="docutils literal">source
+<span class="pre">~/.bashrc</span></tt> to get rid the of long Docker bits of the above command.</p>
+<pre class="code bash literal-block">
+<span class="nb">export</span> <span class="nv">$VID_DIR</span><span class="o">=</span>/path/to/downloaded/videos/
+<span class="nb">alias</span> yt-dl<span class="o">=</span><span class="s1">'docker run -v $VID_DIR:/home/ yt-dl youtube-dl'</span>
+</pre>
+</div>
+<div class="section" id="wait-this-is-overly-complicated">
+<h3>Wait This is Overly Com&shy;pli&shy;cat&shy;ed</h3>
+<p>You're probably thinking: &quot;Hey, couldn't you have just run <tt class="docutils literal">pip install <span class="pre">--user</span>
+<span class="pre">youtube-dl</span></tt>?</p>
+<p>Yes. I could have. But that wouldn't be fun and wouldn't have given me an
+excuse to write a blog, post now would it Ms. Smarty Pantz.</p>
+<hr class="docutils"/>
+<p><strong>drink the coolaid. come to the docker side.</strong></p>
+</div>
+</div>
+
+  </article>
+  <nav>
+  <br>
+    <ul class="pager">
+      
+        <li class="previous"><a href="/blog/how-to-possibly-kinda-sorta-write-a-travelblog/index.html"><span aria-hidden="true">&larr;</span> How to Possibly Kinda Sorta Write a Travelblog</a></li>
+      
+
+      
+        <li class="next"><a href="/blog/cat-barcamp-2015/index.html">Cat Barcamp 2015  <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </nav>
+
+
+    <footer>
+      
+  This page last updated on <time datetime="2015-10-07">2015-10-07</time> |
+  
+      Photo Credit to <a href="https://www.flickr.com/photos/123432654@N05/">Sam Hall</a> |
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
+      </a>
+      This work is licensed under a
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+           Creative Commons Attribution 4.0 International License
+        </a>.
+      
+
+    </footer>
+  </div>
+<body>
+</html>

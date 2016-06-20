@@ -1,0 +1,158 @@
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";
+
+dd, dt, p, li, pre {
+  font-size: 1.4em;
+}
+
+dd {
+  padding-left: 5%;
+}
+
+.main {
+  margin: 0 auto;
+  width: 95%;
+  max-width: 1000px;
+}
+
+nav {
+  padding-top: 1em;
+  width: 100%;
+}
+
+footer {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-top: .1em solid;
+}
+
+.banner {
+  margin: 0 0 0 0;
+  position: relative;
+}
+
+.banner:hover {
+  margin: 0 0 0 0;
+  position: relative;
+}
+
+.banner img {
+  width: 100%;
+  z-index: -1;
+}
+
+.banner h1 {
+  position: absolute;
+  z-index: 1;
+  color: white;
+  font-size: 3em;
+  margin: 1em;
+  opacity: 0.7
+}
+
+.banner:hover h1 {
+  position: absolute;
+  z-index: 1;
+  color: white;
+  opacity: 1;
+  font-size: 3em;
+  margin: 1em;
+}
+
+.avatar {
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  max-height: 200px;
+  max-width: 200px;
+  margin: 1em;
+  right: 0px;
+  z-index: 0;
+}
+
+
+.my-buttons {
+  padding-right: 1em;
+}
+
+footer {
+  font-size: 0.9em;
+}
+
+.figure {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.align-center {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.align-right {
+  float: right;
+  text-align: right;
+}
+
+.align-left {
+  float: left;
+  text-align: left
+}
+
+
+/* Side notes for calling out things
+-------------------------------------------------- */
+
+/* Base styles (regardless of theme) */
+.bs-callout {
+  margin: 20px 0;
+  padding: 15px 30px 15px 15px;
+  border-left: 5px solid #eee;
+}
+.bs-callout h4 {
+  margin-top: 0;
+}
+.bs-callout p:last-child {
+  margin-bottom: 0;
+}
+.bs-callout code,
+.bs-callout .highlight {
+  background-color: #fff;
+}
+
+/* Themes for different contexts */
+.bs-callout-danger {
+  background-color: #fcf2f2;
+  border-color: #dFb5b4;
+}
+.bs-callout-warning {
+  background-color: #fefbed;
+  border-color: #f1e7bc;
+}
+.bs-callout-info {
+  background-color: #f0f7fd;
+  border-color: #d0e3f0;
+}
+
+/* red */
+.warning {
+  @extend .bs-callout;
+  @extend .bs-callout-warning;
+}
+
+/* yellow */
+.error, .caution, .danger {
+  @extend .bs-callout;
+  @extend .bs-callout-danger;
+}
+
+/* blue */
+.attention, .important, .note {
+  @extend .bs-callout;
+  @extend .bs-callout-info;
+}
+
+/* brown */
+.hint, .admonition, .tip {
+  @extend .bs-callout;
+}
