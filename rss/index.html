@@ -5,9 +5,73 @@
         <link>http://elijahcaine.me/</link>
         <description></description>
         <language>en</language>
-        <pubDate>Sat, 02 Jul 2016 07:00:00 GMT</pubDate>
+        <pubDate>Wed, 27 Jul 2016 07:00:00 GMT</pubDate>
         <docs>http://elijahcaine.me/rss/</docs>
         <generator>acrylamid 0.8.dev0</generator>
+        
+            <item>
+        <title>Git Does a Lot of Things</title>
+        <link>http://elijahcaine.me/blog/git-does-a-lot-of-things/index.html</link>
+        <description>&lt;div class=&#34;section&#34; id=&#34;git-does-a-lot-of-things&#34;&gt;
+&lt;h3&gt;Git Does a Lot of Things&lt;/h3&gt;
+&lt;p&gt;I should make a tool that extends &lt;tt class=&#34;docutils literal&#34;&gt;git&lt;/tt&gt; to delete all of the files matched
+by the &lt;tt class=&#34;docutils literal&#34;&gt;.gitginore&lt;/tt&gt;.  I spend way too much time crafting &lt;tt class=&#34;docutils literal&#34;&gt;find &lt;span class=&#34;pre&#34;&gt;&amp;lt;...&amp;gt;&lt;/span&gt; |
+xargs rm&lt;/tt&gt; commands.  I know, I&#39;ll call it &lt;tt class=&#34;docutils literal&#34;&gt;git clean&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Well... before I get too far I&#39;ll just make sure it doesn&#39;t already exist.&lt;/p&gt;
+&lt;pre class=&#34;code text literal-block&#34;&gt;
+$ man git clean
+
+GIT-CLEAN(1)                  Git Manual                       GIT-CLEAN(1)
+
+NAME
+       git-clean - Remove untracked files from the working tree
+
+SYNOPSIS
+    git clean [-d] [-f] [-i] [-n] [-q] [-e &amp;lt;pattern&amp;gt;] [-x | -X] [--]
+    &amp;lt;path&amp;gt;...
+
+DESCRIPTION
+    Cleans the working tree by recursively removing files that are not
+    under version control, starting from the current directory.
+
+    ...
+&lt;/pre&gt;
+&lt;p&gt;Huh... well I... that&#39;s pretty much exactly how I would have done it...&lt;/p&gt;
+&lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;git&lt;/tt&gt; &lt;em&gt;tab tab&lt;/em&gt;&lt;/p&gt;
+&lt;pre class=&#34;code text literal-block&#34;&gt;
+add                  filter-branch        relink
+am                   format-patch         remote
+annotate             fsck                 repack
+apply                gc                   replace
+archive              get-tar-commit-id    request-pull
+bisect               grep                 reset
+blame                help                 revert
+branch               imap-send            review
+bundle               init                 rm
+checkout             instaweb             send-email
+cherry               interpret-trailers   shortlog
+cherry-pick          log                  show
+clean                merge                show-branch
+clone                mergetool            stage
+column               mv                   stash
+commit               name-rev             status
+config               notes                submodule
+credential           p4                   svn
+describe             pull                 tag
+diff                 push                 verify-commit
+difftool             rebase               whatchanged
+fetch                reflog               worktree
+&lt;/pre&gt;
+&lt;p&gt;Ah, okay. I get it now. Git &lt;em&gt;does&lt;/em&gt; do a lot of things.&lt;/p&gt;
+&lt;div class=&#34;note&#34;&gt;
+&lt;p class=&#34;first admonition-title&#34;&gt;Note&lt;/p&gt;
+&lt;p class=&#34;last&#34;&gt;The above output is from &lt;cite&gt;git 2.8.2&lt;/cite&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Wed, 27 Jul 2016 07:00:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:elijahcaine.me,2016-07-27:/blog/git-does-a-lot-of-things/index.html</guid>
+    </item>
         
             <item>
         <title>Debra the Ghoul</title>

@@ -11,15 +11,88 @@
     <link rel="self" type="application/atom+xml" href="http://elijahcaine.me/atom/" />
     <icon>http://elijahcaine.me/favicon.ico</icon>
     <logo>http://elijahcaine.me/feed-logo.png</logo>
-    <updated>2016-07-02T07:00:00Z</updated>
+    <updated>2016-07-27T07:00:00Z</updated>
     <generator uri="https://github.com/posativ/acrylamid/" version="0.8.dev0">acrylamid</generator>
+        <entry>
+        <title>Git Does a Lot of Things</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/git-does-a-lot-of-things/index.html" />
+        <id>tag:elijahcaine.me,2016-07-27:/blog/git-does-a-lot-of-things/index.html</id>
+        <updated>2016-07-27T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7f3d145fd540>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145fd5d0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145fd600>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;git-does-a-lot-of-things&#34;&gt;
+&lt;h3&gt;Git Does a Lot of Things&lt;/h3&gt;
+&lt;p&gt;I should make a tool that extends &lt;tt class=&#34;docutils literal&#34;&gt;git&lt;/tt&gt; to delete all of the files matched
+by the &lt;tt class=&#34;docutils literal&#34;&gt;.gitginore&lt;/tt&gt;.  I spend way too much time crafting &lt;tt class=&#34;docutils literal&#34;&gt;find &lt;span class=&#34;pre&#34;&gt;&amp;lt;...&amp;gt;&lt;/span&gt; |
+xargs rm&lt;/tt&gt; commands.  I know, I&#39;ll call it &lt;tt class=&#34;docutils literal&#34;&gt;git clean&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Well... before I get too far I&#39;ll just make sure it doesn&#39;t already exist.&lt;/p&gt;
+&lt;pre class=&#34;code text literal-block&#34;&gt;
+$ man git clean
+
+GIT-CLEAN(1)                  Git Manual                       GIT-CLEAN(1)
+
+NAME
+       git-clean - Remove untracked files from the working tree
+
+SYNOPSIS
+    git clean [-d] [-f] [-i] [-n] [-q] [-e &amp;lt;pattern&amp;gt;] [-x | -X] [--]
+    &amp;lt;path&amp;gt;...
+
+DESCRIPTION
+    Cleans the working tree by recursively removing files that are not
+    under version control, starting from the current directory.
+
+    ...
+&lt;/pre&gt;
+&lt;p&gt;Huh... well I... that&#39;s pretty much exactly how I would have done it...&lt;/p&gt;
+&lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;git&lt;/tt&gt; &lt;em&gt;tab tab&lt;/em&gt;&lt;/p&gt;
+&lt;pre class=&#34;code text literal-block&#34;&gt;
+add                  filter-branch        relink
+am                   format-patch         remote
+annotate             fsck                 repack
+apply                gc                   replace
+archive              get-tar-commit-id    request-pull
+bisect               grep                 reset
+blame                help                 revert
+branch               imap-send            review
+bundle               init                 rm
+checkout             instaweb             send-email
+cherry               interpret-trailers   shortlog
+cherry-pick          log                  show
+clean                merge                show-branch
+clone                mergetool            stage
+column               mv                   stash
+commit               name-rev             status
+config               notes                submodule
+credential           p4                   svn
+describe             pull                 tag
+diff                 push                 verify-commit
+difftool             rebase               whatchanged
+fetch                reflog               worktree
+&lt;/pre&gt;
+&lt;p&gt;Ah, okay. I get it now. Git &lt;em&gt;does&lt;/em&gt; do a lot of things.&lt;/p&gt;
+&lt;div class=&#34;note&#34;&gt;
+&lt;p class=&#34;first admonition-title&#34;&gt;Note&lt;/p&gt;
+&lt;p class=&#34;last&#34;&gt;The above output is from &lt;cite&gt;git 2.8.2&lt;/cite&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
         <entry>
         <title>Debra the Ghoul</title>
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/creative-writing/2016/07/02/debra-the-ghoul/index.html" />
         <id>tag:elijahcaine.me,2016-07-02:/creative-writing/2016/07/02/debra-the-ghoul/index.html</id>
         <updated>2016-07-02T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fd9cf0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fd9d50>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f0f90>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f7030>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -97,8 +170,8 @@ tomorrow afternoon.&amp;quot;&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/creative-writing/2016/07/01/emperor-stan-of-stantinople/index.html" />
         <id>tag:elijahcaine.me,2016-07-01:/creative-writing/2016/07/01/emperor-stan-of-stantinople/index.html</id>
         <updated>2016-07-01T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fe0060>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe00c0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f7300>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f7360>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -189,10 +262,10 @@ it.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/working-remote-the-fresh-pot/index.html" />
         <id>tag:elijahcaine.me,2016-06-16:/blog/working-remote-the-fresh-pot/index.html</id>
         <updated>2016-06-16T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fe6240>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe62d0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe6300>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe6330>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145fd870>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145fd900>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145fd930>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145fd960>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -339,9 +412,9 @@ questions like&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/working-remote-five-points-coffee-roaster/index.html" />
         <id>tag:elijahcaine.me,2016-06-16:/blog/working-remote-five-points-coffee-roaster/index.html</id>
         <updated>2016-06-16T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fe6d50>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe6db0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe6de0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d146023c0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14602420>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14602450>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -397,11 +470,11 @@ interested in that sort of thing...&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/python-exceptions/index.html" />
         <id>tag:elijahcaine.me,2016-04-03:/blog/python-exceptions/index.html</id>
         <updated>2016-04-03T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fe0600>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe06c0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe06f0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe0750>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe0720>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f78d0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f7990>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f79c0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f7a20>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f79f0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -535,10 +608,10 @@ Python?&lt;/a&gt;.&lt;/li&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/how-to-develop-a-site-for-the-web/index.html" />
         <id>tag:elijahcaine.me,2016-03-25:/blog/how-to-develop-a-site-for-the-web/index.html</id>
         <updated>2016-03-25T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fe0d50>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe0db0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe0e10>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe0e40>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f6060>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f60c0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f6120>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f6150>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -627,10 +700,10 @@ check out this &lt;a class=&#34;reference external&#34; href=&#34;http://stackov
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/running-firefox-in-docker/index.html" />
         <id>tag:elijahcaine.me,2016-03-05:/blog/running-firefox-in-docker/index.html</id>
         <updated>2016-03-05T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fe09f0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe0a50>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe0a80>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fe0ab0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f7cc0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f7d20>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f7d50>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f7d80>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -690,9 +763,9 @@ Food for thought [citation needed].&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/comics/induction/index.html" />
         <id>tag:elijahcaine.me,2015-10-22:/comics/induction/index.html</id>
         <updated>2015-10-22T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff7c60>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fea4b0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fea4e0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d146112a0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14602ab0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14602ae0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -713,9 +786,9 @@ Food for thought [citation needed].&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/cat-barcamp-2015/index.html" />
         <id>tag:elijahcaine.me,2015-10-12:/blog/cat-barcamp-2015/index.html</id>
         <updated>2015-10-12T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fdfed0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fdff60>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fdffc0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145fd1e0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145fd270>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145fd2d0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -805,10 +878,10 @@ the CAT. They throw a hellofan event.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/covertly-installing-packages-with-docker/index.html" />
         <id>tag:elijahcaine.me,2015-10-07:/blog/covertly-installing-packages-with-docker/index.html</id>
         <updated>2015-10-07T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fea0f0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fea180>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fea1b0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fea210>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14602720>" />
+        <category term="<built-in method title of unicode object at 0x7f3d146027b0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d146027e0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14602840>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -899,9 +972,9 @@ excuse to write a blog, post now would it Ms. Smarty Pantz.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/how-to-possibly-kinda-sorta-write-a-travelblog/index.html" />
         <id>tag:elijahcaine.me,2015-09-29:/blog/how-to-possibly-kinda-sorta-write-a-travelblog/index.html</id>
         <updated>2015-09-29T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fdf7b0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fdf7e0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fdf810>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f6a80>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f6ab0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d145f6ae0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -976,8 +1049,8 @@ it could even be a startup...&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/travel/index.html" />
         <id>tag:elijahcaine.me,2015-09-03:/liveblog/europe-2015/travel/index.html</id>
         <updated>2015-09-03T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727fea7b0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727fea810>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14602db0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14602e10>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1013,8 +1086,8 @@ travel travel. Travel travel travel travel travel travel travel travel travel.&l
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/a-personal-day-in-prague/index.html" />
         <id>tag:elijahcaine.me,2015-09-02:/liveblog/europe-2015/a-personal-day-in-prague/index.html</id>
         <updated>2015-09-02T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727feab10>" />
-        <category term="<built-in method title of unicode object at 0x7ff727feab70>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14606150>" />
+        <category term="<built-in method title of unicode object at 0x7f3d146061b0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1060,8 +1133,8 @@ capture it better.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/write-the-docs-day-2/index.html" />
         <id>tag:elijahcaine.me,2015-09-01:/liveblog/europe-2015/write-the-docs-day-2/index.html</id>
         <updated>2015-09-01T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff3210>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ff3270>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14606810>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14606870>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1134,8 +1207,8 @@ Network&lt;/a&gt; writer, both very interesting people.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/write-the-docs-day-1/index.html" />
         <id>tag:elijahcaine.me,2015-08-31:/liveblog/europe-2015/write-the-docs-day-1/index.html</id>
         <updated>2015-08-31T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ffb150>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ffb1b0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14611750>" />
+        <category term="<built-in method title of unicode object at 0x7f3d146117b0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1191,8 +1264,8 @@ Pub. Many conversations and laughs were had. I like this crowd.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/wtd-city-tour-of-prague/index.html" />
         <id>tag:elijahcaine.me,2015-08-30:/liveblog/europe-2015/wtd-city-tour-of-prague/index.html</id>
         <updated>2015-08-30T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff7db0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ff7e10>" />
+        <category term="<built-in method title of unicode object at 0x7f3d146113f0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14611450>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1241,8 +1314,8 @@ conference. There was food and fabulous people.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/to-prague/index.html" />
         <id>tag:elijahcaine.me,2015-08-29:/liveblog/europe-2015/to-prague/index.html</id>
         <updated>2015-08-29T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff3c90>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ff3cf0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d1460c2d0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d1460c330>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1293,8 +1366,8 @@ monies&lt;/em&gt;. Everything is gonna feel really expensive I bet...&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/a-very-long-bike-ride/index.html" />
         <id>tag:elijahcaine.me,2015-08-28:/liveblog/europe-2015/a-very-long-bike-ride/index.html</id>
         <updated>2015-08-28T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff7ab0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ff7ae0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d146110f0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14611120>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1357,8 +1430,8 @@ and the country. You should visit if you haven&#39;t already.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/van-gough-museum/index.html" />
         <id>tag:elijahcaine.me,2015-08-27:/liveblog/europe-2015/van-gough-museum/index.html</id>
         <updated>2015-08-27T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff35a0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ff3600>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14606ba0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14606c00>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1385,8 +1458,8 @@ of walking = ready for bed by 3pm.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/the-rijks-museum-and-travel-tips/index.html" />
         <id>tag:elijahcaine.me,2015-08-26:/liveblog/europe-2015/the-rijks-museum-and-travel-tips/index.html</id>
         <updated>2015-08-26T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff76f0>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ff7750>" />
+        <category term="<built-in method title of unicode object at 0x7f3d1460ccf0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d1460cd50>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1447,8 +1520,8 @@ culturally diversifying as a day in a museum or city tour.&lt;/li&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/to-amsterdam/index.html" />
         <id>tag:elijahcaine.me,2015-08-24:/liveblog/europe-2015/to-amsterdam/index.html</id>
         <updated>2015-08-24T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff7390>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ff73f0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d1460c990>" />
+        <category term="<built-in method title of unicode object at 0x7f3d1460c9f0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1522,8 +1595,8 @@ It tasted &lt;a class=&#34;reference external&#34; href=&#34;https://xkcd.com/15
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/packed-and-ready-to-fly/index.html" />
         <id>tag:elijahcaine.me,2015-08-23:/liveblog/europe-2015/packed-and-ready-to-fly/index.html</id>
         <updated>2015-08-23T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff7030>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ff7090>" />
+        <category term="<built-in method title of unicode object at 0x7f3d1460c630>" />
+        <category term="<built-in method title of unicode object at 0x7f3d1460c690>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1557,8 +1630,8 @@ enough for you to ask.)&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/dominos-are-setup/index.html" />
         <id>tag:elijahcaine.me,2015-08-02:/liveblog/europe-2015/dominos-are-setup/index.html</id>
         <updated>2015-08-02T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727feae70>" />
-        <category term="<built-in method title of unicode object at 0x7ff727feaed0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d146064b0>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14606510>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1578,8 +1651,8 @@ enough for you to ask.)&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/liveblog/europe-2015/about-the-liveblog/index.html" />
         <id>tag:elijahcaine.me,2015-08-01:/liveblog/europe-2015/about-the-liveblog/index.html</id>
         <updated>2015-08-01T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7ff727ff3900>" />
-        <category term="<built-in method title of unicode object at 0x7ff727ff3960>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14606f00>" />
+        <category term="<built-in method title of unicode object at 0x7f3d14606f60>" />
         
         <author>
             <name>Elijah Caine</name>
