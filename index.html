@@ -12,48 +12,15 @@
 </body>
 <a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
   <div class="main">
-    <a href="/">
-    <div class="banner">
-      <h1 class="banner">elijah caine</h1>
-      <div class="avatar">
-        <img src="/static/avatar.png"></img>
-      </div>
-      <img src="https://farm6.staticflickr.com/5813/20476814090_97752519fb_o.jpg" class="banner"></img>
-    </div>
-    </a>
     <nav>
-      <div class="dropdown navbar-right my-buttons">
-        <div class="btn-group">
-          <a href="/" class="btn btn-default">main</a>
-          <a href="/blog" class="btn btn-info">blog</a>
-          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            More
-          <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
-            <li><a href="/awesome-things/">awesome  things</a></li>
-            <li><a href="/creative-writing/">creative writing</a></li>
-            <li><a href="/liveblog/">liveblog</a></li>
-            <li><a href="/reading/">reading</a></li>
-            <!--li><a href="#">naNoWriMo</a></li-->
-            <li role="separator"  class="divider"></li>
-            <li><a href="/code/">code</a></li>
-            <li><a href="/other/">other</a></li>
-            <li><a href="/renders/">renders</a></li>
-            <li><a href="/slides/">slides</a></li>
-            <li><a href="/videos/">videos</a></li>
-            <li  role="separator"  class="divider"></li>
-            <li><a href="/osl/">open  soruce  lab</a></li>
-            <li><a href="/lug/">linux  users  group</a></li>
-          </ul>
-        </div>
-        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuLinks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Links
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLinks">
-          <li><a href="https://github.com/ElijahCaine">Github</a></li>
-          <li role="separator" class="divider"></li>
+      <div class="text-right">
+        <ul class="list-inline">
+          <li class="name"><a href="/">Elijah Caine .me</a></li>
+          <li><a href="/blog">blog</a></li> |
+          <li><a href="/about">about</a></li> |
+          <li><a href="/contributions">contributions</a></li> |
+          <li><a href="/awesome-things">awesome things</a></li> |
+          <li><a href="https://github.com/ElijahCaine">Github</a></li> |
           <li><a href="/resume.pdf">Resume</a></li>
         </ul>
       </div>
@@ -61,31 +28,79 @@
 
     
   <article>
-      <header>
-          <h1>
-              <a href="index.html" rel="bookmark canonical">index</a>
-          </h1>
-      </header>
-
   
 
-      <div class="line-block">
-<div class="line"><br /></div>
+      <div class="section" id="homepage">
+<h1>Homepage</h1>
+<p>My name is <em>Elijah C. Voigt</em>. I wear a few hats including <a class="reference external" href="/about/#code">Software
+Developer</a>, <a class="reference external" href="/about/#osu-open-source-lab">OSU Open Source Lab Employee</a>, Oregon State University Student,
+<a class="reference external" href="http://lug.oregonstate.edu/contact/">OSU Linux Users Group President</a>, <a class="reference external" href="/about/#videos">Media Creator</a>, <a class="reference external" href="/about/#slides">Public Speaker</a>, <a class="reference external" href="/about/#reading">Book
+Reader</a>, and <a class="reference external" href="/blog/">Writer</a>.</p>
+<p>I'm not sure what you came here for. You might be looking for my <a class="reference external" href="/blog/">blog</a> which
+has a mishmash of tech tool write-ups, travel blogposts, and other creative
+endeavors. The most recent post is just down the page.</p>
+<p>If you would like to get in contact with me I have a page for that too
+<a class="reference external" href="/about/#contact">Contact Me</a>.</p>
+<hr class="docutils" />
+<p class="align-center">[ <a class="reference external" href="/blog/git-does-a-lot-of-things/index.html">Recent Post</a> ]</p>
+<div class="section" id="git-does-a-lot-of-things">
+<h2>Git Does a Lot of Things</h2>
+<p>I should make a tool that extends <tt class="docutils literal">git</tt> to delete all of the files matched
+by the <tt class="docutils literal">.gitginore</tt>.  I spend way too much time crafting <tt class="docutils literal">find <span class="pre">&lt;...&gt;</span> |
+xargs rm</tt> commands.  I know, I'll call it <tt class="docutils literal">git clean</tt>.</p>
+<p>Well... before I get too far I'll just make sure it doesn't already exist.</p>
+<pre class="code text literal-block">
+$ man git clean
+
+GIT-CLEAN(1)                  Git Manual                       GIT-CLEAN(1)
+
+NAME
+       git-clean - Remove untracked files from the working tree
+
+SYNOPSIS
+    git clean [-d] [-f] [-i] [-n] [-q] [-e &lt;pattern&gt;] [-x | -X] [--]
+    &lt;path&gt;...
+
+DESCRIPTION
+    Cleans the working tree by recursively removing files that are not
+    under version control, starting from the current directory.
+
+    ...
+</pre>
+<p>Huh... well I... that's pretty much exactly how I would have done it...</p>
+<p><tt class="docutils literal">git</tt> <em>tab tab</em></p>
+<pre class="code text literal-block">
+add                  filter-branch        relink
+am                   format-patch         remote
+annotate             fsck                 repack
+apply                gc                   replace
+archive              get-tar-commit-id    request-pull
+bisect               grep                 reset
+blame                help                 revert
+branch               imap-send            review
+bundle               init                 rm
+checkout             instaweb             send-email
+cherry               interpret-trailers   shortlog
+cherry-pick          log                  show
+clean                merge                show-branch
+clone                mergetool            stage
+column               mv                   stash
+commit               name-rev             status
+config               notes                submodule
+credential           p4                   svn
+describe             pull                 tag
+diff                 push                 verify-commit
+difftool             rebase               whatchanged
+fetch                reflog               worktree
+</pre>
+<p>Ah, okay. I get it now. Git <em>does</em> do a lot of things.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">The above output is from <cite>git 2.8.2</cite>.</p>
 </div>
-<p class="align-center"><strong>Newest Post Thing:</strong> <a class="reference external" href="/blog/git-does-a-lot-of-things/index.html">Git Does a Lot of Things</a></p>
-<div class="line-block">
-<div class="line"><br /></div>
+<p class="align-center">[ <a class="reference external" href="/blog/">More Posts</a> ]</p>
 </div>
-<div class="figure align-center">
-<a class="reference external image-reference" href="https://giphy.com/gifs/cheezburger-hello-waving-IBMavwmu4KEEw"><img alt="Whale Hello There!" src="https://media.giphy.com/media/IBMavwmu4KEEw/giphy.gif" /></a>
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<p>Thank's for vising my website. It's got the Bootstraps and the JQuerys, so it's
-pretty on all the things.</p>
-<p>If you find any problems or have feedback to give, email me at
-<a class="reference external" href="mailto:elijahcainemv&#64;gmail.com">elijahcainemv&#64;gmail.com</a>.</p>
 
 
   </article>
@@ -93,7 +108,7 @@ pretty on all the things.</p>
 
     <footer>
       
-  This page last updated on <time datetime="2016-03-16">2016-03-16</time> |
+  This page last updated on <time datetime="2016-08-19">2016-08-19</time> |
   
       Photo Credit to <a href="https://www.flickr.com/photos/123432654@N05/">Sam Hall</a> |
       <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">

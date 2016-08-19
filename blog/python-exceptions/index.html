@@ -12,54 +12,28 @@
 </body>
 <a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
   <div class="main">
-    <a href="/">
-    <div class="banner">
-      <h1 class="banner">elijah caine</h1>
-      <div class="avatar">
-        <img src="/static/avatar.png"></img>
-      </div>
-      <img src="https://farm6.staticflickr.com/5813/20476814090_97752519fb_o.jpg" class="banner"></img>
-    </div>
-    </a>
     <nav>
-      <div class="dropdown navbar-right my-buttons">
-        <div class="btn-group">
-          <a href="/" class="btn btn-default">main</a>
-          <a href="/blog" class="btn btn-info">blog</a>
-          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            More
-          <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
-            <li><a href="/awesome-things/">awesome  things</a></li>
-            <li><a href="/creative-writing/">creative writing</a></li>
-            <li><a href="/liveblog/">liveblog</a></li>
-            <li><a href="/reading/">reading</a></li>
-            <!--li><a href="#">naNoWriMo</a></li-->
-            <li role="separator"  class="divider"></li>
-            <li><a href="/code/">code</a></li>
-            <li><a href="/other/">other</a></li>
-            <li><a href="/renders/">renders</a></li>
-            <li><a href="/slides/">slides</a></li>
-            <li><a href="/videos/">videos</a></li>
-            <li  role="separator"  class="divider"></li>
-            <li><a href="/osl/">open  soruce  lab</a></li>
-            <li><a href="/lug/">linux  users  group</a></li>
-          </ul>
-        </div>
-        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuLinks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Links
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLinks">
-          <li><a href="https://github.com/ElijahCaine">Github</a></li>
-          <li role="separator" class="divider"></li>
+      <div class="text-right">
+        <ul class="list-inline">
+          <li class="name"><a href="/">Elijah Caine .me</a></li>
+          <li><a href="/blog">blog</a></li> |
+          <li><a href="/about">about</a></li> |
+          <li><a href="/contributions">contributions</a></li> |
+          <li><a href="/awesome-things">awesome things</a></li> |
+          <li><a href="https://github.com/ElijahCaine">Github</a></li> |
           <li><a href="/resume.pdf">Resume</a></li>
         </ul>
       </div>
     </nav>
 
     
+   
+    <header>
+      <h1>
+        <a href="/blog/" rel="bookmark canonical">Blog</a>
+      </h1>
+    </header>
+  
   <nav>
   <br>
     <ul class="pager">
@@ -74,7 +48,7 @@
   </nav>
   <article>
     <div class="section" id="how-to-get-the-most-out-of-your-python-exceptions">
-<h2>How to Get the Most out of Your Python Exceptions</h2>
+<h1>How to Get the Most out of Your Python Exceptions</h1>
 <pre class="code python literal-block">
 <span class="n">var</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">'Please enter a number not equal to 0: '</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
@@ -104,7 +78,7 @@ error, keep on rolling (or fail gracefully).</p>
 don't know how to find python exceptions and don't know how to write their own
 exceptions! So let's do that.</p>
 <div class="section" id="finding-exceptions">
-<h3>Finding Exceptions</h3>
+<h2>Finding Exceptions</h2>
 <p>When writing exception handling code it's kosher to explicitly state <em>which</em>
 error you expect.</p>
 <pre class="code python literal-block">
@@ -154,7 +128,7 @@ exception handling:</p>
 </ol>
 </div>
 <div class="section" id="writing-your-own-exceptions">
-<h3>Writing Your Own Exceptions</h3>
+<h2>Writing Your Own Exceptions</h2>
 <p>You (who me?), yes <em>you</em> can write custom python exceptions. It's dead easy
 too.</p>
 <p>The long and short of it is you define an exception class which either inherits
@@ -181,7 +155,7 @@ from the <tt class="docutils literal">Exception</tt> class or another pre-existi
 <tt class="docutils literal">raise</tt>. Very neat and <a class="reference external" href="https://docs.python.org/2/glossary.html#term-pythonic">pythonic</a></p>
 </div>
 <div class="section" id="further-reading">
-<h3>Further Reading</h3>
+<h2>Further Reading</h2>
 <p>Here are a few references I suggest you check out to get an even better grasp
 on exception handling and custom exceptions:</p>
 <ul class="simple">

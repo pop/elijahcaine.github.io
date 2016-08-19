@@ -12,59 +12,33 @@
 </body>
 <a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
   <div class="main">
-    <a href="/">
-    <div class="banner">
-      <h1 class="banner">elijah caine</h1>
-      <div class="avatar">
-        <img src="/static/avatar.png"></img>
-      </div>
-      <img src="https://farm6.staticflickr.com/5813/20476814090_97752519fb_o.jpg" class="banner"></img>
-    </div>
-    </a>
     <nav>
-      <div class="dropdown navbar-right my-buttons">
-        <div class="btn-group">
-          <a href="/" class="btn btn-default">main</a>
-          <a href="/blog" class="btn btn-info">blog</a>
-          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            More
-          <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
-            <li><a href="/awesome-things/">awesome  things</a></li>
-            <li><a href="/creative-writing/">creative writing</a></li>
-            <li><a href="/liveblog/">liveblog</a></li>
-            <li><a href="/reading/">reading</a></li>
-            <!--li><a href="#">naNoWriMo</a></li-->
-            <li role="separator"  class="divider"></li>
-            <li><a href="/code/">code</a></li>
-            <li><a href="/other/">other</a></li>
-            <li><a href="/renders/">renders</a></li>
-            <li><a href="/slides/">slides</a></li>
-            <li><a href="/videos/">videos</a></li>
-            <li  role="separator"  class="divider"></li>
-            <li><a href="/osl/">open  soruce  lab</a></li>
-            <li><a href="/lug/">linux  users  group</a></li>
-          </ul>
-        </div>
-        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuLinks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Links
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLinks">
-          <li><a href="https://github.com/ElijahCaine">Github</a></li>
-          <li role="separator" class="divider"></li>
+      <div class="text-right">
+        <ul class="list-inline">
+          <li class="name"><a href="/">Elijah Caine .me</a></li>
+          <li><a href="/blog">blog</a></li> |
+          <li><a href="/about">about</a></li> |
+          <li><a href="/contributions">contributions</a></li> |
+          <li><a href="/awesome-things">awesome things</a></li> |
+          <li><a href="https://github.com/ElijahCaine">Github</a></li> |
           <li><a href="/resume.pdf">Resume</a></li>
         </ul>
       </div>
     </nav>
 
     
+   
+    <header>
+      <h1>
+        <a href="/blog/" rel="bookmark canonical">Blog</a>
+      </h1>
+    </header>
+  
   <nav>
   <br>
     <ul class="pager">
       
-        <li class="previous"><a href="/blog/cat-barcamp-2015/index.html"><span aria-hidden="true">&larr;</span> Cat Barcamp 2015</a></li>
+        <li class="previous"><a href="/blog/induction/index.html"><span aria-hidden="true">&larr;</span> induction</a></li>
       
 
       
@@ -74,10 +48,10 @@
   </nav>
   <article>
     <div class="section" id="running-firefox-in-docker">
-<h2>Running Firefox in Docker</h2>
+<h1>Running Firefox in Docker</h1>
 <p>Turns out you can run Firefox in Docker. It's actually pretty easy:</p>
 <div class="section" id="code">
-<h3>Code</h3>
+<h2>Code</h2>
 <p><strong>From</strong> <a class="reference external" href="https://gist.github.com/ElijahCaine/29e7e829341d58abe370">my github gist</a>.</p>
 <script src="https://gist.github.com/ElijahCaine/29e7e829341d58abe370.js"></script><p>In&shy;stal&shy;la&shy;tion in&shy;struc&shy;tions (on Linux):</p>
 <pre class="code text literal-block">
@@ -88,7 +62,7 @@ $ ff-docker -b  # -b pulls &amp; builds container, etc used for first time start
 </pre>
 </div>
 <div class="section" id="notes">
-<h3>Notes</h3>
+<h2>Notes</h2>
 <p>I attempted to use <a class="reference external" href="http://alpinelinux.org/">Alpine Linux</a> as a proof-of-usability, since it's the hip
 new kid on the con&shy;tainer&shy;iza&shy;tion block <a class="footnote-reference" href="#id3" id="id1">[1]</a>, but as it turns out Alpine's
 Firefox package is pretty fucked <a class="footnote-reference" href="#id4" id="id2">[2]</a>.</p>
@@ -97,7 +71,7 @@ opening a terminal, ef&shy;fec&shy;tive&shy;ly making it a super-private-yet-con
 drop-in for Firefox.  Pretty neat right?</p>
 </div>
 <div class="section" id="conclusion">
-<h3>Conclusion</h3>
+<h2>Conclusion</h2>
 <p>This was pretty simple but effective in terms of giving me the option to have
 more privacy. I can see it being extended to add even more security; e.g.,
 routing all of the traffic in the container through a VPN would be easy enough.
@@ -124,7 +98,7 @@ Food for thought [citation needed].</p>
   <br>
     <ul class="pager">
       
-        <li class="previous"><a href="/blog/cat-barcamp-2015/index.html"><span aria-hidden="true">&larr;</span> Cat Barcamp 2015</a></li>
+        <li class="previous"><a href="/blog/induction/index.html"><span aria-hidden="true">&larr;</span> induction</a></li>
       
 
       

@@ -12,54 +12,28 @@
 </body>
 <a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
   <div class="main">
-    <a href="/">
-    <div class="banner">
-      <h1 class="banner">elijah caine</h1>
-      <div class="avatar">
-        <img src="/static/avatar.png"></img>
-      </div>
-      <img src="https://farm6.staticflickr.com/5813/20476814090_97752519fb_o.jpg" class="banner"></img>
-    </div>
-    </a>
     <nav>
-      <div class="dropdown navbar-right my-buttons">
-        <div class="btn-group">
-          <a href="/" class="btn btn-default">main</a>
-          <a href="/blog" class="btn btn-info">blog</a>
-          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            More
-          <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
-            <li><a href="/awesome-things/">awesome  things</a></li>
-            <li><a href="/creative-writing/">creative writing</a></li>
-            <li><a href="/liveblog/">liveblog</a></li>
-            <li><a href="/reading/">reading</a></li>
-            <!--li><a href="#">naNoWriMo</a></li-->
-            <li role="separator"  class="divider"></li>
-            <li><a href="/code/">code</a></li>
-            <li><a href="/other/">other</a></li>
-            <li><a href="/renders/">renders</a></li>
-            <li><a href="/slides/">slides</a></li>
-            <li><a href="/videos/">videos</a></li>
-            <li  role="separator"  class="divider"></li>
-            <li><a href="/osl/">open  soruce  lab</a></li>
-            <li><a href="/lug/">linux  users  group</a></li>
-          </ul>
-        </div>
-        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuLinks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Links
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLinks">
-          <li><a href="https://github.com/ElijahCaine">Github</a></li>
-          <li role="separator" class="divider"></li>
+      <div class="text-right">
+        <ul class="list-inline">
+          <li class="name"><a href="/">Elijah Caine .me</a></li>
+          <li><a href="/blog">blog</a></li> |
+          <li><a href="/about">about</a></li> |
+          <li><a href="/contributions">contributions</a></li> |
+          <li><a href="/awesome-things">awesome things</a></li> |
+          <li><a href="https://github.com/ElijahCaine">Github</a></li> |
           <li><a href="/resume.pdf">Resume</a></li>
         </ul>
       </div>
     </nav>
 
     
+   
+    <header>
+      <h1>
+        <a href="/blog/" rel="bookmark canonical">Blog</a>
+      </h1>
+    </header>
+  
   <nav>
   <br>
     <ul class="pager">
@@ -74,10 +48,10 @@
   </nav>
   <article>
     <div class="section" id="covertly-installing-packages-with-docker">
-<h2>Covertly Installing Packages with Docker</h2>
+<h1>Covertly Installing Packages with Docker</h1>
 <p><a class="reference external" href="#the-deets-dockerfile-and-commands">Jump to the codey bits</a></p>
 <div class="section" id="the-problem-workstations">
-<h3>The Problem: Work&shy;sta&shy;tions</h3>
+<h2>The Problem: Work&shy;sta&shy;tions</h2>
 <p>At the OSL I use work&shy;sta&shy;tions which are pro&shy;vi&shy;sioned by <a class="reference external" href="https://en.wikipedia.org/wiki/Chef_%28software%29">Chef</a> to look more or
 less identical (packages are the same and global config files are consistent
 from machine to machine). This is nice because it allows everybody at the lab
@@ -97,7 +71,7 @@ things.</p>
 <p>* firefox kept crashing, I wasn't just stealing music for the sake of it.</p>
 </div>
 <div class="section" id="enter-docker">
-<h3>Enter: Docker</h3>
+<h2>Enter: Docker</h2>
 <p>In this case the solution to the 'problem' was <a class="reference external" href="https://en.wikipedia.org/wiki/Docker_%28software%29">Docker</a>. I wrote a Dockerfile
 which pro&shy;vi&shy;sioned a container to have <tt class="docutils literal"><span class="pre">youtube-dl</span></tt> installed, spun up the
 container with a shared directory (<tt class="docutils literal"><span class="pre">$PWD:/home/</span></tt>), and executed the
@@ -106,7 +80,7 @@ directory and I was able to play it with my media player of choice, all without
 installing <tt class="docutils literal"><span class="pre">youtube-dl</span></tt> locally.</p>
 </div>
 <div class="section" id="the-deets-dockerfile-and-commands">
-<h3>The Deets: Dockerfile and Commands</h3>
+<h2>The Deets: Dockerfile and Commands</h2>
 <p><tt class="docutils literal">Dockerfile</tt></p>
 <pre class="code text literal-block">
 FROM ubuntu:latest
@@ -131,7 +105,7 @@ $ docker run -v $PWD:/home/ yt-dl youtube-dl &lt;YOUTUBE-VID-URL&gt;
 <p>This will download any url's video into the current working directory.</p>
 </div>
 <div class="section" id="pro-tip-add-an-alias">
-<h3>Pro-Tip: Add an <tt class="docutils literal">Alias</tt></h3>
+<h2>Pro-Tip: Add an <tt class="docutils literal">Alias</tt></h2>
 <p>Add the following content to your <tt class="docutils literal"><span class="pre">~/.bashrc</span></tt> file and then run <tt class="docutils literal">source
 <span class="pre">~/.bashrc</span></tt> to get rid the of long Docker bits of the above command.</p>
 <pre class="code bash literal-block">
@@ -140,7 +114,7 @@ $ docker run -v $PWD:/home/ yt-dl youtube-dl &lt;YOUTUBE-VID-URL&gt;
 </pre>
 </div>
 <div class="section" id="wait-this-is-overly-complicated">
-<h3>Wait This is Overly Com&shy;pli&shy;cat&shy;ed</h3>
+<h2>Wait This is Overly Com&shy;pli&shy;cat&shy;ed</h2>
 <p>You're probably thinking: &quot;Hey, couldn't you have just run <tt class="docutils literal">pip install <span class="pre">--user</span>
 <span class="pre">youtube-dl</span></tt>?</p>
 <p>Yes. I could have. But that wouldn't be fun and wouldn't have given me an

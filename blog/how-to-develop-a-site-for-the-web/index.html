@@ -12,54 +12,28 @@
 </body>
 <a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
   <div class="main">
-    <a href="/">
-    <div class="banner">
-      <h1 class="banner">elijah caine</h1>
-      <div class="avatar">
-        <img src="/static/avatar.png"></img>
-      </div>
-      <img src="https://farm6.staticflickr.com/5813/20476814090_97752519fb_o.jpg" class="banner"></img>
-    </div>
-    </a>
     <nav>
-      <div class="dropdown navbar-right my-buttons">
-        <div class="btn-group">
-          <a href="/" class="btn btn-default">main</a>
-          <a href="/blog" class="btn btn-info">blog</a>
-          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            More
-          <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
-            <li><a href="/awesome-things/">awesome  things</a></li>
-            <li><a href="/creative-writing/">creative writing</a></li>
-            <li><a href="/liveblog/">liveblog</a></li>
-            <li><a href="/reading/">reading</a></li>
-            <!--li><a href="#">naNoWriMo</a></li-->
-            <li role="separator"  class="divider"></li>
-            <li><a href="/code/">code</a></li>
-            <li><a href="/other/">other</a></li>
-            <li><a href="/renders/">renders</a></li>
-            <li><a href="/slides/">slides</a></li>
-            <li><a href="/videos/">videos</a></li>
-            <li  role="separator"  class="divider"></li>
-            <li><a href="/osl/">open  soruce  lab</a></li>
-            <li><a href="/lug/">linux  users  group</a></li>
-          </ul>
-        </div>
-        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuLinks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Links
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLinks">
-          <li><a href="https://github.com/ElijahCaine">Github</a></li>
-          <li role="separator" class="divider"></li>
+      <div class="text-right">
+        <ul class="list-inline">
+          <li class="name"><a href="/">Elijah Caine .me</a></li>
+          <li><a href="/blog">blog</a></li> |
+          <li><a href="/about">about</a></li> |
+          <li><a href="/contributions">contributions</a></li> |
+          <li><a href="/awesome-things">awesome things</a></li> |
+          <li><a href="https://github.com/ElijahCaine">Github</a></li> |
           <li><a href="/resume.pdf">Resume</a></li>
         </ul>
       </div>
     </nav>
 
     
+   
+    <header>
+      <h1>
+        <a href="/blog/" rel="bookmark canonical">Blog</a>
+      </h1>
+    </header>
+  
   <nav>
   <br>
     <ul class="pager">
@@ -74,7 +48,7 @@
   </nav>
   <article>
     <div class="section" id="how-to-develop-a-site-for-the-web">
-<h2>How to Develop a Site for the Web</h2>
+<h1>How to Develop a Site for the Web</h1>
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p>This post does not deal with the basics of HTML, CSS, or Javascript, but
@@ -111,9 +85,9 @@ point to <tt class="docutils literal"><span class="pre">http://mywebsite.ext/som
 when they should take you to
 <tt class="docutils literal"><span class="pre">file:///home/username/projects/myawe&shy;some&shy;site/somepage/index.html</span></tt>.</p>
 <div class="section" id="run-a-development-server-it-s-easy">
-<h3>Run A De&shy;vel&shy;op&shy;ment Server (it's easy!)</h3>
+<h2>Run A De&shy;vel&shy;op&shy;ment Server (it's easy!)</h2>
 <div class="section" id="the-short-answer">
-<h4>The Short Answer</h4>
+<h3>The Short Answer</h3>
 <p><strong>Use Python!</strong></p>
 <pre class="code text literal-block">
 $ python2 -m SimpleHTTPServer
@@ -121,7 +95,7 @@ Serving HTTP on 0.0.0.0 port 8000 ...
 </pre>
 </div>
 <div class="section" id="the-longer-answer">
-<h4>The Longer Answer</h4>
+<h3>The Longer Answer</h3>
 <p>You can run your own local webserver to serve files <em>locally</em>. This gets you
 all of the de&shy;vel&shy;op&shy;men&shy;tal advantages of running a webserver without having to
 rent or run a server in the cloud. The best part is that it's very easy to run

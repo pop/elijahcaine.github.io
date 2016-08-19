@@ -1,7 +1,11 @@
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";
 
-dd, dt, p, li, pre {
-  font-size: 1.4em;
+dd, dt, p, li, pre, .line {
+  font-size: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 900;
 }
 
 dd {
@@ -14,6 +18,10 @@ dd {
   max-width: 1000px;
 }
 
+.pager {
+  margin-top: -1em;
+}
+
 nav {
   padding-top: 1em;
   width: 100%;
@@ -23,39 +31,6 @@ footer {
   margin-top: 1em;
   margin-bottom: 1em;
   border-top: .1em solid;
-}
-
-.banner {
-  margin: 0 0 0 0;
-  position: relative;
-}
-
-.banner:hover {
-  margin: 0 0 0 0;
-  position: relative;
-}
-
-.banner img {
-  width: 100%;
-  z-index: -1;
-}
-
-.banner h1 {
-  position: absolute;
-  z-index: 1;
-  color: white;
-  font-size: 3em;
-  margin: 1em;
-  opacity: 0.7
-}
-
-.banner:hover h1 {
-  position: absolute;
-  z-index: 1;
-  color: white;
-  opacity: 1;
-  font-size: 3em;
-  margin: 1em;
 }
 
 .avatar {
@@ -72,6 +47,15 @@ footer {
 
 .my-buttons {
   padding-right: 1em;
+}
+
+.name {
+  float: left;
+  font-weight: 900;
+}
+
+.section img {
+    padding: 10px;
 }
 
 footer {
