@@ -48,10 +48,10 @@
   </nav>
   <article>
     <div class="section" id="covertly-installing-packages-with-docker">
-<h1>Covertly Installing Packages with Docker</h1>
+<h2>Covertly Installing Packages with Docker</h2>
 <p><a class="reference external" href="#the-deets-dockerfile-and-commands">Jump to the codey bits</a></p>
 <div class="section" id="the-problem-workstations">
-<h2>The Problem: Work&shy;sta&shy;tions</h2>
+<h3>The Problem: Work&shy;sta&shy;tions</h3>
 <p>At the OSL I use work&shy;sta&shy;tions which are pro&shy;vi&shy;sioned by <a class="reference external" href="https://en.wikipedia.org/wiki/Chef_%28software%29">Chef</a> to look more or
 less identical (packages are the same and global config files are consistent
 from machine to machine). This is nice because it allows everybody at the lab
@@ -71,7 +71,7 @@ things.</p>
 <p>* firefox kept crashing, I wasn't just stealing music for the sake of it.</p>
 </div>
 <div class="section" id="enter-docker">
-<h2>Enter: Docker</h2>
+<h3>Enter: Docker</h3>
 <p>In this case the solution to the 'problem' was <a class="reference external" href="https://en.wikipedia.org/wiki/Docker_%28software%29">Docker</a>. I wrote a Dockerfile
 which pro&shy;vi&shy;sioned a container to have <tt class="docutils literal"><span class="pre">youtube-dl</span></tt> installed, spun up the
 container with a shared directory (<tt class="docutils literal"><span class="pre">$PWD:/home/</span></tt>), and executed the
@@ -80,7 +80,7 @@ directory and I was able to play it with my media player of choice, all without
 installing <tt class="docutils literal"><span class="pre">youtube-dl</span></tt> locally.</p>
 </div>
 <div class="section" id="the-deets-dockerfile-and-commands">
-<h2>The Deets: Dockerfile and Commands</h2>
+<h3>The Deets: Dockerfile and Commands</h3>
 <p><tt class="docutils literal">Dockerfile</tt></p>
 <pre class="code text literal-block">
 FROM ubuntu:latest
@@ -105,7 +105,7 @@ $ docker run -v $PWD:/home/ yt-dl youtube-dl &lt;YOUTUBE-VID-URL&gt;
 <p>This will download any url's video into the current working directory.</p>
 </div>
 <div class="section" id="pro-tip-add-an-alias">
-<h2>Pro-Tip: Add an <tt class="docutils literal">Alias</tt></h2>
+<h3>Pro-Tip: Add an <tt class="docutils literal">Alias</tt></h3>
 <p>Add the following content to your <tt class="docutils literal"><span class="pre">~/.bashrc</span></tt> file and then run <tt class="docutils literal">source
 <span class="pre">~/.bashrc</span></tt> to get rid the of long Docker bits of the above command.</p>
 <pre class="code bash literal-block">
@@ -114,7 +114,7 @@ $ docker run -v $PWD:/home/ yt-dl youtube-dl &lt;YOUTUBE-VID-URL&gt;
 </pre>
 </div>
 <div class="section" id="wait-this-is-overly-complicated">
-<h2>Wait This is Overly Com&shy;pli&shy;cat&shy;ed</h2>
+<h3>Wait This is Overly Com&shy;pli&shy;cat&shy;ed</h3>
 <p>You're probably thinking: &quot;Hey, couldn't you have just run <tt class="docutils literal">pip install <span class="pre">--user</span>
 <span class="pre">youtube-dl</span></tt>?</p>
 <p>Yes. I could have. But that wouldn't be fun and wouldn't have given me an
