@@ -5,22 +5,249 @@
         <uri>http://elijahcaine.me/</uri>
         <email>elijahcainemv@gmail.com</email>
     </author>
-    <title>Elijah&#39;s Website</title>
+    <title>Elijah Caine .me</title>
     <id>tag:elijahcaine.me,2011-06-11:/atom/</id>
     <link rel="alternate" type="text/html" href="http://elijahcaine.me/" />
     <link rel="self" type="application/atom+xml" href="http://elijahcaine.me/atom/" />
     <icon>http://elijahcaine.me/favicon.ico</icon>
     <logo>http://elijahcaine.me/feed-logo.png</logo>
-    <updated>2016-08-19T07:00:00Z</updated>
+    <updated>2016-08-21T07:00:00Z</updated>
     <generator uri="https://github.com/posativ/acrylamid/" version="0.8.dev0">acrylamid</generator>
+        <entry>
+        <title>Conceptual Hurdles in Programming</title>
+        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/conceptual-hurdles-in-programming/index.html" />
+        <id>tag:elijahcaine.me,2016-08-21:/blog/conceptual-hurdles-in-programming/index.html</id>
+        <updated>2016-08-21T07:00:00Z</updated>
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ee660>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ee6c0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ee720>" />
+        
+        <author>
+            <name>Elijah Caine</name>
+            <uri>http://elijahcaine.me/</uri>
+            <email>elijahcainemv@gmail.com</email>
+        </author>
+        <content type="html">&lt;div class=&#34;section&#34; id=&#34;conceptual-hurdles-in-programming&#34;&gt;
+&lt;h3&gt;Conceptual Hurdles in Programming&lt;/h3&gt;
+&lt;p&gt;I&#39;ve been actively learning programming for almost five years now. I started
+by taking a C++ class at Portland Community College.  That class was the best
+thing to happen to my engineering career because it taught me that
+&lt;em&gt;programming is very hard, and I am not naturally good at it&lt;/em&gt;, but it was also
+very rewarding so I stuck with it.&lt;/p&gt;
+&lt;p&gt;I&#39;m not special either, most of us aren&#39;t very good at programming because
+it&#39;s so abstract and hard to grasp, like Math and Infinite Jest. There are of
+course the people that seem like &lt;em&gt;programming gods&lt;/em&gt;, but nine times out of ten
+those people have been programming since they were eight and it&#39;s really not
+fair to compare yourself to them.  That&#39;s like comparing your sporting
+abilities to &lt;em&gt;any olympic athlete&lt;/em&gt;.  Don&#39;t be so hard on yourself.&lt;/p&gt;
+&lt;p&gt;In learning to program, and now teaching others how to program, I&#39;ve
+identified a few &lt;strong&gt;hurdles&lt;/strong&gt; (mountains, cliffs, obstacles, w/e) that folks
+tend to hit and have trouble crossing.  They always get past these hurdles
+eventually (or they quit CS ☹), but not without a bit of unnecessary struggle.
+Struggling builds character, and I don&#39;t want to cheat anybody out of that,
+but I do want to help those that want it.&lt;/p&gt;
+&lt;p&gt;This post will in no way guarantee your success in overcoming these obstacles
+but it should at least give you a head start to help you understand what you&#39;re
+learning and point you in the right direction when you want to ask a question.&lt;/p&gt;
+&lt;div class=&#34;section&#34; id=&#34;data-structures&#34;&gt;
+&lt;h4&gt;Data Structures&lt;/h4&gt;
+&lt;p&gt;Understanding that &lt;strong&gt;a lot of programming is basically manipulating data to
+fit a need&lt;/strong&gt; is pretty important.  A social network can be thought of as a
+bunch of people&#39;s personal information plugged into a bunch of algorithms to
+make connecting easier.  A word processor is really just a front-end for some
+&lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Microsoft_Office_XML_formats&#34;&gt;XML under the hood&lt;/a&gt;, which is itself &lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/XML&#34;&gt;just a way to represent structured
+data&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;When handling data try to keep in mind what you are trying to accomplish and
+the best way to structure the data in the pursuit of that goal.&lt;/p&gt;
+&lt;dl class=&#34;docutils&#34;&gt;
+&lt;dt&gt;&lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Array_data_structure&#34;&gt;Arrays/Lists/Vectors&lt;/a&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;Arrays and Lists are an ordered data type&lt;/strong&gt;.  Use them when you need to
+keep track of the order things happened in, like queuing an event.  Try to
+keep them &lt;em&gt;relatively small&lt;/em&gt; since they are fast for retrieval but not
+inherently space efficient.&lt;/dd&gt;
+&lt;dt&gt;&lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Hash_table&#34;&gt;Hash-table/Key-Value/Dictionary&lt;/a&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;p class=&#34;first&#34;&gt;&lt;strong&gt;Hashes are useful for storing unordered data&lt;/strong&gt; with keys, like an address
+book or a small database. We use them to access data quickly and easily
+since data is retrieved using a key and always takes approximately the
+same amount of time.  When you get data out of a dictionary you provide a
+key and get back the associated data, just like (you guessed it) &lt;em&gt;a real
+dictionary&lt;/em&gt; where provided the word you get back a definition.&lt;/p&gt;
+&lt;p class=&#34;last&#34;&gt;Hash-tables are useful tools but should only be used for &lt;em&gt;relatively
+small&lt;/em&gt; amounts of data.  There is a bit of overhead in creating the table
+for storing your data so if your data-set gets too big you&#39;ll run out of
+memory.&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt&gt;&lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Linked_list&#34;&gt;Linked Lists/Sorted Trees&lt;/a&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;p class=&#34;first&#34;&gt;Linked Lists and Sorted Trees aren&#39;t exactly the same thing but I&#39;m
+lumping them together because they both deal with a lot of the same
+concepts and can be implemented in similar ways.  In learning about LL/ST
+you&#39;ll probably deal with Structs, Nodes, Pointers, and dynamic memory
+allocation, which if you&#39;re like me will totally break your brain and then
+become second-nature.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;One advantage to these structures is that they can be implemented to
+take up only the space they require&lt;/strong&gt;.  Where Hash-maps and lists are hard
+to make the &lt;em&gt;right size&lt;/em&gt;, LL/ST can only take up exactly as much room as
+they need.  The trade-off (a word you hear a lot when dealing choosing
+data structures) is that they&#39;re not always the &lt;em&gt;fastest&lt;/em&gt; way to
+store/retrieve data.  Just consider your use-case and think about what you
+need for the task at hand.&lt;/p&gt;
+&lt;p class=&#34;last&#34;&gt;If you&#39;re interested in learning Rust though there&#39;s a great guide on
+&lt;a class=&#34;reference external&#34; href=&#34;http://cglab.ca/~abeinges/blah/too-many-lists/book/README.html&#34;&gt;Learning Rust With Entirely Too Many Linked Lists&lt;/a&gt;. I do suggest it.&lt;/p&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;&lt;strong&gt;These are all just the structures you&#39;re giving your data&lt;/strong&gt; (a series of
+ones and zeros on disk and in memory).  Anybody that&#39;s done work with a
+sufficiently complicated project (e.g., the Linux Kernel) can tell you that
+one glob of data can be treated as a Linked List, Array, Hash -- or all three
+at the same time!  The structure you give your data is just so &lt;em&gt;you&lt;/em&gt; can work
+with it, the computer doesn&#39;t really care one way or another, so choose what
+makes the most sense.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Speaking of data structures...&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;objects-classes&#34;&gt;
+&lt;h4&gt;Objects/Classes&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;Objects are logical groupings of data (variables) and functions that act on
+that data&lt;/strong&gt;.  They differ from structs in that they are (usually) private by
+default, meaning that variables declared in an object are not accessible from
+the &lt;em&gt;outside&lt;/em&gt; unless you explicitly say so. Variables are usually manipulated
+via a method called a &lt;em&gt;getter&lt;/em&gt; and &lt;em&gt;setter&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Well... what I&#39;ve actually described so far is creating a &lt;strong&gt;class: aka a
+blueprint for an object&lt;/strong&gt;.  This python is a pretty succinct way to describe
+classes and objects:&lt;/p&gt;
+&lt;pre class=&#34;code python literal-block&#34;&gt;
+&lt;span class=&#34;sd&#34;&gt;&amp;quot;&amp;quot;&amp;quot;
+objects_example.py
+
+Declare a class named BazClass.
+&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;BazClass&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;object&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__init__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;None&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+        &lt;span class=&#34;sd&#34;&gt;&amp;quot;&amp;quot;&amp;quot;
+        The __init__ function sets class variables and sets up the object.
+        &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+        &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;var1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;
+        &lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;var2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;
+
+    &lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+        &lt;span class=&#34;sd&#34;&gt;&amp;quot;&amp;quot;&amp;quot;
+        a() acts on the object variables (accessed via `self`).
+        &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;Variable you set {}&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;var1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;quot;Variable set by class definition {}&amp;quot;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;self&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;var2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+
+&lt;span class=&#34;sd&#34;&gt;&amp;quot;&amp;quot;&amp;quot;
+Creating an instance of the class and call the `a()` function.
+&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;foo_object&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BazClass&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;7&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;foo_object&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;Objects are something that will &lt;em&gt;click&lt;/em&gt; after you use the for a while.
+There&#39;s some nuances and implementation quirks depending on the language
+you&#39;re using, but in the end they&#39;re just logical collections of private data
+and functions.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;functional-programming&#34;&gt;
+&lt;h4&gt;Functional Programming&lt;/h4&gt;
+&lt;p&gt;&lt;a class=&#34;reference external&#34; href=&#34;https://en.wikipedia.org/wiki/Functional_programming&#34;&gt;Functional Programming&lt;/a&gt; (FP) was my first big paradigm shift in CS since
+functions.  FP includes concepts of variable immutability (once it&#39;s set it&#39;s
+set), callbacks (functions calling functions and propagating results up),
+program state -- the list goes on.  Here&#39;s an example to get us started.&lt;/p&gt;
+&lt;p&gt;Non-functional paradigm:&lt;/p&gt;
+&lt;pre class=&#34;code javascript literal-block&#34;&gt;
+&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;average_evens&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;avg&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+
+    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;length&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;%&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+            &lt;span class=&#34;nx&#34;&gt;avg&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+    &lt;span class=&#34;nx&#34;&gt;avg&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;avg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;length&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;avg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;Functional Paradigm:&lt;/p&gt;
+&lt;pre class=&#34;code javascript literal-block&#34;&gt;
+&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;average_evens&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;reduce&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;%&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;})&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;length&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;In the non-functional example one would create a variable, iterate with a
+for-loop, and return a variable at the end.  In the functional example you
+call functions which return data that you handle (callback) and that result is
+added to or replaces the original data.  I&#39;m honestly not doing this topic
+justice but it&#39;s one of those things you either learn first or you learn the
+hard way.&lt;/p&gt;
+&lt;p&gt;This is just the tip of the ice-berg; many people prefer functional
+programming. If you are even remotely interested you should find one of
+those people and let them talk your ear off.&lt;/p&gt;
+&lt;p&gt;If you&#39;re learning functional programming I suggest either &lt;a class=&#34;reference external&#34; href=&#34;http://learnyouahaskell.com/chapters&#34;&gt;Learn You a
+Haskell for Great Good&lt;/a&gt; if you&#39;re interested in learning Haskell (which is
+interesting an interesting language if nothing else) or &lt;a class=&#34;reference external&#34; href=&#34;http://www.oreilly.com/programming/free/functional-programming-python.csp&#34;&gt;Functional
+Programming in Python&lt;/a&gt; for &lt;em&gt;pythonistas&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;frameworks&#34;&gt;
+&lt;h4&gt;Frameworks&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;Frameworks are a collection of libraries, methods, and tools to accomplish a
+specific type of task&lt;/strong&gt;.  If you want to get something &lt;em&gt;complicated&lt;/em&gt; done
+&lt;em&gt;fast&lt;/em&gt;, you&#39;ll use a framework.  Take for instance a web-app like Facebook or
+Twitter: it needs to be able to &lt;em&gt;send/receive HTTP requests&lt;/em&gt;, &lt;em&gt;interface with
+a database&lt;/em&gt; / &lt;em&gt;craft database queries&lt;/em&gt;, &lt;em&gt;render web-pages&lt;/em&gt;, &lt;em&gt;and&lt;/em&gt; whatever the
+actual website is supposed to do.&lt;/p&gt;
+&lt;p&gt;Frameworks can be very small or very large but they are always a big hurdle
+for those of us that have never worked with one before.  A good starter
+framework I suggest is &lt;a class=&#34;reference external&#34; href=&#34;http://flask.pocoo.org/&#34;&gt;Flask&lt;/a&gt; for Python-based web-apps.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;testing&#34;&gt;
+&lt;h4&gt;Testing&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;Testing is writing a program to test your program&lt;/strong&gt;.  There are many different
+&lt;em&gt;kinds&lt;/em&gt; of tests from &lt;em&gt;unit tests&lt;/em&gt; (checking single functions), to
+&lt;em&gt;integration tests&lt;/em&gt; (checking that your functions work &lt;em&gt;together&lt;/em&gt;), to &lt;em&gt;random
+tests&lt;/em&gt; (trying to break your program by telling a computer to break your
+functions by using they in weird ways).&lt;/p&gt;
+&lt;p&gt;Remember that first program you wrote for class?  You wrote one that prompted
+the user for data and then manipulated that input in some way?  Remember how
+you tested that?  Probably in the most tedious way imaginable: &lt;strong&gt;by hand&lt;/strong&gt;.
+Tests are much easier to write than your actual code and while they&#39;re a
+tedious investment up-front it&#39;s a small commitment relative to the &lt;em&gt;hours&lt;/em&gt;
+you&#39;d spend checking your program every time you made a change.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;troubleshooting&#34;&gt;
+&lt;h4&gt;Troubleshooting&lt;/h4&gt;
+&lt;p&gt;The last thing isn&#39;t really about programming but about &lt;em&gt;fixing&lt;/em&gt; your
+programming.  When you&#39;re learning a new paradigm, language, or framework
+you&#39;re going to spend a lot of time &lt;em&gt;fixing&lt;/em&gt; what doesn&#39;t currently work much
+more than you&#39;re going to actually be producing working code.  This skill can
+also be summed up as &#39;How to Read Error Messages and Google well&#39;.&lt;/p&gt;
+&lt;p&gt;My troubleshooting advice is to &lt;em&gt;read&lt;/em&gt; the error message, don&#39;t give up,
+and search for anything that looks meaningful.  Once you find an answer try to
+&lt;em&gt;grok&lt;/em&gt; what the answer means so you can learn &lt;em&gt;why&lt;/em&gt; that worked instead of
+knowing &lt;em&gt;if I type this in a certain way it will not fall down&lt;/em&gt;.  Future you
+will appreciate the investment you put into &lt;em&gt;understanding&lt;/em&gt; the problem and
+it&#39;s solution.&lt;/p&gt;
+&lt;p&gt;Also don&#39;t be afraid to experiment. Make a copy of your program (or use
+&lt;a class=&#34;reference external&#34; href=&#34;https://git-scm.com/&#34;&gt;git&lt;/a&gt;) and see if some crazy idea is exactly what you need.&lt;/p&gt;
+&lt;hr class=&#34;docutils&#34;/&gt;
+&lt;p&gt;This list is far from complete but it still felt worth sharing.  If you think
+I missed something, &lt;a class=&#34;reference external&#34; href=&#34;http://elijahcaine.me/about/#contact&#34;&gt;contact me&lt;/a&gt; and I might do a follow-up post.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</content>
+    </entry>
+    
         <entry>
         <title>The MoonStone Discovery</title>
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/the-moonstone-discovery/index.html" />
         <id>tag:elijahcaine.me,2016-08-19:/blog/the-moonstone-discovery/index.html</id>
         <updated>2016-08-19T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fd9c60>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd9cf0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd9d20>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f9060>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f90f0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f9120>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -95,9 +322,9 @@ else to do, she sat in wait.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/git-does-a-lot-of-things/index.html" />
         <id>tag:elijahcaine.me,2016-07-27:/blog/git-does-a-lot-of-things/index.html</id>
         <updated>2016-07-27T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fd42d0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd4360>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd4390>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ee330>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ee3c0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ee3f0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -168,9 +395,9 @@ fetch                reflog               worktree
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/debra-the-ghoul/index.html" />
         <id>tag:elijahcaine.me,2016-07-02:/blog/debra-the-ghoul/index.html</id>
         <updated>2016-07-02T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fd91e0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd9270>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd92a0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f35a0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f3630>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f3660>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -251,9 +478,9 @@ tomorrow afternoon.&amp;quot;&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/emperor-stan-of-stantinople/index.html" />
         <id>tag:elijahcaine.me,2016-07-01:/blog/emperor-stan-of-stantinople/index.html</id>
         <updated>2016-07-01T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fd9570>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd9600>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd9630>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f3930>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f39c0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f39f0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -346,9 +573,9 @@ it.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/character-study-the-try-new-things-couple/index.html" />
         <id>tag:elijahcaine.me,2016-06-17:/blog/character-study-the-try-new-things-couple/index.html</id>
         <updated>2016-06-17T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fd98d0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd9960>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd9990>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f3c90>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f3d20>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f3d50>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -406,10 +633,10 @@ never tell her that though.  He loves her too much.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/working-remote-the-fresh-pot/index.html" />
         <id>tag:elijahcaine.me,2016-06-16:/blog/working-remote-the-fresh-pot/index.html</id>
         <updated>2016-06-16T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fdf3c0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fdf450>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fdf480>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fdf4b0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f9780>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f9810>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f9840>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f9870>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -559,9 +786,9 @@ questions like&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/working-remote-five-points-coffee-roaster/index.html" />
         <id>tag:elijahcaine.me,2016-06-16:/blog/working-remote-five-points-coffee-roaster/index.html</id>
         <updated>2016-06-16T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fdf780>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fdf7e0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fdf810>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f9b40>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f9ba0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f9bd0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -620,11 +847,11 @@ interested in that sort of thing...&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/python-exceptions/index.html" />
         <id>tag:elijahcaine.me,2016-04-03:/blog/python-exceptions/index.html</id>
         <updated>2016-04-03T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fc8660>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc8720>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc8750>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc87b0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc8780>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e26c0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2780>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e27b0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2810>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e27e0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -758,10 +985,10 @@ Python?&lt;/a&gt;.&lt;/li&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/how-to-develop-a-site-for-the-web/index.html" />
         <id>tag:elijahcaine.me,2016-03-25:/blog/how-to-develop-a-site-for-the-web/index.html</id>
         <updated>2016-03-25T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fc8db0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc8e10>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc8e70>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc8ea0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2e10>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2e70>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2ed0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2f00>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -850,10 +1077,10 @@ check out this &lt;a class=&#34;reference external&#34; href=&#34;http://stackov
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/running-firefox-in-docker/index.html" />
         <id>tag:elijahcaine.me,2016-03-05:/blog/running-firefox-in-docker/index.html</id>
         <updated>2016-03-05T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fc8a50>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc8ab0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc8ae0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fc8b10>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2ab0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2b10>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2b40>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3e2b70>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -913,10 +1140,10 @@ Food for thought [citation needed].&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/induction/index.html" />
         <id>tag:elijahcaine.me,2015-10-22:/blog/induction/index.html</id>
         <updated>2015-10-22T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fd2750>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd27e0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd2810>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd2870>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ec7b0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ec840>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ec870>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ec8d0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -937,9 +1164,9 @@ Food for thought [citation needed].&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/cat-barcamp-2015/index.html" />
         <id>tag:elijahcaine.me,2015-10-12:/blog/cat-barcamp-2015/index.html</id>
         <updated>2015-10-12T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fd2f30>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd2fc0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd4060>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ecf90>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ee060>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ee0c0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1029,10 +1256,10 @@ the CAT. They throw a hellofan event.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/covertly-installing-packages-with-docker/index.html" />
         <id>tag:elijahcaine.me,2015-10-07:/blog/covertly-installing-packages-with-docker/index.html</id>
         <updated>2015-10-07T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fd4db0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd4e40>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd4e70>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd4ed0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f31b0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f3240>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f3270>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3f32d0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1123,9 +1350,9 @@ excuse to write a blog, post now would it Ms. Smarty Pantz.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/how-to-possibly-kinda-sorta-write-a-travelblog/index.html" />
         <id>tag:elijahcaine.me,2015-09-29:/blog/how-to-possibly-kinda-sorta-write-a-travelblog/index.html</id>
         <updated>2015-09-29T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fd24b0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd24e0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fd2510>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ec510>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ec540>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3ec570>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1200,8 +1427,8 @@ it could even be a startup...&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/travel/index.html" />
         <id>tag:elijahcaine.me,2015-09-03:/blog/travel/index.html</id>
         <updated>2015-09-03T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fdfc30>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fdfd20>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3fd030>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3fd120>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1237,8 +1464,8 @@ travel travel. Travel travel travel travel travel travel travel travel travel.&l
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/a-personal-day-in-prague/index.html" />
         <id>tag:elijahcaine.me,2015-09-02:/blog/a-personal-day-in-prague/index.html</id>
         <updated>2015-09-02T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fdff90>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fe30c0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3fd390>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3fd480>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1284,8 +1511,8 @@ capture it better.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/write-the-docs-day-2/index.html" />
         <id>tag:elijahcaine.me,2015-09-01:/blog/write-the-docs-day-2/index.html</id>
         <updated>2015-09-01T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fe3690>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fe3780>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3fda50>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3fdb40>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1358,8 +1585,8 @@ Network&lt;/a&gt; writer, both very interesting people.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/write-the-docs-day-1/index.html" />
         <id>tag:elijahcaine.me,2015-08-31:/blog/write-the-docs-day-1/index.html</id>
         <updated>2015-08-31T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11ff15d0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11ff16c0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c40c990>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c40ca80>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1415,8 +1642,8 @@ Pub. Many conversations and laughs were had. I like this crowd.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/wtd-city-tour-of-prague/index.html" />
         <id>tag:elijahcaine.me,2015-08-30:/blog/wtd-city-tour-of-prague/index.html</id>
         <updated>2015-08-30T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11ff1270>" />
-        <category term="<built-in method title of unicode object at 0x7fae11ff1360>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c40c630>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c40c720>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1465,8 +1692,8 @@ conference. There was food and fabulous people.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/to-prague/index.html" />
         <id>tag:elijahcaine.me,2015-08-29:/blog/to-prague/index.html</id>
         <updated>2015-08-29T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fe9150>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fe9240>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c403510>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c403600>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1517,8 +1744,8 @@ monies&lt;/em&gt;. Everything is gonna feel really expensive I bet...&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/a-very-long-bike-ride/index.html" />
         <id>tag:elijahcaine.me,2015-08-28:/blog/a-very-long-bike-ride/index.html</id>
         <updated>2015-08-28T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fe9ed0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fe9fc0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c40c2d0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c40c3c0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1581,8 +1808,8 @@ and the country. You should visit if you haven&#39;t already.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/van-gough-museum/index.html" />
         <id>tag:elijahcaine.me,2015-08-27:/blog/van-gough-museum/index.html</id>
         <updated>2015-08-27T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fe3a20>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fe3b10>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3fdde0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c3fded0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1609,8 +1836,8 @@ of walking = ready for bed by 3pm.&lt;/p&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/the-rijks-museum-and-travel-tips/index.html" />
         <id>tag:elijahcaine.me,2015-08-26:/blog/the-rijks-museum-and-travel-tips/index.html</id>
         <updated>2015-08-26T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fe9b70>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fe9c60>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c403f30>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c40c060>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1671,8 +1898,8 @@ culturally diversifying as a day in a museum or city tour.&lt;/li&gt;
         <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/to-amsterdam/index.html" />
         <id>tag:elijahcaine.me,2015-08-24:/blog/to-amsterdam/index.html</id>
         <updated>2015-08-24T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fe9810>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fe9900>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c403bd0>" />
+        <category term="<built-in method title of unicode object at 0x7fbf4c403cc0>" />
         
         <author>
             <name>Elijah Caine</name>
@@ -1736,41 +1963,6 @@ It tasted &lt;a class=&#34;reference external&#34; href=&#34;https://xkcd.com/15
 &lt;img alt=&#34;http://i.imgur.com/ab22x3s.jpg&#34; src=&#34;http://i.imgur.com/ab22x3s.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
 &lt;/div&gt;
 &lt;p&gt;&lt;em&gt;So this is what it feels like to drink in a bar... neat.&lt;/em&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</content>
-    </entry>
-    
-        <entry>
-        <title>Packed and Ready to Fly</title>
-        <link rel="alternate" type="text/html" href="http://elijahcaine.me/blog/packed-and-ready-to-fly/index.html" />
-        <id>tag:elijahcaine.me,2015-08-23:/blog/packed-and-ready-to-fly/index.html</id>
-        <updated>2015-08-23T07:00:00Z</updated>
-        <category term="<built-in method title of unicode object at 0x7fae11fe94b0>" />
-        <category term="<built-in method title of unicode object at 0x7fae11fe95a0>" />
-        
-        <author>
-            <name>Elijah Caine</name>
-            <uri>http://elijahcaine.me/</uri>
-            <email>elijahcainemv@gmail.com</email>
-        </author>
-        <content type="html">&lt;div class=&#34;section&#34; id=&#34;sunday-2015-08-23&#34;&gt;
-&lt;h3&gt;Sunday 2015-08-23&lt;/h3&gt;
-&lt;div class=&#34;section&#34; id=&#34;all-packed&#34;&gt;
-&lt;h4&gt;All Packed&lt;/h4&gt;
-&lt;p&gt;So I&#39;m all packed up and ready to go.&lt;/p&gt;
-&lt;div class=&#34;figure align-center&#34;&gt;
-&lt;img alt=&#34;http://i.imgur.com/gtFk6YA.jpg&#34; src=&#34;http://i.imgur.com/gtFk6YA.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
-&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;Left:&lt;/strong&gt; Chargers, electronics, entertainment, toiletries, water bottle,
-wallet, etc.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Center:&lt;/strong&gt; The bag, the &lt;em&gt;Write the Docs&lt;/em&gt; shirt I&#39;ll be wearing.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Right:&lt;/strong&gt; Clothing. Gameboy SP at the top.&lt;/p&gt;
-&lt;p&gt;Not the &lt;em&gt;perfect&lt;/em&gt; bag of things to bring to Europe, but certainly solid and
-most of it practical. I&#39;m packing an extra bag for all of the trinkets I&#39;ll
-bring back.&lt;/p&gt;
-&lt;p&gt;Let me know if you want anything (if you know how to contact me we&#39;re close
-enough for you to ask.)&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </content>
