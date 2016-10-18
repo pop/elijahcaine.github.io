@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Python Exceptions | Elijah Caine .me</title>
+  <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js "></script>
+  <link rel="stylesheet" href="/pygments.css">
+  <link rel="stylesheet" href="/style.css">
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-48615202-3', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+</body>
+<a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+  <div class="main">
+    <nav>
+      <div class="text-right">
+        <ul class="list-inline">
+          <li class="name"><a href="/">Elijah Caine .me</a></li>
+          <li><a href="/blog">blog</a></li> |
+          <li><a href="/about">about</a></li> |
+          <li><a href="/contributions">contributions</a></li> |
+          <li><a href="/awesome-things">awesome things</a></li> |
+          <li><a href="/resume.pdf">Resume</a></li> |
+          <li><a href="https://github.com/ElijahCaine">Github</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    
+  
+  <nav>
+  <br>
+    <ul class="pager">
+      
+        <li class="previous"><a href="/blog/how-to-develop-a-site-for-the-web/index.html"><span aria-hidden="true">&larr;</span> How to Develop a Site for the Web</a></li>
+      
+
+      
+        <li class="next"><a href="/blog/working-remote-the-fresh-pot/index.html">Working Remote - The Fresh Pot  <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </nav>
+  <article>
+    <div class="section" id="how-to-get-the-most-out-of-your-python-exceptions">
+<h2>How to Get the Most out of Your Python Exceptions</h2>
+<pre class="code python literal-block">
+<span class="n">var</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">'Please enter a number not equal to 0: '</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ZeroDivisionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">'Error: '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">'You had one job!'</span><span class="p">)</span>
+</pre>
+<div class="warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This post does not cover <em>what</em> python exceptions are. If the above
+code doesn't make sense you should check out this <a class="reference external" href="https://wiki.python.org/moin/HandlingExceptions">In&shy;tro&shy;duc&shy;tion to Python
+Exceptions</a> from wiki.python.org before reading this post.</p>
+</div>
+<p>If you've fallen in love with Python you've no doubt discovered exceptions:</p>
+<pre class="code python literal-block">
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># do a thing</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="c1"># thing did not work,</span>
+    <span class="c1"># do something else</span>
+</pre>
+<p>They are endlessly useful and help one to avoid writing checks upon checks upon
+checks before getting to the meat of your project. Just try a thing, catch the
+error, keep on rolling (or fail gracefully).</p>
+<p>As powerful as they can be, I have found a lot of folks (past me included) who
+don't know how to find python exceptions and don't know how to write their own
+exceptions! So let's do that.</p>
+<div class="section" id="finding-exceptions">
+<h3>Finding Exceptions</h3>
+<p>When writing exception handling code it's kosher to explicitly state <em>which</em>
+error you expect.</p>
+<pre class="code python literal-block">
+<span class="c1"># Bad:</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># A thing that might not work</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="c1"># Something else</span>
+
+<span class="c1"># Good:</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># A thing that might not work</span>
+<span class="k">except</span> <span class="n">SpecificError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+    <span class="c1"># Maybe print(err)</span>
+    <span class="c1"># Something else</span>
+</pre>
+<p>When I first found this out I thought <em>Golly that does sound useful; I always
+try to be explicit in my error handling -- but how??</em> Thankfully future me is
+here to answer questions like this.</p>
+<p>The exception you are looking for (for instance, <tt class="docutils literal">Speci&shy;fi&shy;cEr&shy;ror</tt> in the above
+pseudo-code) can be found in the python traceback:</p>
+<pre class="code text literal-block">
+$ echo &quot;open('myfakefile.txt', 'r').close()&quot; &gt; my-unhandled-script.py
+$ python my-unhandled-script.py
+Traceback (most recent call last):
+  File &quot;/tmp/test.py&quot;, line 1, in &lt;module&gt;
+    open('myfakefile.txt', 'r').close()
+IOError: [Errno 2] No such file or directory: 'myfakefile.txt'
+</pre>
+<p>That bit on the last line <tt class="docutils literal">IOError</tt> is the exception you're looking for. So
+when you write your code you'll say something like the following:</p>
+<pre class="code python literal-block">
+<span class="k">try</span><span class="p">:</span>
+    <span class="nb">open</span><span class="p">(</span><span class="s1">'myfakefile.txt'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">'File `myfakefile.txt` does not exist'</span><span class="p">)</span>
+</pre>
+<p>To recap, here is one way (and my preferred method for) 'doing' python
+exception handling:</p>
+<ol class="arabic simple">
+<li>Write breakable code.</li>
+<li>Run breakable code, see what exceptions python spits out.</li>
+<li>Wrap breakable code in explicit <tt class="docutils literal">try/except</tt> blocks.</li>
+<li>???</li>
+<li>Profit.</li>
+</ol>
+</div>
+<div class="section" id="writing-your-own-exceptions">
+<h3>Writing Your Own Exceptions</h3>
+<p>You (who me?), yes <em>you</em> can write custom python exceptions. It's dead easy
+too.</p>
+<p>The long and short of it is you define an exception class which either inherits
+from the <tt class="docutils literal">Exception</tt> class or another pre-existing exception.</p>
+<pre class="code python literal-block">
+<span class="k">class</span> <span class="nc">CusssstomError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">'''Raise when snakes'''</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+
+<span class="k">def</span> <span class="nf">check_for_snakes</span><span class="p">(</span><span class="n">foo</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">'snake'</span> <span class="ow">in</span> <span class="n">foo</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">CusssstomError</span><span class="p">(</span><span class="s1">'Snakes! I hate snakes!'</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Just don't mention snakes: &quot;</span><span class="p">)</span>
+    <span class="n">check_for_snakes</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">CusssstomError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Thanks. I appreciate it.&quot;</span><span class="p">)</span>
+</pre>
+<p>The above code defines the <tt class="docutils literal">CusssstomEr&shy;ror</tt> exception class which you can
+<tt class="docutils literal">raise</tt>. Very neat and <a class="reference external" href="https://docs.python.org/2/glossary.html#term-pythonic">pythonic</a></p>
+</div>
+<div class="section" id="further-reading">
+<h3>Further Reading</h3>
+<p>Here are a few references I suggest you check out to get an even better grasp
+on exception handling and custom exceptions:</p>
+<ul class="simple">
+<li>This Stack Overflow post: <a class="reference external" href="http://stackoverflow.com/questions/1319615/proper-way-to-declare-custom-exceptions-in-modern-python">Proper way to declare custom exceptions in modern
+Python?</a>.</li>
+<li>This Python doc: <a class="reference external" href="https://docs.python.org/2/library/exceptions.html">Built-in Exceptions</a>.</li>
+</ul>
+<p>And as always, search engines are your friends.</p>
+</div>
+</div>
+
+  </article>
+  <nav>
+  <br>
+    <ul class="pager">
+      
+        <li class="previous"><a href="/blog/how-to-develop-a-site-for-the-web/index.html"><span aria-hidden="true">&larr;</span> How to Develop a Site for the Web</a></li>
+      
+
+      
+        <li class="next"><a href="/blog/working-remote-the-fresh-pot/index.html">Working Remote - The Fresh Pot  <span aria-hidden="true">&rarr;</span></a></li>
+      
+    </ul>
+  </nav>
+
+
+    <footer class="align-center">
+      
+  This page last updated on <time datetime="2016-04-03">2016-04-03</time> |
+  
+      <a href="/rss/">rss feed <img src="/static/feed-icon-14x14.png"></img></a>
+      <br>
+      This work is licensed under a
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+         Creative Commons Attribution 4.0 International License
+        </a>
+      <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+        <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
+      </a>
+      <br>
+      GPG Fingerprint: <b> Elijah Caine McDade Voigt | 1009 B899 9401 526E 33C5  BA8B 694C A211 7443 799C </b>
+      <br>
+      Heads up, this site uses Google Analytics.
+      </br>
+      
+
+    </footer>
+  </div>
+<body>
+</html>
