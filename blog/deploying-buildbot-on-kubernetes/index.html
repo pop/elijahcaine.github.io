@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>Deploying Buildbot on Kubernetes | Elijah Caine .me</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/bootstrap3.min.css">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/pygments.css">
   <script>
@@ -51,7 +51,7 @@
 <strong>TLDR:</strong> If you just want to see the end-result of this post, the results can be found at this GitHub Repository: <a class="reference external" href="https://github.com/ElijahCaine/buildbot-on-kubernetes">https://github.com/Eli&shy;jah&shy;Caine/buildbot-on-kubernetes</a></blockquote>
 <div class="section" id="preamble">
 <h3>Preamble</h3>
-<p>So I'm learning Kubernetes (K8s) for work and decided to try my hand at deploying Buildbot with K8s because we all know the universal law discovered made by Science Mc&shy;S&shy;mar&shy;ty&shy;Pants in the 1758 which stated: <strong>doing cool shit &gt; reading docs</strong> <a class="footnote-reference" href="#docs-should" id="id1">[1]</a>.
+<p>I'm learning Kubernetes (K8s) for work and decided to try my hand at deploying Buildbot with K8s because we all know the universal law discovered made by Science Mc&shy;S&shy;mar&shy;ty&shy;Pants in the 1758 which stated: <strong>doing cool shit &gt; reading docs</strong> <a class="footnote-reference" href="#docs-should" id="id1">[1]</a>.
 I would describe K8s and Buildbot, but they each already did that:</p>
 <blockquote>
 <p>&quot;Buildbot is an open-source framework for automating software build, test, and release processes.&quot;</p>
@@ -71,7 +71,7 @@ This is a fun post.</p>
 </blockquote>
 <div class="section" id="squad-goals">
 <h4>Squad Goals</h4>
-<p>So here's a quick rundown of what I want to achieve:</p>
+<p>Here's a quick rundown of what I want to achieve:</p>
 <ul class="simple">
 <li>Deploy an instance of Buildbot on K8s.</li>
 <li>Have that instance scale it's number of workers au&shy;tomag&shy;i&shy;cal&shy;ly depending on the amount of work being asked of it.</li>
@@ -82,7 +82,7 @@ This is a fun post.</p>
 <h4>Why?</h4>
 <p>I have never deployed Buildbot ever for anything.
 I have also not really worked with K8s until starting my recent jorb at <a class="reference external" href="https://coreos.com">CoreOS</a>.
-So why Buildbot and why K8s?</p>
+Why Buildbot and why K8s?</p>
 <ol class="arabic">
 <li><p class="first">I have to learn K8s sooner or later for work.</p>
 </li>
@@ -104,18 +104,54 @@ As fun as that is, every K8s tutorial uses that as an example and it's getting <
 <div class="section" id="my-sick-rig">
 <h4>My sick rig</h4>
 <p>I'm using the latest version of K8s and <a class="reference external" href="https://github.com/kubernetes/minikube#minikube">Minikube</a>, which is backed by Virtualbox on a 2014 MacBook Pro running OSX.</p>
+<p>Minikube version and associated OS:</p>
 <pre class="code literal-block">
 $ minikube version
 minikube version: v0.13.1
+$ minikube ssh
+...
+Boot2Docker version 1.11.1, build master : 901340f - Fri Jul  1 22:52:19 UTC 2016
+Docker version 1.11.1, build 5604cbe
+docker&#64;minikube:~$
+</pre>
+<p>There's some Minikube-specific semantics in this post, but you can probably get by with whatever K8s back-end you want/have lying around.</p>
+<p>Kubernetes version:</p>
+<pre class="code literal-block">
 $ kubectl version
 Client Version: version.Info{Major:&quot;1&quot;, Minor:&quot;4&quot;, GitVersion:&quot;v1.4.6&quot;, GitCommit:&quot;e569a27d02001e343cb68086bc06d47804f62af6&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2016-11-12T05:22:15Z&quot;, GoVersion:&quot;go1.7.1&quot;, Compiler:&quot;gc&quot;, Platform:&quot;darwin/amd64&quot;}
 Server Version: version.Info{Major:&quot;1&quot;, Minor:&quot;4&quot;, GitVersion:&quot;v1.4.6&quot;, GitCommit:&quot;e569a27d02001e343cb68086bc06d47804f62af6&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;1970-01-01T00:00:00Z&quot;, GoVersion:&quot;go1.7.1&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
 </pre>
-<p>There's some Minikube-specific semitics in this post, but you can probably get by with whatever K8s back-end you want/have lying around.</p>
 <p>Between finishing editing and pushing this post the above versions will probably be out of date.
 <em>SHRUG</em>.
 What are you gonna do.
-Software, amiright?</p>
+Software, amirite?</p>
+<p>Virtualbox version:</p>
+<pre class="code literal-block">
+$ virtualbox --help
+Oracle VM VirtualBox Manager 5.1.6
+...
+</pre>
+<p>OSX Version and hardware:</p>
+<pre class="code literal-block">
+$ sw_vers
+ProductName:    Mac OS X
+ProductVersion: 10.10.5
+BuildVersion:   14F1912
+$ system_profiler
+...
+    Hardware Overview:
+      Model Name: MacBook Pro
+      Model Identifier: MacBookPro11,1
+      Processor Name: Intel Core i5
+      Processor Speed: 2.6 GHz
+      Number of Processors: 1
+      Total Number of Cores: 2
+      ...
+      Memory: 16 GB
+      ...
+...
+</pre>
+<p>The hardware and Virtualbox versions are a little less important, but might as well be included for com&shy;plete&shy;ness.</p>
 </div>
 </div>
 <div class="section" id="first-pass">
@@ -124,7 +160,9 @@ Software, amiright?</p>
 It uses a <a class="reference external" href="https://docs.docker.com/compose/">Docker Compose</a> YAML file to deploy one worker container, one master service, and one PostgreSQL service, each of which is linked together and <em>just works™</em></p>
 <p>Great!
 In theory <a class="footnote-reference" href="#theory-vs-practice" id="id2">[2]</a> we can just translate the options in <tt class="docutils literal"><span class="pre">docker-compose.yml</span></tt> to K8s options to get a simple cluster up and running.
-Once we've got that running we can tweak the right nobs to get the persistent storage and auto-scaling working.</p>
+Which, to clarify, isn't an es&shy;tab&shy;lished <strong>thing</strong>, it's just a process I'm guessing should work based on the fact that Docker Compose  and K8s are both or&shy;ches&shy;tra&shy;tion tools.
+One is <strong>way</strong> more com&shy;pli&shy;cat&shy;ed and robust, but At least <strong>some</strong> of their features should over-lap in that Venn diagram.</p>
+<p>Once we've got a nieve translated-docker-compose k8s setup running then we can (hopefully) tweak some knobs and get persistent storage and auto-scaling working <a class="footnote-reference" href="#id11" id="id3">[9]</a>.</p>
 <div class="section" id="throw-some-containers-at-the-wall-and-see-what-sticks">
 <h4>Throw some containers at the wall and see what sticks</h4>
 <p>Let's start really basic and just try to get something running with <tt class="docutils literal">kubectl run</tt>.
@@ -218,13 +256,14 @@ There's probably some way to do we do that with K8s right?</p>
 <h4>Welcome YAML config files to the class</h4>
 <p>Running Command-Line Interface (CLI) commands is fun, but the easiest way to get this system running seems to be with con&shy;fig&shy;u&shy;ra&shy;tion files.
 I'm sure I <em>can</em> use CLI commands to or&shy;ches&shy;trate this entire project, but... honestly all the tutorials talk about how to do things in YAML so we're doing it in YAML now.</p>
-<p>Some research later It looks like declaring a <a class="reference external" href="http://kubernetes.io/docs/user-guide/pods/">Pod</a> is the way to go?
+<p>Some research later it looks like declaring a <a class="reference external" href="http://kubernetes.io/docs/user-guide/pods/">Pod</a> is the way to go?
 For context, here's where I got the idea from the K8s docs:</p>
 <blockquote>
 A pod (as in a pod of whales or pea pod) is a group of one or more containers (such as Docker containers), the shared storage for those containers, and options about how to run the containers.</blockquote>
 <p>Well that sounds <em>roughly</em> like what we're doing.
 I've got some containers, I want them to be able to talk to each other, and they're all logically connected to one another.
 Let's go down this rabbit hole.</p>
+<a class="reference external image-reference" href="http://wifflegif.com/gifs/272040-alice-in-wonderland-adventure-time-gif"><img alt="Alice down the rabbit hole..." class="align-center" src="/static/buildbot-on-k8s/alice-down.gif" style="width: 100%;"/></a>
 <p>Here I have Franken&shy;steined this config <tt class="docutils literal">buildbot.yaml</tt> from examples in the configs:</p>
 <pre class="code yaml literal-block">
 <span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="s">'v1'</span>
@@ -313,7 +352,7 @@ OperationalError: (psycopg2.OperationalError) could not translate host name &quo
 </dd>
 </dl>
 <p>If you guessed <strong>c</strong> you would be right so let's start in <tt class="docutils literal">buildbot.yaml</tt>.</p>
-<p>Based on my experience with databases, specif&shy;i&shy;cal&shy;ly the startup time of database containers like Postgres and Mariadb, I'd <em>guess</em> that the database was taking too long to start.
+<p>Based on my experience with databases, specif&shy;i&shy;cal&shy;ly the startup time of database containers like Postgres and MariaDB, I'd <em>guess</em> that the database was taking too long to start.
 After some digging around, I found out that Pods were the entirely wrong way to go.
 Here's how that discovery went:</p>
 <ul class="simple">
@@ -502,7 +541,7 @@ $ minikube service master
 </pre>
 <p>Opens up this wonderful site:</p>
 <img alt="Buildbot working." class="align-center" src="/static/buildbot-on-k8s/buildbot-working.png" style="width: 100%;"/>
-<p>Great, they can talk <a class="footnote-reference" href="#same-app-note" id="id3">[3]</a>.</p>
+<p>Great, they can talk <a class="footnote-reference" href="#same-app-note" id="id4">[3]</a>.</p>
 </div>
 <div class="section" id="hire-a-worker">
 <h4>Hire a worker</h4>
@@ -898,7 +937,7 @@ $ kubectl port-forward master-3176013930-gvy2i 8080
 Forwarding from 127.0.0.1:8080 -&gt; 8080
 Forwarding from [::1]:8080 -&gt; 8080
 </pre>
-<p>That kinda works, but It kept getting weird arbitrary errors which looked suspicious.</p>
+<p>That kinda works, but it kept getting weird arbitrary errors which looked suspicious.</p>
 <img alt="Permissions fail in buildbot" class="align-center" src="/static/buildbot-on-k8s/permissions-build-fail.png" style="width: 100%;"/>
 <p>Since the only thing that had really changed was the volumes I figured I might as well login to the host and in&shy;ves&shy;ti&shy;gate.</p>
 <pre class="code literal-block">
@@ -939,7 +978,7 @@ docker&#64;minikube$ sudo chown -R 1000:1000 /data/pv*
 Might as well.</p>
 <p>So if we try the build again with the correct per&shy;mis&shy;sions, what happens?</p>
 <img alt="Buildbot with permissions fixed." class="align-center" src="/static/buildbot-on-k8s/build-success-perms.png" style="width: 100%;"/>
-<p>Huzaahh</p>
+<p>Huzah</p>
 </div>
 <div class="section" id="autoscaling">
 <h3>Au&shy;toscal&shy;ing</h3>
@@ -959,7 +998,7 @@ It sounds straight forward enough, but how do we test it?</p>
 <h4>Creating a test-case</h4>
 <p>For this we need to add a few projects to our instance of Buildbot, each of which will have a hefty workload.
 To do this we need to host a Buildbot <tt class="docutils literal">master.cfg</tt> config file at some public location and refer to this in the <tt class="docutils literal">master.yaml</tt> config file.
-I used the GitHub repo that ac&shy;com&shy;pa&shy;nies this blogpost <a class="footnote-reference" href="#accompanying-repo" id="id4">[7]</a>, but you could use GitHub Gists or a pastebin; just make sure you're referring to the <strong>raw</strong> file or a <tt class="docutils literal">.tar.gz</tt> with the <tt class="docutils literal">master.cfg</tt> file at the base of the tarball.</p>
+I used the GitHub repo that ac&shy;com&shy;pa&shy;nies this blogpost <a class="footnote-reference" href="#accompanying-repo" id="id5">[7]</a>, but you could use GitHub Gists or a pastebin; just make sure you're referring to the <strong>raw</strong> file or a <tt class="docutils literal">.tar.gz</tt> with the <tt class="docutils literal">master.cfg</tt> file at the base of the tarball.</p>
 <p>So let's pull a project out of a hat that takes a while to build, how about... <a class="reference external" href="https://github.com/rust-lang/cargo">Cargo</a>.
 Any objections?
 Great, let's roll.</p>
@@ -1118,12 +1157,12 @@ Let's look around the internet and see if we find anything useful.
 I'll go East, you go West, and we'll meet back here in 20.</p>
 <p>Great, what did you find?
 Me?
-Oh I found a bunch of Github issues <a class="footnote-reference" href="#hpa-gh" id="id5">[4]</a> and Stack Overflow posts <a class="footnote-reference" href="#hpa-so" id="id6">[5]</a>; lot of people mentioned this Heapster thing.
+Oh I found a bunch of Github issues <a class="footnote-reference" href="#hpa-gh" id="id6">[4]</a> and Stack Overflow posts <a class="footnote-reference" href="#hpa-so" id="id7">[5]</a>; lot of people mentioned this Heapster thing.
 The <a class="reference external" href="https://github.com/kubernetes/heapster">Heapster GitHub page</a> says it does <em>Compute Resource Usage Analysis and Monitoring of Container Clusters</em>, which sounds like what we want.
 I also found the <a class="reference external" href="http://kubernetes.io/docs/user-guide/horizontal-pod-autoscaling/">K8s Au&shy;toscal&shy;ing</a> docs that point to a <a class="reference external" href="http://kubernetes.io/docs/user-guide/horizontal-pod-autoscaling/">K8s Au&shy;toscal&shy;ing Tutorial</a>.
 That sounds super useful and confirms the suspicion that Heapster is useful.
 <strong>TLDR</strong> things are pointing toward setting up Heapster.</p>
-<p>As it turns out there is a <a class="reference external" href="https://github.com/kubernetes/minikube/blob/master/README.md#add-ons">Heapster addon for Minikube</a> <a class="footnote-reference" href="#heapster-release" id="id7">[6]</a>, so let's get that setup.</p>
+<p>As it turns out there is a <a class="reference external" href="https://github.com/kubernetes/minikube/blob/master/README.md#add-ons">Heapster addon for Minikube</a> <a class="footnote-reference" href="#heapster-release" id="id8">[6]</a>, so let's get that setup.</p>
 <pre class="code literal-block">
 $ minikube addons enable heapster
 heapster was successfully enabled
@@ -1201,7 +1240,7 @@ worker            Deployment/worker            50%       536%      1         5  
 </pre>
 <p>Great! Let's check up on Buildbot:</p>
 <img alt="Replication failing." class="align-center" src="/static/buildbot-on-k8s/replicas-didnt-work.png" style="width: 100%;"/>
-<p>Ruh-rohe that's not good...</p>
+<p>Ruh-roh that's not good...</p>
 <p>Let's dig in a bit.</p>
 <img alt="Replication failing -- zoom, enhance." class="align-center" src="/static/buildbot-on-k8s/failed-build.png" style="width: 100%;"/>
 <p>That's not good...</p>
@@ -1253,19 +1292,36 @@ Here's the big things I feel like I'm walking away with:</p>
 <ul class="simple">
 <li><cite>kubectl &lt;command&gt; --dry-run -o yaml</cite> is very useful for file-izing your in&shy;fra&shy;struc&shy;ture.</li>
 <li>K8s is very well documented <strong>if</strong> you are a very patient individual.</li>
-<li>Storage in K8s is still not a perfectly solved problem.</li>
+<li>Storage in K8s is still not a perfectly solved problem <a class="footnote-reference" href="#storage" id="id9">[]</a>.</li>
 <li>K8s ap&shy;pli&shy;ca&shy;tions share private networking.</li>
 <li>K8s Pods are really just containers.</li>
 </ul>
 <p>I'm sure there's a ton more I've in&shy;ter&shy;nal&shy;ized and can't recall.
 I tried to take thorough notes during this entire experience to capture the failures as well as the successes, which is a harder skill than I expected.</p>
 </div>
+<div class="section" id="useful-resources">
+<h4>Useful resources</h4>
+<p>Beyond searching for specific answers these are <em>honestly</em> the websites I kept going back to throughout this project.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://kubernetes.io/docs/">http://kubernetes.io/docs/</a>
+The main K8s docs.
+A bit dense and sparse in key areas, a problem I'm actively I'm working on.
+Includes API docs and user-guides which are useful for those patient enough to read them.</li>
+<li><a class="reference external" href="http://k8s.info/">http://k8s.info/</a>
+A community-run resource with some useful links and a 'cheat sheet'.</li>
+<li><a class="reference external" href="https://github.com/kubernetes/community">https://github.com/kubernetes/community</a>
+Includes a bunch of very useful design doc&shy;u&shy;men&shy;ta&shy;tion.
+I'm not usually the kind of person that enjoys reading design docs, but sometimes a feature is too new to have a usable user-guide.
+When it's the best you've got, take it.</li>
+</ul>
+<p>As far as Buildbot-specific stuff I honestly just used the <a class="reference external" href="https://docs.buildbot.net/current/">official Buildbot docs</a> which were more than enough.</p>
+</div>
 <div class="section" id="whats-next">
 <h4>Whats next?</h4>
 <p>I'm sure I'll be posting more about K8s going forward.
-It is a very useful tool because of and despite it's com&shy;plex&shy;i&shy;ties.
+It is a very useful tool because of/despite it's com&shy;plex&shy;i&shy;ties.
 As I use it I'll post more about it.</p>
-<p>If you have any feedback on this post feel free to get in contact with me <a class="reference external" href="https://twitter.com/pastywhitenoise">&#64;Pasty&shy;WhiteNoise</a> on Twitter, <tt class="docutils literal">pop</tt> on <a class="reference external" href="https://webchat.freenode.net/">irc.freenode.net</a> <a class="footnote-reference" href="#irc" id="id8">[8]</a>, you can make an issue on <a class="reference external" href="https://github.com/elijahcaine/elijahcaine.github.io">this website's Github Repository</a>, and of course I can be reached by Carrier Pigeon..</p>
+<p>If you have any feedback on this post feel free to get in contact with me <a class="reference external" href="https://twitter.com/pastywhitenoise">&#64;Pasty&shy;WhiteNoise</a> on Twitter, <tt class="docutils literal">pop</tt> on <a class="reference external" href="https://webchat.freenode.net/">irc.freenode.net</a> <a class="footnote-reference" href="#irc" id="id10">[8]</a>, you can make an issue on <a class="reference external" href="https://github.com/elijahcaine/elijahcaine.github.io">this website's Github Repository</a>, and of course I can be reached by Carrier Pigeon..</p>
 </div>
 </div>
 <div class="section" id="errata">
@@ -1291,7 +1347,7 @@ Just like a great cin&shy;e&shy;matog&shy;ra&shy;ph&shy;er is so good you don't 
 <table class="docutils footnote" frame="void" id="same-app-note" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><p class="first">It wasn't painfully obvious to me so it's worth elab&shy;o&shy;rat&shy;ing that for K8s services to com&shy;mu&shy;ni&shy;cate with one-another they need to be part of the same <tt class="docutils literal">app</tt>.
+<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td><p class="first">It wasn't painfully obvious to me so it's worth elab&shy;o&shy;rat&shy;ing that for K8s services to com&shy;mu&shy;ni&shy;cate with one-another they need to be part of the same <tt class="docutils literal">app</tt>.
 In the example the <tt class="docutils literal">postgres</tt>, <tt class="docutils literal">worker</tt>, and <tt class="docutils literal">master</tt> containers are all part of the same <tt class="docutils literal">buildbot</tt> app.</p>
 <p class="last">It's not a terribly well documented <strong>key</strong> piece of in&shy;for&shy;ma&shy;tion so it seemed worth mentioning.</p>
 </td></tr>
@@ -1300,7 +1356,7 @@ In the example the <tt class="docutils literal">postgres</tt>, <tt class="docuti
 <table class="docutils footnote" frame="void" id="hpa-gh" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[4]</a></td><td><ul class="first last simple">
+<tr><td class="label"><a class="fn-backref" href="#id6">[4]</a></td><td><ul class="first last simple">
 <li><a class="reference external" href="https://github.com/openshift/origin/issues/6239">https://github.com/openshift/origin/issues/6239</a></li>
 <li><a class="reference external" href="https://github.com/kubernetes/kubernetes/issues/18652">https://github.com/kubernetes/kubernetes/issues/18652</a></li>
 </ul>
@@ -1310,7 +1366,7 @@ In the example the <tt class="docutils literal">postgres</tt>, <tt class="docuti
 <table class="docutils footnote" frame="void" id="hpa-so" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id6">[5]</a></td><td><ul class="first last simple">
+<tr><td class="label"><a class="fn-backref" href="#id7">[5]</a></td><td><ul class="first last simple">
 <li><a class="reference external" href="http://stackoverflow.com/questions/38874145/autoscaling-hpa-failed-to-get-cpu-consumption-cannot-unmarshal-object-into-go">http://stack&shy;over&shy;flow.com/questions/38874145/au&shy;toscal&shy;ing-hpa-failed-to-get-cpu-con&shy;sump&shy;tion-cannot-unmarshal-object-into-go</a></li>
 <li><a class="reference external" href="http://stackoverflow.com/questions/37631008/kubernetes-hpa-cannot-get-cpu-consumption">http://stack&shy;over&shy;flow.com/questions/37631008/kubernetes-hpa-cannot-get-cpu-con&shy;sump&shy;tion</a></li>
 </ul>
@@ -1320,7 +1376,7 @@ In the example the <tt class="docutils literal">postgres</tt>, <tt class="docuti
 <table class="docutils footnote" frame="void" id="heapster-release" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id7">[6]</a></td><td><div class="first last line-block">
+<tr><td class="label"><a class="fn-backref" href="#id8">[6]</a></td><td><div class="first last line-block">
 <div class="line">Authors Note:</div>
 <div class="line">The heapster addon was added to Minikube <strong>during the writing of this post</strong>.
 How convenient!</div>
@@ -1331,17 +1387,68 @@ How convenient!</div>
 <table class="docutils footnote" frame="void" id="accompanying-repo" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[7]</a></td><td><a class="reference external" href="https://github.com/ElijahCaine/buildbot-on-kubernetes">https://github.com/Eli&shy;jah&shy;Caine/buildbot-on-kubernetes</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id5">[7]</a></td><td><a class="reference external" href="https://github.com/ElijahCaine/buildbot-on-kubernetes">https://github.com/Eli&shy;jah&shy;Caine/buildbot-on-kubernetes</a></td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="irc" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id8">[8]</a></td><td>I usually hang out in the <tt class="docutils literal"><span class="pre">#osu-lug</span></tt> channel.
+<tr><td class="label"><a class="fn-backref" href="#id10">[8]</a></td><td>I usually hang out in the <tt class="docutils literal"><span class="pre">#osu-lug</span></tt> channel.
 They're cool people, you should hang out with us!</td></tr>
 </tbody>
 </table>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label"/><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[9]</a></td><td><p class="first">Might as well clarify <em>why</em> we want persistent storage and auto-scaling since these are usually desired features in an or&shy;ches&shy;tra&shy;tor but nobody explains <em>why</em> they're desireable.</p>
+<dl class="last docutils">
+<dt>Au&shy;toscal&shy;ing:</dt>
+<dd><p class="first">Au&shy;toscal&shy;ing is important is because we've got a whole data-center (in theory) and we want to maximize how we use that data-center's com&shy;pu&shy;ta&shy;tion&shy;al abilities.
+In a perfect world we would use exactly as much of the data-center as is demanded by users, but in practice this is super hard!</p>
+<p>Say your website gets linked on Hacker News, you get tons of requests pouring in, but your poor little 2004 server falls on it's face when you <em>look</em> at it wrong, and <strong>that</strong> is where the exact page was hosted.
+If you don't <strong>know</strong> that server fell down you'll never fix the problem or even <strong>know</strong> about the problem.</p>
+<p class="last">With an or&shy;ches&shy;tra&shy;tor we can (in theory) specify how much we want to utilize a our data-center's resources and under what conditions we want to use more or less resources.
+If our service is creating a light load, only have one container up; if it's got a metric fuck-ton then spin up 20 containers across our entire cluster.
+You say what you want and the load-balancer + scheduler + monitor take care of the rest.</p>
+</dd>
+<dt>Persistent Storage:</dt>
+<dd><p class="first">The reason persistent storage is a useful feature is for two reasons</p>
+<p>The first is that containers are ephemeral.
+They can be created, destroyed, and upgraded <em>all</em> the time, basically making them the polar opposite of a 'Special Snowflake' service.</p>
+<p>This is nice, but what about state?
+As nice as it'd be to make an entirely stateless data-center, cat pictures and builds aren't going to store themselves!</p>
+<p>The solution to this problem is -- well it's not solved, but there's a clear direction things are going in.
+The TLDR is that we create some block device in the cloud and mount it to each identical container at the same mount-point, so each container (K8s 'Pod') shares some amount of state.
+Sorta like... I'm bad at examples actually. I'll think of one eventually.</p>
+<p>Piggy-backing off of this, not only do we preserve state between container upgrades/deletes/additions, but we can also share state between scaled services (i.e., a set of identical containers across a datacenter).
+Es&shy;sen&shy;tial&shy;ly we can have one worker pod carry out a build and another pod perform some action on that build (uploading it, verify it, archive it, etc).
+When the first worker pod gets deleted the build lives on in the shared state.</p>
+<p class="last">This allows us to treat our state the same way we treat computing resources in the world of GIFFEE <a class="footnote-reference" href="#gifee" id="id12">[10]</a>.
+Create some block device for the service, mount it to this point, and let your or&shy;ches&shy;tra&shy;tor take care of the rest.</p>
+</dd>
+</dl>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="gifee" rules="none">
+<colgroup><col class="label"/><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id12">[10]</a></td><td>Google In&shy;fra&shy;struc&shy;ture for Everyone Else</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="storge" rules="none">
+<colgroup><col class="label"/><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[11]</td><td>But neither is storage in general so who can blame 'em?</td></tr>
+</tbody>
+</table>
 </div>
+</div>
+<div class="system-messages section">
+<h2>Docutils System Messages</h2>
+<div class="system-message" id="id13">
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">&lt;string&gt;</tt>, line 952)</p>
+Too many au&shy;ton&shy;um&shy;bered footnote references: only 0 cor&shy;re&shy;spond&shy;ing footnotes available.</div>
 </div>
 
   </article>
