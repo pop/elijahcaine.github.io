@@ -51,7 +51,7 @@
 <strong>TLDR:</strong> If you just want to see the end-result of this post, the results can be found at this GitHub Repository: <a class="reference external" href="https://github.com/ElijahCaine/buildbot-on-kubernetes">https://github.com/Eli&shy;jah&shy;Caine/buildbot-on-kubernetes</a></blockquote>
 <div class="section" id="preamble">
 <h3>Preamble</h3>
-<p>I'm learning Kubernetes (K8s) for work and decided to try my hand at deploying Buildbot with K8s because we all know the universal law discovered made by Science Mc&shy;S&shy;mar&shy;ty&shy;Pants in the 1758 which stated: <strong>doing cool shit &gt; reading docs</strong> <a class="footnote-reference" href="#docs-should" id="id1">[1]</a>.
+<p>I'm learning Kubernetes (K8s) for work and decided to try my hand at deploying Buildbot with K8s because we all know the universal law discovered made by Science Mc&shy;S&shy;mar&shy;ty&shy;Pants in the 1758 which stated: <strong>doing cool shit &gt; reading docs</strong> <a class="citation-reference" href="#docs-should" id="id1">[docs-should]</a>.
 I would describe K8s and Buildbot, but they each already did that:</p>
 <blockquote>
 <p>&quot;Buildbot is an open-source framework for automating software build, test, and release processes.&quot;</p>
@@ -159,10 +159,10 @@ $ system_profiler
 <p>The Buildbot project is nice enough to provide <a class="reference external" href="https://docs.buildbot.net/current/tutorial/docker.html">some Buidlbot Docker in&shy;fra&shy;struc&shy;ture</a> to start working with.
 It uses a <a class="reference external" href="https://docs.docker.com/compose/">Docker Compose</a> YAML file to deploy one worker container, one master service, and one PostgreSQL service, each of which is linked together and <em>just works™</em></p>
 <p>Great!
-In theory <a class="footnote-reference" href="#theory-vs-practice" id="id2">[2]</a> we can just translate the options in <tt class="docutils literal"><span class="pre">docker-compose.yml</span></tt> to K8s options to get a simple cluster up and running.
+In theory <a class="citation-reference" href="#theory-vs-practice" id="id2">[theory-vs-practice]</a> we can just translate the options in <tt class="docutils literal"><span class="pre">docker-compose.yml</span></tt> to K8s options to get a simple cluster up and running.
 Which, to clarify, isn't an es&shy;tab&shy;lished <strong>thing</strong>, it's just a process I'm guessing should work based on the fact that Docker Compose  and K8s are both or&shy;ches&shy;tra&shy;tion tools.
 One is <strong>way</strong> more com&shy;pli&shy;cat&shy;ed and robust, but At least <strong>some</strong> of their features should over-lap in that Venn diagram.</p>
-<p>Once we've got a nieve translated-docker-compose k8s setup running then we can (hopefully) tweak some knobs and get persistent storage and auto-scaling working <a class="footnote-reference" href="#id11" id="id3">[9]</a>.</p>
+<p>Once we've got a nieve translated-docker-compose k8s setup running then we can (hopefully) tweak some knobs and get persistent storage and auto-scaling working <a class="citation-reference" href="#id11" id="id3">[why]</a>.</p>
 <div class="section" id="throw-some-containers-at-the-wall-and-see-what-sticks">
 <h4>Throw some containers at the wall and see what sticks</h4>
 <p>Let's start really basic and just try to get something running with <tt class="docutils literal">kubectl run</tt>.
@@ -541,7 +541,7 @@ $ minikube service master
 </pre>
 <p>Opens up this wonderful site:</p>
 <img alt="Buildbot working." class="align-center" src="/static/buildbot-on-k8s/buildbot-working.png" style="width: 100%;"/>
-<p>Great, they can talk <a class="footnote-reference" href="#same-app-note" id="id4">[3]</a>.</p>
+<p>Great, they can talk <a class="citation-reference" href="#same-app-note" id="id4">[same-app-note]</a>.</p>
 </div>
 <div class="section" id="hire-a-worker">
 <h4>Hire a worker</h4>
@@ -998,7 +998,7 @@ It sounds straight forward enough, but how do we test it?</p>
 <h4>Creating a test-case</h4>
 <p>For this we need to add a few projects to our instance of Buildbot, each of which will have a hefty workload.
 To do this we need to host a Buildbot <tt class="docutils literal">master.cfg</tt> config file at some public location and refer to this in the <tt class="docutils literal">master.yaml</tt> config file.
-I used the GitHub repo that ac&shy;com&shy;pa&shy;nies this blogpost <a class="footnote-reference" href="#accompanying-repo" id="id5">[7]</a>, but you could use GitHub Gists or a pastebin; just make sure you're referring to the <strong>raw</strong> file or a <tt class="docutils literal">.tar.gz</tt> with the <tt class="docutils literal">master.cfg</tt> file at the base of the tarball.</p>
+I used the GitHub repo that ac&shy;com&shy;pa&shy;nies this blogpost <a class="citation-reference" href="#accompanying-repo" id="id5">[ac&shy;com&shy;pa&shy;ny&shy;ing-repo]</a>, but you could use GitHub Gists or a pastebin; just make sure you're referring to the <strong>raw</strong> file or a <tt class="docutils literal">.tar.gz</tt> with the <tt class="docutils literal">master.cfg</tt> file at the base of the tarball.</p>
 <p>So let's pull a project out of a hat that takes a while to build, how about... <a class="reference external" href="https://github.com/rust-lang/cargo">Cargo</a>.
 Any objections?
 Great, let's roll.</p>
@@ -1157,12 +1157,12 @@ Let's look around the internet and see if we find anything useful.
 I'll go East, you go West, and we'll meet back here in 20.</p>
 <p>Great, what did you find?
 Me?
-Oh I found a bunch of Github issues <a class="footnote-reference" href="#hpa-gh" id="id6">[4]</a> and Stack Overflow posts <a class="footnote-reference" href="#hpa-so" id="id7">[5]</a>; lot of people mentioned this Heapster thing.
+Oh I found a bunch of Github issues <a class="citation-reference" href="#hpa-gh" id="id6">[hpa-gh]</a> and Stack Overflow posts <a class="citation-reference" href="#hpa-so" id="id7">[hpa-so]</a>; lot of people mentioned this Heapster thing.
 The <a class="reference external" href="https://github.com/kubernetes/heapster">Heapster GitHub page</a> says it does <em>Compute Resource Usage Analysis and Monitoring of Container Clusters</em>, which sounds like what we want.
 I also found the <a class="reference external" href="http://kubernetes.io/docs/user-guide/horizontal-pod-autoscaling/">K8s Au&shy;toscal&shy;ing</a> docs that point to a <a class="reference external" href="http://kubernetes.io/docs/user-guide/horizontal-pod-autoscaling/">K8s Au&shy;toscal&shy;ing Tutorial</a>.
 That sounds super useful and confirms the suspicion that Heapster is useful.
 <strong>TLDR</strong> things are pointing toward setting up Heapster.</p>
-<p>As it turns out there is a <a class="reference external" href="https://github.com/kubernetes/minikube/blob/master/README.md#add-ons">Heapster addon for Minikube</a> <a class="footnote-reference" href="#heapster-release" id="id8">[6]</a>, so let's get that setup.</p>
+<p>As it turns out there is a <a class="reference external" href="https://github.com/kubernetes/minikube/blob/master/README.md#add-ons">Heapster addon for Minikube</a> <a class="citation-reference" href="#heapster-release" id="id8">[heapster-release]</a>, so let's get that setup.</p>
 <pre class="code literal-block">
 $ minikube addons enable heapster
 heapster was successfully enabled
@@ -1292,7 +1292,7 @@ Here's the big things I feel like I'm walking away with:</p>
 <ul class="simple">
 <li><cite>kubectl &lt;command&gt; --dry-run -o yaml</cite> is very useful for file-izing your in&shy;fra&shy;struc&shy;ture.</li>
 <li>K8s is very well documented <strong>if</strong> you are a very patient individual.</li>
-<li>Storage in K8s is still not a perfectly solved problem <a class="footnote-reference" href="#storage" id="id9">[]</a>.</li>
+<li>Storage in K8s is still not a perfectly solved problem <a class="citation-reference" href="#storage" id="id9">[storage]</a>.</li>
 <li>K8s ap&shy;pli&shy;ca&shy;tions share private networking.</li>
 <li>K8s Pods are really just containers.</li>
 </ul>
@@ -1321,15 +1321,15 @@ When it's the best you've got, take it.</li>
 <p>I'm sure I'll be posting more about K8s going forward.
 It is a very useful tool because of/despite it's com&shy;plex&shy;i&shy;ties.
 As I use it I'll post more about it.</p>
-<p>If you have any feedback on this post feel free to get in contact with me <a class="reference external" href="https://twitter.com/pastywhitenoise">&#64;Pasty&shy;WhiteNoise</a> on Twitter, <tt class="docutils literal">pop</tt> on <a class="reference external" href="https://webchat.freenode.net/">irc.freenode.net</a> <a class="footnote-reference" href="#irc" id="id10">[8]</a>, you can make an issue on <a class="reference external" href="https://github.com/elijahcaine/elijahcaine.github.io">this website's Github Repository</a>, and of course I can be reached by Carrier Pigeon..</p>
+<p>If you have any feedback on this post feel free to get in contact with me <a class="reference external" href="https://twitter.com/pastywhitenoise">&#64;Pasty&shy;WhiteNoise</a> on Twitter, <tt class="docutils literal">pop</tt> on <a class="reference external" href="https://webchat.freenode.net/">irc.freenode.net</a> <a class="citation-reference" href="#irc" id="id10">[irc]</a>, you can make an issue on <a class="reference external" href="https://github.com/elijahcaine/elijahcaine.github.io">this website's Github Repository</a>, and of course I can be reached by Carrier Pigeon..</p>
 </div>
 </div>
 <div class="section" id="errata">
 <h3>Errata</h3>
-<table class="docutils footnote" frame="void" id="docs-should" rules="none">
+<table class="docutils citation" frame="void" id="docs-should" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><p class="first">My job, at least a big part of it, is writing doc&shy;u&shy;men&shy;ta&shy;tion.
+<tr><td class="label"><a class="fn-backref" href="#id1">[docs-should]</a></td><td><p class="first">My job, at least a big part of it, is writing doc&shy;u&shy;men&shy;ta&shy;tion.
 Docs are a notable part of my identify, and I have a belief in the power of good doc&shy;u&shy;men&shy;ta&shy;tion, but at the end of the day they <strong>are</strong> just a means to an end.</p>
 <p>In a perfect world docs wouldn't <em>need</em> to exist, so all docs should be enough to get whoever's readin them to the point where they can do cool shit on their own.
 Just like a great cin&shy;e&shy;matog&shy;ra&shy;ph&shy;er is so good you don't notice the camera in a movie, great docs should be so good you don't <strong>notice</strong> how good they are.</p>
@@ -1338,45 +1338,45 @@ Just like a great cin&shy;e&shy;matog&shy;ra&shy;ph&shy;er is so good you don't 
 </td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="theory-vs-practice" rules="none">
+<table class="docutils citation" frame="void" id="theory-vs-practice" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>If you read that and thought &quot;You know what they say about theory versus practice!&quot; then <em>yes</em> -- but you're getting ahead of me.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[theory-vs-practice]</a></td><td>If you read that and thought &quot;You know what they say about theory versus practice!&quot; then <em>yes</em> -- but you're getting ahead of me.</td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="same-app-note" rules="none">
+<table class="docutils citation" frame="void" id="same-app-note" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td><p class="first">It wasn't painfully obvious to me so it's worth elab&shy;o&shy;rat&shy;ing that for K8s services to com&shy;mu&shy;ni&shy;cate with one-another they need to be part of the same <tt class="docutils literal">app</tt>.
+<tr><td class="label"><a class="fn-backref" href="#id4">[same-app-note]</a></td><td><p class="first">It wasn't painfully obvious to me so it's worth elab&shy;o&shy;rat&shy;ing that for K8s services to com&shy;mu&shy;ni&shy;cate with one-another they need to be part of the same <tt class="docutils literal">app</tt>.
 In the example the <tt class="docutils literal">postgres</tt>, <tt class="docutils literal">worker</tt>, and <tt class="docutils literal">master</tt> containers are all part of the same <tt class="docutils literal">buildbot</tt> app.</p>
 <p class="last">It's not a terribly well documented <strong>key</strong> piece of in&shy;for&shy;ma&shy;tion so it seemed worth mentioning.</p>
 </td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="hpa-gh" rules="none">
+<table class="docutils citation" frame="void" id="hpa-gh" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id6">[4]</a></td><td><ul class="first last simple">
+<tr><td class="label"><a class="fn-backref" href="#id6">[hpa-gh]</a></td><td><ul class="first last simple">
 <li><a class="reference external" href="https://github.com/openshift/origin/issues/6239">https://github.com/openshift/origin/issues/6239</a></li>
 <li><a class="reference external" href="https://github.com/kubernetes/kubernetes/issues/18652">https://github.com/kubernetes/kubernetes/issues/18652</a></li>
 </ul>
 </td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="hpa-so" rules="none">
+<table class="docutils citation" frame="void" id="hpa-so" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id7">[5]</a></td><td><ul class="first last simple">
+<tr><td class="label"><a class="fn-backref" href="#id7">[hpa-so]</a></td><td><ul class="first last simple">
 <li><a class="reference external" href="http://stackoverflow.com/questions/38874145/autoscaling-hpa-failed-to-get-cpu-consumption-cannot-unmarshal-object-into-go">http://stack&shy;over&shy;flow.com/questions/38874145/au&shy;toscal&shy;ing-hpa-failed-to-get-cpu-con&shy;sump&shy;tion-cannot-unmarshal-object-into-go</a></li>
 <li><a class="reference external" href="http://stackoverflow.com/questions/37631008/kubernetes-hpa-cannot-get-cpu-consumption">http://stack&shy;over&shy;flow.com/questions/37631008/kubernetes-hpa-cannot-get-cpu-con&shy;sump&shy;tion</a></li>
 </ul>
 </td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="heapster-release" rules="none">
+<table class="docutils citation" frame="void" id="heapster-release" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id8">[6]</a></td><td><div class="first last line-block">
+<tr><td class="label"><a class="fn-backref" href="#id8">[heapster-release]</a></td><td><div class="first last line-block">
 <div class="line">Authors Note:</div>
 <div class="line">The heapster addon was added to Minikube <strong>during the writing of this post</strong>.
 How convenient!</div>
@@ -1384,23 +1384,23 @@ How convenient!</div>
 </td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="accompanying-repo" rules="none">
+<table class="docutils citation" frame="void" id="accompanying-repo" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[7]</a></td><td><a class="reference external" href="https://github.com/ElijahCaine/buildbot-on-kubernetes">https://github.com/Eli&shy;jah&shy;Caine/buildbot-on-kubernetes</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id5">[ac&shy;com&shy;pa&shy;ny&shy;ing-repo]</a></td><td><a class="reference external" href="https://github.com/ElijahCaine/buildbot-on-kubernetes">https://github.com/Eli&shy;jah&shy;Caine/buildbot-on-kubernetes</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="irc" rules="none">
+<table class="docutils citation" frame="void" id="irc" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id10">[8]</a></td><td>I usually hang out in the <tt class="docutils literal"><span class="pre">#osu-lug</span></tt> channel.
+<tr><td class="label"><a class="fn-backref" href="#id10">[irc]</a></td><td>I usually hang out in the <tt class="docutils literal"><span class="pre">#osu-lug</span></tt> channel.
 They're cool people, you should hang out with us!</td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id11" rules="none">
+<table class="docutils citation" frame="void" id="id11" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[9]</a></td><td><p class="first">Might as well clarify <em>why</em> we want persistent storage and auto-scaling since these are usually desired features in an or&shy;ches&shy;tra&shy;tor but nobody explains <em>why</em> they're desireable.</p>
+<tr><td class="label"><a class="fn-backref" href="#id3">[why]</a></td><td><p class="first">Might as well clarify <em>why</em> we want persistent storage and auto-scaling since these are usually desired features in an or&shy;ches&shy;tra&shy;tor but nobody explains <em>why</em> they're desireable.</p>
 <dl class="last docutils">
 <dt>Au&shy;toscal&shy;ing:</dt>
 <dd><p class="first">Au&shy;toscal&shy;ing is important is because we've got a whole data-center (in theory) and we want to maximize how we use that data-center's com&shy;pu&shy;ta&shy;tion&shy;al abilities.
@@ -1423,32 +1423,26 @@ Sorta like... I'm bad at examples actually. I'll think of one eventually.</p>
 <p>Piggy-backing off of this, not only do we preserve state between container upgrades/deletes/additions, but we can also share state between scaled services (i.e., a set of identical containers across a datacenter).
 Es&shy;sen&shy;tial&shy;ly we can have one worker pod carry out a build and another pod perform some action on that build (uploading it, verify it, archive it, etc).
 When the first worker pod gets deleted the build lives on in the shared state.</p>
-<p class="last">This allows us to treat our state the same way we treat computing resources in the world of GIFFEE <a class="footnote-reference" href="#gifee" id="id12">[10]</a>.
+<p class="last">This allows us to treat our state the same way we treat computing resources in the world of GIFFEE <a class="citation-reference" href="#gifee" id="id12">[GIFEE]</a>.
 Create some block device for the service, mount it to this point, and let your or&shy;ches&shy;tra&shy;tor take care of the rest.</p>
 </dd>
 </dl>
 </td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="gifee" rules="none">
+<table class="docutils citation" frame="void" id="gifee" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id12">[10]</a></td><td>Google In&shy;fra&shy;struc&shy;ture for Everyone Else</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id12">[GIFEE]</a></td><td>Google In&shy;fra&shy;struc&shy;ture for Everyone Else</td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="storge" rules="none">
+<table class="docutils citation" frame="void" id="storge" rules="none">
 <colgroup><col class="label"/><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[11]</td><td>But neither is storage in general so who can blame 'em?</td></tr>
+<tr><td class="label">[storge]</td><td>But neither is storage in general so who can blame 'em?</td></tr>
 </tbody>
 </table>
 </div>
-</div>
-<div class="system-messages section">
-<h2>Docutils System Messages</h2>
-<div class="system-message" id="id13">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">&lt;string&gt;</tt>, line 952)</p>
-Too many au&shy;ton&shy;um&shy;bered footnote references: only 0 cor&shy;re&shy;spond&shy;ing footnotes available.</div>
 </div>
 
   </article>
