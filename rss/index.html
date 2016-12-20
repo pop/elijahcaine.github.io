@@ -5,9 +5,1315 @@
         <link>http://elijahcaine.me/</link>
         <description></description>
         <language>en</language>
-        <pubDate>Fri, 16 Sep 2016 07:00:00 GMT</pubDate>
+        <pubDate>Mon, 12 Dec 2016 08:00:00 GMT</pubDate>
         <docs>http://elijahcaine.me/rss/</docs>
         <generator>acrylamid 0.8.dev0</generator>
+        
+            <item>
+        <title>Deploying Buildbot on Kubernetes</title>
+        <link>http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html</link>
+        <description>&lt;div class=&#34;section&#34; id=&#34;deploying-buildbot-on-kubernetes&#34;&gt;
+&lt;h3&gt;Deploying Buildbot on Kubernetes&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;strong&gt;TLDR:&lt;/strong&gt; If you just want to see the end-result of this post, the results can be found at this GitHub Repository: &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/ElijahCaine/buildbot-on-kubernetes&#34;&gt;https://github.com/ElijahCaine/buildbot-on-kubernetes&lt;/a&gt;&lt;/blockquote&gt;
+&lt;div class=&#34;section&#34; id=&#34;preamble&#34;&gt;
+&lt;h4&gt;Preamble&lt;/h4&gt;
+&lt;p&gt;So I&#39;m learning Kubernetes (K8s) for work and decided to try my hand at deploying Buildbot with K8s because we all know the universal law discovered made by Science McSmartyPants in the 1758 which stated: &lt;strong&gt;doing cool shit &amp;gt; reading docs&lt;/strong&gt; &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#docs-should&#34; id=&#34;id1&#34;&gt;[1]&lt;/a&gt;.
+I would describe K8s and Buildbot, but they each already did that:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;Buildbot is an open-source framework for automating software build, test, and release processes.&amp;quot;&lt;/p&gt;
+&lt;p&gt;- &lt;a class=&#34;reference external&#34; href=&#34;http://buildbot.net/&#34;&gt;Buildbot.net&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr class=&#34;docutils&#34;/&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Kubernetes is an open-source system for automating deployment, scaling, and management of containerized applications.&lt;/p&gt;
+&lt;p&gt;- &lt;a class=&#34;reference external&#34; href=&#34;http://kubernetes.io/&#34;&gt;Kubernetes.io&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr class=&#34;docutils&#34;/&gt;
+&lt;p&gt;If that still didn&#39;t make sense, don&#39;t worry you should keep reading.
+This is a fun post.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; As you read this post keep in mind: &lt;em&gt;it might walk like a tutorial, quack like a tutorial, and even read like a tutorial, but I promise you that it is in fact&lt;/em&gt; &lt;strong&gt;not&lt;/strong&gt; &lt;em&gt;a tutorial.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;This post is an adventure.&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;section&#34; id=&#34;squad-goals&#34;&gt;
+&lt;h5&gt;Squad Goals&lt;/h5&gt;
+&lt;p&gt;So here&#39;s a quick rundown of what I want to achieve:&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;Deploy an instance of Buildbot on K8s.&lt;/li&gt;
+&lt;li&gt;Have that instance scale it&#39;s number of workers automagically depending on the amount of work being asked of it.&lt;/li&gt;
+&lt;li&gt;Share all relevant storage between replicated containers (e.g., databases, builds, etc).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;why&#34;&gt;
+&lt;h5&gt;Why?&lt;/h5&gt;
+&lt;p&gt;I have never deployed Buildbot ever for anything.
+I have also not really worked with K8s until starting my recent jorb at &lt;a class=&#34;reference external&#34; href=&#34;https://coreos.com&#34;&gt;CoreOS&lt;/a&gt;.
+So why Buildbot and why K8s?&lt;/p&gt;
+&lt;ol class=&#34;arabic&#34;&gt;
+&lt;li&gt;&lt;p class=&#34;first&#34;&gt;I have to learn K8s sooner or later for work.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class=&#34;first&#34;&gt;I want to deploy something a little more complicated than Nginx.
+As fun as that is, every K8s tutorial uses that as an example and it&#39;s getting &lt;em&gt;oooooold&lt;/em&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;dl class=&#34;first docutils&#34;&gt;
+&lt;dt&gt;Buildbot seems like a good K8s challenge b/c:&lt;/dt&gt;
+&lt;dd&gt;&lt;ol class=&#34;first last loweralpha simple&#34;&gt;
+&lt;li&gt;It has 3 moving parts (master, worker, database)&lt;/li&gt;
+&lt;li&gt;It could benefit from the fancy-dancy auto-scaling features built into K8s (e.g., high workload -&amp;gt; add more workers)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Anyway, let&#39;s get started.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;my-sick-rig&#34;&gt;
+&lt;h5&gt;My sick rig&lt;/h5&gt;
+&lt;p&gt;I&#39;m using the latest version of K8s and &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/kubernetes/minikube#minikube&#34;&gt;Minikube&lt;/a&gt;, which is backed by Virtualbox on a 2014 MacBook Pro running OSX.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ minikube version
+minikube version: v0.13.1
+$ kubectl version
+Client Version: version.Info{Major:&amp;quot;1&amp;quot;, Minor:&amp;quot;4&amp;quot;, GitVersion:&amp;quot;v1.4.6&amp;quot;, GitCommit:&amp;quot;e569a27d02001e343cb68086bc06d47804f62af6&amp;quot;, GitTreeState:&amp;quot;clean&amp;quot;, BuildDate:&amp;quot;2016-11-12T05:22:15Z&amp;quot;, GoVersion:&amp;quot;go1.7.1&amp;quot;, Compiler:&amp;quot;gc&amp;quot;, Platform:&amp;quot;darwin/amd64&amp;quot;}
+Server Version: version.Info{Major:&amp;quot;1&amp;quot;, Minor:&amp;quot;4&amp;quot;, GitVersion:&amp;quot;v1.4.6&amp;quot;, GitCommit:&amp;quot;e569a27d02001e343cb68086bc06d47804f62af6&amp;quot;, GitTreeState:&amp;quot;clean&amp;quot;, BuildDate:&amp;quot;1970-01-01T00:00:00Z&amp;quot;, GoVersion:&amp;quot;go1.7.1&amp;quot;, Compiler:&amp;quot;gc&amp;quot;, Platform:&amp;quot;linux/amd64&amp;quot;}
+&lt;/pre&gt;
+&lt;p&gt;There&#39;s some Minikube-specific semitics in this post, but you can probably get by with whatever K8s back-end you want/have lying around.&lt;/p&gt;
+&lt;p&gt;Between finishing editing and pushing this post the above versions will probably be out of date.
+&lt;em&gt;SHRUG&lt;/em&gt;.
+What are you gonna do.
+Software, amiright?&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;first-pass&#34;&gt;
+&lt;h4&gt;First Pass&lt;/h4&gt;
+&lt;p&gt;The Buildbot project is nice enough to provide &lt;a class=&#34;reference external&#34; href=&#34;https://docs.buildbot.net/current/tutorial/docker.html&#34;&gt;some Buidlbot Docker infrastructure&lt;/a&gt; to start working with.
+It uses a &lt;a class=&#34;reference external&#34; href=&#34;https://docs.docker.com/compose/&#34;&gt;Docker Compose&lt;/a&gt; YAML file to deploy one worker container, one master service, and one PostgreSQL service, each of which is linked together and &lt;em&gt;just works™&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Great!
+In theory &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#theory-vs-practice&#34; id=&#34;id2&#34;&gt;[2]&lt;/a&gt; we can just translate the options in &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;docker-compose.yml&lt;/span&gt;&lt;/tt&gt; to K8s options to get a simple cluster up and running.
+Once we&#39;ve got that running we can tweak the right nobs to get the persistent storage and auto-scaling working.&lt;/p&gt;
+&lt;div class=&#34;section&#34; id=&#34;throw-some-containers-at-the-wall-and-see-what-sticks&#34;&gt;
+&lt;h5&gt;Throw some containers at the wall and see what sticks&lt;/h5&gt;
+&lt;p&gt;Let&#39;s start really basic and just try to get something running with &lt;tt class=&#34;docutils literal&#34;&gt;kubectl run&lt;/tt&gt;.
+We&#39;ll use K8s to deploy a Buildbot &lt;tt class=&#34;docutils literal&#34;&gt;master&lt;/tt&gt; container mentioned in that &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;docker-compose.yml&lt;/span&gt;&lt;/tt&gt; with translated configuration options from that file.
+Remember, we&#39;re just mapping a &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;docker-compose.yml&lt;/span&gt;&lt;/tt&gt; into a K8s setup to begin.
+Nothing fancy, no pre-emptive optimizations, just this:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl run master \
+    --image=buildbot/buildbot-master:master \
+    --env=&amp;quot;BUILDBOT_CONFIG_DIR=config&amp;quot; \
+    --env=&amp;quot;BUILDBOT_CONFIG_URL=https://github.com/buildbot/buildbot-docker-example-config/archive/master.tar.gz&amp;quot; \
+    --env=&amp;quot;BUILDBOT_WORKER_PORT=9989&amp;quot; \
+    --env=&amp;quot;BUILDBOT_WEB_URL=http://localhost:8080/&amp;quot; \
+    --env=&amp;quot;BUILDBOT_WEB_PORT=8080&amp;quot; \
+    --port=8080
+&lt;/pre&gt;
+&lt;p&gt;Some reading later and I can tell you that command started a &lt;em&gt;Deployment&lt;/em&gt; of &lt;em&gt;Pods&lt;/em&gt;.
+To see if it worked, let&#39;s run &lt;tt class=&#34;docutils literal&#34;&gt;kubect get pods&lt;/tt&gt;.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get pods
+NAME                               READY     STATUS             RESTARTS   AGE
+master-4259088255-afsfk            1/1       Running            1          10s
+&lt;/pre&gt;
+&lt;p&gt;This looks pretty good...&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get pods
+NAME                               READY     STATUS             RESTARTS   AGE
+master-4259088255-afsfk            0/1       CrashLoopBackOff   2          1m
+&lt;/pre&gt;
+&lt;p&gt;... nooo!
+The thing was at 1/1 and now it&#39;s at 0/1 &lt;strong&gt;and&lt;/strong&gt; it says &lt;strong&gt;CrashLoopBackOff&lt;/strong&gt;.
+Numbers going down when they&#39;re supposed to stay the same is never a good sign, and crashing is almost never what you want.&lt;/p&gt;
+&lt;p&gt;If I&#39;ve learned &lt;em&gt;anything&lt;/em&gt; about fixing stuff that&#39;s broke it&#39;s &lt;em&gt;always check the logs&lt;/em&gt;.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl logs po/master-4259088255-afsfk
+[...]
+2016-12-09 22:31:42+0000 [-] Setting up database with URL &#39;sqlite:&#39;
+2016-12-09 22:31:42+0000 [-] The Buildmaster database needs to be upgraded before this version of
+[...]
+2016-12-09 22:31:42+0000 [-] BuildMaster startup failed
+2016-12-09 22:31:42+0000 [-] BuildMaster is stopped
+2016-12-09 22:31:42+0000 [-] Main loop terminated.
+2016-12-09 22:31:42+0000 [-] Server Shut Down.
+&lt;/pre&gt;
+&lt;p&gt;Gross, but probably useful. How? Good question:&lt;/p&gt;
+&lt;ol class=&#34;arabic simple&#34;&gt;
+&lt;li&gt;I saw the word &lt;tt class=&#34;docutils literal&#34;&gt;database&lt;/tt&gt;.&lt;/li&gt;
+&lt;li&gt;We &lt;em&gt;didn&#39;t&lt;/em&gt; deploy a database.&lt;/li&gt;
+&lt;li&gt;QED let&#39;s do that.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;add-one-cup-of-postgres-to-the-mix&#34;&gt;
+&lt;h5&gt;Add one cup of Postgres to the mix&lt;/h5&gt;
+&lt;p&gt;Just like with the &lt;tt class=&#34;docutils literal&#34;&gt;master&lt;/tt&gt; container, we&#39;re just going to use CLI arguments to get a database running.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl run postgres \
+    --image=postgres:9.4\
+    --env=&amp;quot;POSTGRES_PASSWORD=change_me&amp;quot; \
+    --env=&amp;quot;POSTGRES_USER=buildbot&amp;quot; \
+    --env=&amp;quot;POSTGRES_DB=buildbot&amp;quot; \
+    --env=&amp;quot;BUILDBOT_DB_URL=postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}&amp;#64;db/{POSTGRES_DB}&amp;quot;\
+    --port=5432
+&lt;/pre&gt;
+&lt;p&gt;Cross fingers aaand...&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get pods
+NAME                               READY     STATUS             RESTARTS   AGE
+master-4259088255-afsfk            0/1       CrashLoopBackOff   6          9m
+postgres-2443857112-3ermh          0/1       ContainerCreating  0          15s
+&lt;/pre&gt;
+&lt;p&gt;&lt;em&gt;/me holds breath&lt;/em&gt;&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get pods
+NAME                               READY     STATUS             RESTARTS   AGE
+master-4259088255-afsfk            0/1       CrashLoopBackOff   6          9m
+postgres-2443857112-3ermh          1/1       Running            0          54s
+&lt;/pre&gt;
+&lt;p&gt;Yuss! Wait, for real?&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl logs postgres-2443857112-3ermh
+[... hey look a bunch of useful Postgres garbage ...]
+PostgreSQL init process complete; ready for start up.
+[... some more useful Postgres garbage ...]
+&lt;/pre&gt;
+&lt;p&gt;Good &#39;nuff.
+Now how does this database plug into the master container?&lt;/p&gt;
+&lt;p&gt;Well, in the Docker Compose world, containers talked to one-another on a private network with the &lt;tt class=&#34;docutils literal&#34;&gt;link&lt;/tt&gt; directive.
+There&#39;s probably some way to do we do that with K8s right?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;welcome-yaml-config-files-to-the-class&#34;&gt;
+&lt;h5&gt;Welcome YAML config files to the class&lt;/h5&gt;
+&lt;p&gt;Running Command-Line Interface (CLI) commands is fun, but the easiest way to get this system running seems to be with configuration files.
+I&#39;m sure I &lt;em&gt;can&lt;/em&gt; use CLI commands to orchestrate this entire project, but... honestly all the tutorials talk about how to do things in YAML so we&#39;re doing it in YAML now.&lt;/p&gt;
+&lt;p&gt;Some research later It looks like declaring a &lt;a class=&#34;reference external&#34; href=&#34;http://kubernetes.io/docs/user-guide/pods/&#34;&gt;Pod&lt;/a&gt; is the way to go?
+For context, here&#39;s where I got the idea from the K8s docs:&lt;/p&gt;
+&lt;blockquote&gt;
+A pod (as in a pod of whales or pea pod) is a group of one or more containers (such as Docker containers), the shared storage for those containers, and options about how to run the containers.&lt;/blockquote&gt;
+&lt;p&gt;Well that sounds &lt;em&gt;roughly&lt;/em&gt; like what we&#39;re doing.
+I&#39;ve got some containers, I want them to be able to talk to each other, and they&#39;re all logically connected to one another.
+Let&#39;s go down this rabbit hole.&lt;/p&gt;
+&lt;p&gt;Here I have Frankensteined this config &lt;tt class=&#34;docutils literal&#34;&gt;buildbot.yaml&lt;/tt&gt; from examples in the configs:&lt;/p&gt;
+&lt;pre class=&#34;code yaml literal-block&#34;&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;v1&#39;&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;Pod&#39;&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;buildbot&#39;&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;buildbot&#39;&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;containers&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;master&#39;&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;buildbot/buildbot-master:master&#39;&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;containerPort&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;8080&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;env&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;BUILDBOT_CONFIG_DIR&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;config&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;BUILDBOT_CONFIG_URL&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;https://github.com/buildbot/buildbot-docker-example-config/archive/master.tar.gz&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;BUILDBOT_WORKER_PORT&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;9989&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;BUILDBOT_WEB_URL&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;http://localhost:8080/&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;BUILDBOT_WEB_PORT&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;8080&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;POSTGRES_PASSWORD&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;change_me&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;POSTGRES_USER&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;buildbot&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;POSTGRES_DB&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;buildbot&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;BUILDBOT_DB_URL&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}&amp;#64;db/{POSTGRES_DB}&#39;&lt;/span&gt;
+    &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;postgres&#39;&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;postgres:9.4&#39;&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;containerPort&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;5432&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;env&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;POSTGRES_PASSWORD&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;change_me&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;POSTGRES_USER&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;buildbot&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;POSTGRES_DB&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;buildbot&#39;&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;BUILDBOT_DB_URL&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}&amp;#64;db/{POSTGRES_DB}&#39;&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;What happens when we run it?&lt;/p&gt;
+&lt;p&gt;Well first we need to clean up that CLI-created garbage we were doing earlier.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl delete deployment master postgres
+deployment &amp;quot;master&amp;quot; deleted
+deployment &amp;quot;postgres&amp;quot; deleted
+&lt;/pre&gt;
+&lt;p&gt;Then deploy the new pod:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl create -f buildbot.yaml
+pod &amp;quot;buildbot&amp;quot; created
+&lt;/pre&gt;
+&lt;p&gt;Aaaand:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get pods
+buildbot   2/2       Running   0          23s
+&lt;/pre&gt;
+&lt;p&gt;I&#39;m suspicious...&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl logs po/buildbot master
+checking basedir
+/usr/lib/python2.7/site-packages/buildbot/config.py:85: ConfigWarning: [0.9.0 and later] `buildbotNetUsageData` is not configured and defaults to basic
+[...]
+Failure: sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) could not translate host name &amp;quot;db&amp;quot; to address: Try again
+[...]
+problem while upgrading!:
+Traceback (most recent call last):
+[... python traceback ...]
+OperationalError: (psycopg2.OperationalError) could not translate host name &amp;quot;db&amp;quot; to address: Try again
+&lt;/pre&gt;
+&lt;p&gt;Whelp let&#39;s play &#39;Where do I fix &lt;em&gt;that&lt;/em&gt;?&#39;&lt;/p&gt;
+&lt;dl class=&#34;docutils&#34;&gt;
+&lt;dt&gt;Is the problem in:&lt;/dt&gt;
+&lt;dd&gt;&lt;ol class=&#34;first last loweralpha simple&#34;&gt;
+&lt;li&gt;The &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;buildbot-master&lt;/span&gt;&lt;/tt&gt; image&lt;/li&gt;
+&lt;li&gt;The &lt;tt class=&#34;docutils literal&#34;&gt;postgres&lt;/tt&gt; image&lt;/li&gt;
+&lt;li&gt;The &lt;tt class=&#34;docutils literal&#34;&gt;buildbot.yml&lt;/tt&gt; file&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;If you guessed &lt;strong&gt;c&lt;/strong&gt; you would be right so let&#39;s start in &lt;tt class=&#34;docutils literal&#34;&gt;buildbot.yaml&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Based on my experience with databases, specifically the startup time of database containers like Postgres and Mariadb, I&#39;d &lt;em&gt;guess&lt;/em&gt; that the database was taking too long to start.
+After some digging around, I found out that Pods were the entirely wrong way to go.
+Here&#39;s how that discovery went:&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;&lt;strong&gt;Q&lt;/strong&gt;: Does K8s have anything like docker-compose&#39;s &lt;tt class=&#34;docutils literal&#34;&gt;depends_on:&lt;/tt&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;A&lt;/strong&gt;: No.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Q&lt;/strong&gt;: Okay, so how... actually, is there anything like what I&#39;m doing already out there?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;A&lt;/strong&gt;: Yes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Q&lt;/strong&gt;: ... Where?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;A&lt;/strong&gt;: &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/kubernetes/kubernetes/tree/master/examples/mysql-wordpress-pd&#34;&gt;https://github.com/kubernetes/kubernetes/tree/master/examples/mysql-wordpress-pd&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Q&lt;/strong&gt;: Noice. So the &lt;em&gt;Pods&lt;/em&gt; thing was the wrong rabbit hole to go down?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;A&lt;/strong&gt;: Right.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Q&lt;/strong&gt;: Right like correct or right like...?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;A&lt;/strong&gt;: Stop.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;yay-examples&#34;&gt;
+&lt;h5&gt;Yay examples&lt;/h5&gt;
+&lt;p&gt;So let&#39;s run that example to make sure it all works fine.&lt;/p&gt;
+&lt;ol class=&#34;arabic simple&#34;&gt;
+&lt;li&gt;Clone repo&lt;/li&gt;
+&lt;li&gt;&lt;tt class=&#34;docutils literal&#34;&gt;cd&lt;/tt&gt; to example&lt;/li&gt;
+&lt;li&gt;Follow README instructions&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl create -f local-volumes.yaml
+persistentvolume &amp;quot;local-pv-1&amp;quot; created
+persistentvolume &amp;quot;local-pv-2&amp;quot; created
+$ kubectl create -f mysql-deployment.yaml
+service &amp;quot;wordpress-mysql&amp;quot; created
+persistentvolumeclaim &amp;quot;mysql-pv-claim&amp;quot; created
+deployment &amp;quot;wordpress-mysql&amp;quot; created
+$ kubectl create -f wordpress-deployment.yaml
+service &amp;quot;wordpress&amp;quot; created
+persistentvolumeclaim &amp;quot;wp-pv-claim&amp;quot; created
+deployment &amp;quot;wordpress&amp;quot; created
+$ kubectl get all
+NAME                  CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+svc/kubernetes        10.0.0.1     &amp;lt;none&amp;gt;        443/TCP    2h
+svc/wordpress         10.0.0.28    &amp;lt;pending&amp;gt;     80/TCP     5s
+svc/wordpress-mysql   None         &amp;lt;none&amp;gt;        3306/TCP   17s
+NAME                                  READY     STATUS              RESTARTS   AGE
+po/buildbot                           2/2       Running             0          8m
+po/wordpress-1618093523-4if9k         0/1       ContainerCreating   0          5s
+po/wordpress-mysql-2379610080-mqvll   0/1       ContainerCreating   0          17s
+NAME                 STATUS    VOLUME       CAPACITY   ACCESSMODES   AGE
+pvc/mysql-pv-claim   Bound     local-pv-1   20Gi       RWO           17s
+pvc/wp-pv-claim      Bound     local-pv-2   20Gi       RWO           5s
+&lt;/pre&gt;
+&lt;p&gt;And I can go to the site?&lt;/p&gt;
+&lt;img alt=&#34;Wordpress working correctly.&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/wordpress-working.png&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;p&gt;Great.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;now-use-the-example&#34;&gt;
+&lt;h5&gt;Now Use the example&lt;/h5&gt;
+&lt;p&gt;Now we need to morph &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;wordpress-deployment.yaml&lt;/span&gt;&lt;/tt&gt; into &lt;tt class=&#34;docutils literal&#34;&gt;postgres.yaml&lt;/tt&gt;, and &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;wordpress-deployment.yaml&lt;/span&gt;&lt;/tt&gt; into &lt;tt class=&#34;docutils literal&#34;&gt;master.yaml&lt;/tt&gt;
+Also, let&#39;s ignore &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;local-volumes.yaml&lt;/span&gt;&lt;/tt&gt; for now, just to be safe.
+Don&#39;t forget: we&#39;re not doing anything fancy yet.&lt;/p&gt;
+&lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;master.yaml&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class=&#34;code yaml literal-block&#34;&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;v1&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Service&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;master&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;port&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;8080&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;frontend&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;selector&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;tier&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;master&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;NodePort&lt;/span&gt;
+&lt;span class=&#34;nn&#34;&gt;---&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;extensions/v1beta1&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Deployment&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;master&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;strategy&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Recreate&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;template&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;tier&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;master&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;containers&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;master&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot/buildbot-master:master&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;env&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;BUILDBOT_CONFIG_DIR&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;config&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;BUILDBOT_CONFIG_URL&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;https://raw.githubusercontent.com/buildbot/buildbot-docker-example-config/master/master.cfg&#39;&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;BUILDBOT_WORKER_PORT&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;9989&#39;&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;BUILDBOT_WEB_URL&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;http://localhost:8080/&#39;&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;BUILDBOT_WEB_PORT&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;8080&#39;&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;POSTGRES_PASSWORD&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;change_me&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;POSTGRES_USER&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;POSTGRES_DB&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;POSTGRES_DB_HOST&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;BUILDBOT_DB_URL&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}&amp;#64;{POSTGRES_DB_HOST}/{POSTGRES_DB}&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;containerPort&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;8080&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;frontend&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;postgres.yaml:&lt;/tt&gt;&lt;/p&gt;
+&lt;pre class=&#34;code yaml literal-block&#34;&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;v1&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Service&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;port&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;5432&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;selector&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;tier&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;clusterIP&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;None&lt;/span&gt;
+&lt;span class=&#34;nn&#34;&gt;---&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;extensions/v1beta1&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Deployment&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;strategy&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Recreate&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;template&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;tier&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;containers&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres:9.4&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;env&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;POSTGRES_PASSWORD&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;change_me&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;POSTGRES_USER&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;POSTGRES_DB&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;POSTGRES_DB_HOST&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;BUILDBOT_DB_URL&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}&amp;#64;{POSTGRES_DB_HOST}/{POSTGRES_DB}&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;containerPort&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;5432&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;postgres&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;And with a flick of my wand:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl delete pods,deployment,service --all  # cleanup the old stuff
+pod &amp;quot;buildbot&amp;quot; deleted
+pod &amp;quot;wordpress-1618093523-4if9k&amp;quot; deleted
+pod &amp;quot;wordpress-mysql-2379610080-mqvll&amp;quot; deleted
+deployment &amp;quot;wordpress&amp;quot; deleted
+deployment &amp;quot;wordpress-mysql&amp;quot; deleted
+service &amp;quot;kubernetes&amp;quot; deleted
+service &amp;quot;wordpress&amp;quot; deleted
+service &amp;quot;wordpress-mysql&amp;quot; deleted
+$ kubectl create -f postrges.yml
+service &amp;quot;postgres&amp;quot; created
+deployment &amp;quot;postgres&amp;quot; created
+$ kubectl create -f master.yml
+service &amp;quot;master&amp;quot; created
+deployment &amp;quot;master&amp;quot; created
+$ minikube service master
+&lt;/pre&gt;
+&lt;p&gt;Opens up this wonderful site:&lt;/p&gt;
+&lt;img alt=&#34;Buildbot working.&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/buildbot-up.png&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;p&gt;Great, they can talk &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#same-app-note&#34; id=&#34;id3&#34;&gt;[3]&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;hire-a-worker&#34;&gt;
+&lt;h5&gt;Hire a worker&lt;/h5&gt;
+&lt;p&gt;So we&#39;ve got a website and a database, but we&#39;re not actually running any builds yet.
+Let&#39;s fix that.&lt;/p&gt;
+&lt;p&gt;Based on what the &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;docker-compose.yml&lt;/span&gt;&lt;/tt&gt; says we should be able to throw this together and have it work:&lt;/p&gt;
+&lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;worker.yaml&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class=&#34;code yaml literal-block&#34;&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;v1&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Service&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;worker&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;port&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;9989&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;worker&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;selector&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;tier&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;worker&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;clusterIP&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;None&lt;/span&gt;
+&lt;span class=&#34;nn&#34;&gt;---&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;extensions/v1beta1&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Deployment&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;worker&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;strategy&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Recreate&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;template&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;buildbot&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;tier&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;worker&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;l-Scalar-Plain&#34;&gt;containers&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+      &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;quot;buildbot/buildbot-worker:master&amp;quot;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;worker&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;env&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;BUILDMASTER&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;master&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;BUILDMASTER_PORT&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;9989&#39;&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;WORKERNAME&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;example-worker&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;WORKERPASS&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;pass&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;WORKER_ENVIRONMENT_BLACKLIST&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;value&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&#39;DOCKER_BUILDBOT*&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s&#34;&gt;BUILDBOT_ENV_*&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s&#34;&gt;BUILDBOT_1*&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s&#34;&gt;WORKER_ENVIRONMENT_BLACKLIST&#39;&lt;/span&gt;
+        &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+        &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;containerPort&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;9989&lt;/span&gt;
+          &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;worker&lt;/span&gt;
+&lt;/pre&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl create -f worker.yaml
+service &amp;quot;worker&amp;quot; created
+deployment &amp;quot;worker&amp;quot; created
+$ kubectl get -f worker.yaml
+NAME                  CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+svc/worker            None         &amp;lt;none&amp;gt;        9989/TCP   44s
+NAME                     DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/worker            1         1         1            0           44s
+&lt;/pre&gt;
+&lt;p&gt;Looks promising...&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get pods -l tier=worker
+NAME                               READY     STATUS    RESTARTS   AGE
+worker-3607067131-qdpfd   1/1       Running   0          1m
+$ kubectl logs worker-3607067131-ke4zb -f
+2016-11-21 19:46:45+0000 [-] Loading buildbot.tac...
+2016-11-21 19:46:45+0000 [-] Loaded.
+2016-11-21 19:46:45+0000 [-] twistd 16.5.0 (/usr/bin/python 2.7.12) starting up.
+2016-11-21 19:46:45+0000 [-] reactor class: twisted.internet.epollreactor.EPollReactor.  2016-11-21 19:46:45+0000 [-] Starting Worker -- version: latest
+2016-11-21 19:46:45+0000 [-] recording hostname in twistd.hostname
+2016-11-21 19:46:45+0000 [-] Starting factory &amp;lt;buildbot_worker.pb.BotFactory instance at 0x7fd8c2339cf8&amp;gt;
+2016-11-21 19:46:45+0000 [-] Connecting to buildbot:9989
+2016-11-21 19:46:56+0000 [Uninitialized] Connection to buildbot:9989 failed: Connection Refused
+2016-11-21 19:46:56+0000 [Uninitialized] &amp;lt;twisted.internet.tcp.Connector instance at 0x7fd8c233a170&amp;gt; will retry in 2 seconds
+2016-11-21 19:46:56+0000 [-] Stopping factory &amp;lt;buildbot_worker.pb.BotFactory instance at 0x7fd8c2339cf8&amp;gt;
+2016-11-21 19:46:59+0000 [-] Starting factory &amp;lt;buildbot_worker.pb.BotFactory instance at 0x7fd8c2339cf8&amp;gt;
+2016-11-21 19:46:59+0000 [-] Connecting to buildbot:9989
+2016-11-21 19:47:29+0000 [-] Connection to buildbot:9989 failed: [Failure instance: Traceback (failure with no frames): &amp;lt;class &#39;twisted.internet.error.TimeoutError&#39;&amp;gt;: User timeout caused connection failure.
+    ]
+2016-11-21 19:47:29+0000 [-] &amp;lt;twisted.internet.tcp.Connector instance at 0x7fd8c233a170&amp;gt; will retry in 5 seconds
+2016-11-21 19:47:29+0000 [-] Stopping factory &amp;lt;buildbot_worker.pb.BotFactory instance at 0x7fd8c2339cf8&amp;gt;
+&lt;/pre&gt;
+&lt;p&gt;Khaaaaaan!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;connection-issues&#34;&gt;
+&lt;h5&gt;Connection issues&lt;/h5&gt;
+&lt;p&gt;Fine, let&#39;s get to work debugging.
+First we&#39;ll login to the worker pod and try to ping the &lt;tt class=&#34;docutils literal&#34;&gt;buildbot&lt;/tt&gt; pod since the output makes it seem like there was a timeout between the host and the worker.
+This usually means they can&#39;t reach each other.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl exec -it worker-3607067131-qdpfd bash
+buildbot&amp;#64;worker-3607067131-qdpfd:/buildbot$ ping master
+bash: ping: command not found
+&lt;/pre&gt;
+&lt;p&gt;Uhh...&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+buildbot&amp;#64;worker-3607067131-ke4zb:/buildbot$ curl http://master:8080
+&amp;lt;!DOCTYPE html&amp;gt;[... definitely actually a webpage ...]
+&lt;/pre&gt;
+&lt;p&gt;So the worker can reach the master, but can the master reach the worker?&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get pods -l tier=master
+NAME                                 READY     STATUS    RESTARTS   AGE
+master-2152810066-9ip8b              1/1       Running   0          21m
+$ kubectl exec -it master-2152810066-9ip8b sh
+/var/lib/buildbot # ping worker
+PING worker (172.17.0.6): 56 data bytes
+64 bytes from 172.17.0.6: seq=0 ttl=64 time=0.083 ms
+64 bytes from 172.17.0.6: seq=1 ttl=64 time=0.101 ms
+^C
+--- worker ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.083/0.092/0.101 ms
+&lt;/pre&gt;
+&lt;p&gt;Okay, so they can connect to one-another.
+What&#39;s the problem then?
+My best guess is that the &lt;tt class=&#34;docutils literal&#34;&gt;master&lt;/tt&gt; pod needs to have it&#39;s special worker port (&lt;tt class=&#34;docutils literal&#34;&gt;9989&lt;/tt&gt;) exposed.
+So let&#39;s add those lines to &lt;tt class=&#34;docutils literal&#34;&gt;master.yaml&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class=&#34;code diff literal-block&#34;&gt;
+&lt;span class=&#34;gd&#34;&gt;--- a/blogpost/updated-master.yaml
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+++ b/blogpost/updated-master.yaml
+&lt;/span&gt;&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -8,6 +8,8 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;   ports:
+     - port: 8080
+       name: frontend
+&lt;span class=&#34;gi&#34;&gt;+    - port: 9989
++      name: worker
+&lt;/span&gt;   selector:
+     app: buildbot
+     tier: master
+&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -55,3 +57,5 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;         ports:
+         - containerPort: 8080
+           name: frontend
+&lt;span class=&#34;gi&#34;&gt;+        - containerPort: 9989
++          name: worker&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;And after tearing everything down and bringing it back up:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get pods -l tier=worker
+NAME                               READY     STATUS    RESTARTS   AGE
+worker-2552724660-l4kmv            1/1       Running   0          12s
+$ kubectl logs worker-2552724660-l4kmv
+[... logs logs logs ...]
+2016-12-09 23:30:18+0000 [-] Connecting to master:9989
+2016-12-09 23:30:18+0000 [HangCheckProtocol,client] message from master: attached
+2016-12-09 23:30:18+0000 [HangCheckProtocol,client] message from master: attached
+2016-12-09 23:30:18+0000 [HangCheckProtocol,client] Connected to master:9989; worker is ready
+2016-12-09 23:30:18+0000 [HangCheckProtocol,client] sending application-level keepalives every 600 seconds
+&lt;/pre&gt;
+&lt;p&gt;Hey that looks like success to me!
+How does the front-end look?&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get pods -l tier=master
+NAME                               READY     STATUS    RESTARTS   AGE
+master-3038604518-jim6q            1/1       Running   0          2m
+$ kubectl port-forward master-3038604518-jim6q 8080
+&lt;/pre&gt;
+&lt;p&gt;And in a browser:&lt;/p&gt;
+&lt;img alt=&#34;Buildbot still working.&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/build-success.png&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;p&gt;You may now do a happy dance.&lt;/p&gt;
+&lt;img alt=&#34;Happy Dance .gif&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/happy-dance.gif&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;storage&#34;&gt;
+&lt;h4&gt;Storage&lt;/h4&gt;
+&lt;p&gt;We&#39;ve got the three core moving parts of our system, next on our list is adding some persistent storage.
+Thankfully, we can recycle the MySQL+Wordpress example we used before.
+Yay examples.&lt;/p&gt;
+&lt;p&gt;So let&#39;s add the storage bits back in that we ignored before. This results in configs that look like so (abbreviated for your scrollbar&#39;s convenience):&lt;/p&gt;
+&lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;volumes.yaml&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class=&#34;code yaml literal-block&#34;&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;v1&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;PersistentVolume&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;local-pv-1&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;local&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;capacity&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;storage&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;1Gi&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;accessModes&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ReadWriteOnce&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;persistentVolumeReclaimPolicy&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Recycle&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;hostPath&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;/data/pv-1&lt;/span&gt;
+&lt;span class=&#34;nn&#34;&gt;---&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;v1&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;PersistentVolume&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;local-pv-2&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;local&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;capacity&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;storage&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;5Gi&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;accessModes&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ReadWriteOnce&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;persistentVolumeReclaimPolicy&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Recycle&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;hostPath&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;/data/pv-2&lt;/span&gt;
+&lt;span class=&#34;nn&#34;&gt;---&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;v1&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;PersistentVolume&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;local-pv-3&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;local&lt;/span&gt;
+&lt;span class=&#34;l-Scalar-Plain&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;capacity&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;storage&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;5Gi&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;accessModes&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;p-Indicator&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;ReadWriteOnce&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;persistentVolumeReclaimPolicy&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;Recycle&lt;/span&gt;
+  &lt;span class=&#34;l-Scalar-Plain&#34;&gt;hostPath&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;l-Scalar-Plain&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;p-Indicator&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;l-Scalar-Plain&#34;&gt;/data/pv-3&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;master.yaml&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class=&#34;code diff literal-block&#34;&gt;
+&lt;span class=&#34;gh&#34;&gt;diff --git a/blogpost/volumes-master.yaml b/blogpost/volumes-master.yaml
+index 7cbffd7..c7479e3 100644
+&lt;/span&gt;&lt;span class=&#34;gd&#34;&gt;--- a/blogpost/volumes-master.yaml
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+++ b/blogpost/volumes-master.yaml
+&lt;/span&gt;&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -15,6 +15,19 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;     tier: master
+   type: NodePort
+ ---
+&lt;span class=&#34;gi&#34;&gt;+apiVersion: v1
++kind: PersistentVolumeClaim
++metadata:
++  name: master-pv-claim
++  labels:
++    app: buildbot
++spec:
++  accessModes:
++    - ReadWriteOnce
++  resources:
++    requests:
++      storage: 1Gi
++---
+&lt;/span&gt; apiVersion: extensions/v1beta1
+ kind: Deployment
+ metadata:
+&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -37,7 +50,7 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;         - name: BUILDBOT_CONFIG_DIR
+           value: config
+         - name: BUILDBOT_CONFIG_URL
+&lt;span class=&#34;gd&#34;&gt;-          value: &#39;https://raw.githubusercontent.com/buildbot/buildbot-docker-example-config/master/master.cfg&#39;
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+          value: &#39;https://raw.githubusercontent.com/ElijahCaine/buildbot-on-kubernetes/master/simple/master.cfg&#39;
+&lt;/span&gt;         - name: BUILDBOT_WORKER_PORT
+           value: &#39;9989&#39;
+         - name: BUILDBOT_WEB_URL
+&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -59,3 +72,10 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;           name: frontend
+         - containerPort: 9989
+           name: worker
+&lt;span class=&#34;gi&#34;&gt;+        volumeMounts:
++        - name: master-persistent-storage
++          mountPath: /var/lib/buildbot/builds
++      volumes:
++      - name: master-persistent-storage
++        persistentVolumeClaim:
++          claimName: master-pv-claim&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;postgres.yaml&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class=&#34;code diff literal-block&#34;&gt;
+&lt;span class=&#34;gd&#34;&gt;--- a/blogpost/volumes-postgres.yaml
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+++ b/blogpost/volumes-postgres.yaml
+&lt;/span&gt;&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -13,6 +13,19 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;     tier: postgres
+   clusterIP: None
+ ---
+&lt;span class=&#34;gi&#34;&gt;+apiVersion: v1
++kind: PersistentVolumeClaim
++metadata:
++  name: postgres-pv-claim
++  labels:
++    app: buildbot
++spec:
++  accessModes:
++    - ReadWriteOnce
++  resources:
++    requests:
++      storage: 5Gi
++---
+&lt;/span&gt; apiVersion: extensions/v1beta1
+ kind: Deployment
+ metadata:
+&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -45,3 +58,10 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;         ports:
+         - containerPort: 5432
+           name: postgres
+&lt;span class=&#34;gi&#34;&gt;+        volumeMounts:
++        - name: postgres-persistent-storage
++          mountPath: /var/lib/postgresql
++      volumes:
++      - name: postgres-persistent-storage
++        persistentVolumeClaim:
++          claimName: postgres-pv-claim&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;&lt;tt class=&#34;docutils literal&#34;&gt;worker.yaml&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class=&#34;code diff literal-block&#34;&gt;
+&lt;span class=&#34;gd&#34;&gt;--- a/blogpost/volumes-worker.yaml
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+++ b/blogpost/volumes-worker.yaml
+&lt;/span&gt;&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -13,6 +13,19 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;     tier: worker
+   clusterIP: None
+ ---
+&lt;span class=&#34;gi&#34;&gt;+apiVersion: v1
++kind: PersistentVolumeClaim
++metadata:
++  name: worker-pv-claim
++  labels:
++    app: buidlbot
++spec:
++  accessModes:
++    - ReadWriteOnce
++  resources:
++    requests:
++      storage: 5Gi
++---
+&lt;/span&gt; apiVersion: extensions/v1beta1
+ kind: Deployment
+ metadata:
+&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -45,3 +58,10 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;         ports:
+         - containerPort: 9989
+           name: worker
+&lt;span class=&#34;gi&#34;&gt;+        volumeMounts:
++        - name: worker-persistent-storage
++          mountPath: /buildbot/builds
++      volumes:
++      - name: worker-persistent-storage
++        persistentVolumeClaim:
++          claimName: worker-pv-claim&lt;/span&gt;
+&lt;/pre&gt;
+&lt;p&gt;And of lastly we edit the Buildbot &lt;tt class=&#34;docutils literal&#34;&gt;master.cfg&lt;/tt&gt; to use our custom paths for storing and carrying out builds:&lt;/p&gt;
+&lt;pre class=&#34;code diff literal-block&#34;&gt;
+&lt;span class=&#34;gh&#34;&gt;diff --git a/blogpost/volumes-master.cfg b/blogpost/volumes-master.cfg
+index 06ad65b..36212ea 100644
+&lt;/span&gt;&lt;span class=&#34;gd&#34;&gt;--- a/blogpost/volumes-master.cfg
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+++ b/blogpost/volumes-master.cfg
+&lt;/span&gt;&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -78,7 +78,9 &amp;#64;&amp;#64; c[&#39;builders&#39;] = []
+&lt;/span&gt; c[&#39;builders&#39;].append(
+     util.BuilderConfig(name=&amp;quot;runtests&amp;quot;,
+       workernames=[&amp;quot;example-worker&amp;quot;],
+&lt;span class=&#34;gd&#34;&gt;-      factory=factory))
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+      factory=factory,
++      builddir=&#39;builds&#39;,
++      workerbuilddir=&#39;builds&#39;))
+&lt;/span&gt;
+ ####### STATUS TARGETS
+&lt;/pre&gt;
+&lt;p&gt;This is just an edited version of the original &lt;tt class=&#34;docutils literal&#34;&gt;master.cfg&lt;/tt&gt; you can find in the original Buildbot docker-compose example repository.&lt;/p&gt;
+&lt;p&gt;So this &lt;em&gt;should&lt;/em&gt; just work, right?
+We request a volume of a given size, the volume exists and is the correct size, badda bing badda boom, do the thing like this:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl delete service,deployment,pods --all
+service &amp;quot;master&amp;quot; deleted
+service &amp;quot;postgres&amp;quot; deleted
+service &amp;quot;worker&amp;quot; deleted
+service &amp;quot;kubernetes&amp;quot; deleted
+deployment &amp;quot;master&amp;quot; deleted
+deployment &amp;quot;postgres&amp;quot; deleted
+deployment &amp;quot;worker&amp;quot; deleted
+$ kubectl create -f volumes.yaml
+persistentvolume &amp;quot;local-pv-1&amp;quot; created
+persistentvolume &amp;quot;local-pv-2&amp;quot; created
+persistentvolume &amp;quot;local-pv-3&amp;quot; created
+$ kubectl create -f postgres.yaml
+service &amp;quot;postgres&amp;quot; created
+persistentvolumeclaim &amp;quot;postgres-pv-claim&amp;quot; created
+deployment &amp;quot;postgres&amp;quot; created
+$ kubectl create -f master.yaml
+service &amp;quot;master&amp;quot; created
+persistentvolumeclaim &amp;quot;master-pv-claim&amp;quot; created
+deployment &amp;quot;master&amp;quot; created
+$ kubectl create -f worker.yaml
+service &amp;quot;-worker&amp;quot; created
+persistentvolumeclaim &amp;quot;worker-pv-claim&amp;quot; created
+deployment &amp;quot;worker&amp;quot; created
+$ kubectl get pods -l tier=master
+NAME                        READY     STATUS    RESTARTS   AGE
+master-3176013930-gvy2i   1/1       Running   0          1m
+$ kubectl port-forward master-3176013930-gvy2i 8080
+Forwarding from 127.0.0.1:8080 -&amp;gt; 8080
+Forwarding from [::1]:8080 -&amp;gt; 8080
+&lt;/pre&gt;
+&lt;p&gt;That kinda works, but It kept getting weird arbitrary errors which looked suspicious.&lt;/p&gt;
+&lt;img alt=&#34;Permissions fail in buildbot&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/permissions-build-fail.png&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;p&gt;Since the only thing that had really changed was the volumes I figured I might as well login to the host and investigate.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ minikube ssh
+docker&amp;#64;minikube:~$ ls -alh /data/
+total 20
+drwxr-xr-x    5 root     root        4.0K Dec 11 02:21 ./
+drwxr-xr-x    6 root     root        4.0K Dec 11 01:48 ../
+drwxr-xr-x    2 root     root        4.0K Dec 11 02:20 pv-1/
+drwxr-xr-x    2 root     root        4.0K Dec 11 02:33 pv-2/
+drwxr-xr-x    3 root     root        4.0K Dec 11 02:33 pv-3/
+&lt;/pre&gt;
+&lt;p&gt;Ahah!
+That&#39;s the problem, root owns everything but the builds are run by the &lt;tt class=&#34;docutils literal&#34;&gt;buildbot&lt;/tt&gt; user (&lt;tt class=&#34;docutils literal&#34;&gt;uid: 1000&lt;/tt&gt;)
+&lt;em&gt;/me shakes fist at permissions errors.&lt;/em&gt;
+The last first place you think to look.&lt;/p&gt;
+&lt;p&gt;So is there any way to change the permissions of a volume as you claim it (i.e., in &lt;tt class=&#34;docutils literal&#34;&gt;volumes.yaml&lt;/tt&gt;)?
+We can both go through this journey together or I can share with you a quote from my coworker Barak Michener, the BAMF that works on &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/coreos/torus&#34;&gt;Torus&lt;/a&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;div class=&#34;line-block&#34;&gt;
+&lt;div class=&#34;line&#34;&gt;&lt;em&gt;Barak Michener&lt;/em&gt;&lt;/div&gt;
+&lt;div class=&#34;line&#34;&gt;&lt;br /&gt;&lt;/div&gt;
+&lt;div class=&#34;line&#34;&gt;yeah, hostPath is completely hands-off from k8s perspective&lt;/div&gt;
+&lt;div class=&#34;line&#34;&gt;so you just chmod the underlying dir&lt;/div&gt;
+&lt;div class=&#34;line&#34;&gt;to whatever uid you&#39;re using inside the pod&lt;/div&gt;
+&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Turns out the problem was with my &lt;tt class=&#34;docutils literal&#34;&gt;type&lt;/tt&gt; of storage in &lt;tt class=&#34;docutils literal&#34;&gt;volumes.yaml&lt;/tt&gt;.
+As of yet there is no type-agnostic way to assign permissions for mounted volumes.
+Storage, why you gotta be like that?&lt;/p&gt;
+&lt;p&gt;So after digging around and asking Barak I finally concluded that I had to had to login to my host and set the correct permissions on the directories being reserved.
+Here&#39;s how you do that on Minikube:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ minikube ssh
+docker&amp;#64;minikube$ sudo chown -R 1000:1000 /data/pv*
+&lt;/pre&gt;
+&lt;p&gt;In this case we could just chown the one volume that&#39;s going to be used by the &lt;tt class=&#34;docutils literal&#34;&gt;worker&lt;/tt&gt; pod, since the other ones run their services as &lt;tt class=&#34;docutils literal&#34;&gt;root&lt;/tt&gt;, but much like Debra from accounting, &lt;tt class=&#34;docutils literal&#34;&gt;root&lt;/tt&gt; doesn&#39;t give a fuck.
+Might as well.&lt;/p&gt;
+&lt;p&gt;So if we try the build again with the correct permissions, what happens?&lt;/p&gt;
+&lt;img alt=&#34;Buildbot with permissions fixed.&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/build-success-perms.png&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;p&gt;Huzaahh&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;autoscaling&#34;&gt;
+&lt;h4&gt;Autoscaling&lt;/h4&gt;
+&lt;p&gt;At last we have what I suspect will be the &lt;em&gt;hardest&lt;/em&gt; part of the project: autoscaling.
+Here&#39;s what we want in a perfect world:&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;When a lot of builds get requested, spin up more &lt;tt class=&#34;docutils literal&#34;&gt;worker&lt;/tt&gt; nodes.&lt;/li&gt;
+&lt;li&gt;When fewer builds are requested, destroy those extra &lt;tt class=&#34;docutils literal&#34;&gt;worker&lt;/tt&gt; nodes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;section&#34; id=&#34;asking-the-question&#34;&gt;
+&lt;h5&gt;Asking the question&lt;/h5&gt;
+&lt;p&gt;This task is actually a pretty tough cookie to crack.
+We want enough workers to each deal with 1/N requests in a queue of N builds, essentially scaling the building service to deal with usage spikes.
+It sounds straight forward enough, but how do we test it?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;creating-a-test-case&#34;&gt;
+&lt;h5&gt;Creating a test-case&lt;/h5&gt;
+&lt;p&gt;For this we need to add a few projects to our instance of Buildbot, each of which will have a hefty workload.
+To do this we need to host a Buildbot &lt;tt class=&#34;docutils literal&#34;&gt;master.cfg&lt;/tt&gt; config file at some public location and refer to this in the &lt;tt class=&#34;docutils literal&#34;&gt;master.yaml&lt;/tt&gt; config file.
+I used the GitHub repo that accompanies this blogpost &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#accompanying-repo&#34; id=&#34;id4&#34;&gt;[7]&lt;/a&gt;, but you could use GitHub Gists or a pastebin; just make sure you&#39;re referring to the &lt;strong&gt;raw&lt;/strong&gt; file or a &lt;tt class=&#34;docutils literal&#34;&gt;.tar.gz&lt;/tt&gt; with the &lt;tt class=&#34;docutils literal&#34;&gt;master.cfg&lt;/tt&gt; file at the base of the tarball.&lt;/p&gt;
+&lt;p&gt;So let&#39;s pull a project out of a hat that takes a while to build, how about... &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/rust-lang/cargo&#34;&gt;Cargo&lt;/a&gt;.
+Any objections?
+Great, let&#39;s roll.&lt;/p&gt;
+&lt;p&gt;To get started we&#39;ll need a custom &lt;tt class=&#34;docutils literal&#34;&gt;worker&lt;/tt&gt; container can build Cargo.
+A small adventure later and we have this Dockerfile which has all of the dependencies to build what we want:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+FROM buildbot/buildbot-worker:master
+
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
+RUN echo &#39;PATH=$PATH:$HOME/.cargo/bin&#39; &amp;gt;&amp;gt; $HOME/.bashrc
+
+USER root
+RUN apt update -y
+RUN apt install -y cmake pkg-config
+
+USER buildbot
+&lt;/pre&gt;
+&lt;p&gt;I set this to auto-build on &lt;a class=&#34;reference external&#34; href=&#34;https://quay.io/&#34;&gt;quay.io&lt;/a&gt;, hosted at the docker-pull url &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;quay.io/elijahcaine/buidlbot-rust-worker&lt;/span&gt;&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;Now that we have a capable worker container, we need to create an arbitrary workload.
+To do that we&#39;ll use this Buildbot &lt;tt class=&#34;docutils literal&#34;&gt;master.cfg&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class=&#34;code diff literal-block&#34;&gt;
+&lt;span class=&#34;gh&#34;&gt;diff --git a/blogpost/robust-master.cfg b/blogpost/robust-master.cfg
+index 06ad65b..892188b 100644
+&lt;/span&gt;&lt;span class=&#34;gd&#34;&gt;--- a/blogpost/robust-master.cfg
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+++ b/blogpost/robust-master.cfg
+&lt;/span&gt;&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -18,7 +18,7 &amp;#64;&amp;#64; c = BuildmasterConfig = {}
+&lt;/span&gt; # a Worker object, specifying a unique worker name and password.  The same
+ # worker name and password must be configured on the worker.
+
+&lt;span class=&#34;gd&#34;&gt;-c[&#39;workers&#39;] = [worker.Worker(&amp;quot;example-worker&amp;quot;, &#39;pass&#39;)]
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+c[&#39;workers&#39;] = [worker.Worker(&amp;quot;rust-worker&amp;quot;, &#39;pass&#39;)]
+&lt;/span&gt;
+ if &#39;BUILDBOT_MQ_URL&#39; in os.environ:
+     c[&#39;mq&#39;] = {
+&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -43,7 +43,7 &amp;#64;&amp;#64; c[&#39;protocols&#39;] = {&#39;pb&#39;: {&#39;port&#39;: os.environ.get(&amp;quot;BUILDBOT_WORKER_PORT&amp;quot;, 9989)}}
+&lt;/span&gt;
+ c[&#39;change_source&#39;] = []
+ c[&#39;change_source&#39;].append(changes.GitPoller(
+&lt;span class=&#34;gd&#34;&gt;-        &#39;git://github.com/buildbot/pyflakes.git&#39;,
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+        &#39;git://github.com/rust-lang/cargo.git&#39;,
+&lt;/span&gt;         workdir=&#39;gitpoller-workdir&#39;, branch=&#39;master&#39;,
+         pollinterval=300))
+
+&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -57,10 +57,10 &amp;#64;&amp;#64; c[&#39;schedulers&#39;].append(schedulers.SingleBranchScheduler(
+&lt;/span&gt;                             name=&amp;quot;all&amp;quot;,
+                             change_filter=util.ChangeFilter(branch=&#39;master&#39;),
+                             treeStableTimer=None,
+&lt;span class=&#34;gd&#34;&gt;-                            builderNames=[&amp;quot;runtests&amp;quot;]))
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+                            builderNames=[&amp;quot;cargo1-runtests&amp;quot;, &amp;quot;cargo2-runtests&amp;quot;, &amp;quot;cargo3-runtests&amp;quot;]))
+&lt;/span&gt; c[&#39;schedulers&#39;].append(schedulers.ForceScheduler(
+                             name=&amp;quot;force&amp;quot;,
+&lt;span class=&#34;gd&#34;&gt;-                            builderNames=[&amp;quot;runtests&amp;quot;]))
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+                            builderNames=[&amp;quot;cargo1-runtests&amp;quot;, &amp;quot;cargo2-runtests&amp;quot;, &amp;quot;cargo3-runtests&amp;quot;]))
+&lt;/span&gt;
+ ####### BUILDERS
+
+&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -68,17 +68,30 &amp;#64;&amp;#64; c[&#39;schedulers&#39;].append(schedulers.ForceScheduler(
+&lt;/span&gt; # what steps, and which workers can execute them.  Note that any particular build will
+ # only take place on one worker.
+
+&lt;span class=&#34;gd&#34;&gt;-factory = util.BuildFactory()
+-# check out the source
+-factory.addStep(steps.Git(repourl=&#39;http://github.com/buildbot/pyflakes.git&#39;, mode=&#39;incremental&#39;))
+-# run the tests (note that this will require that &#39;trial&#39; is installed)
+-factory.addStep(steps.ShellCommand(command=[&amp;quot;trial&amp;quot;, &amp;quot;pyflakes&amp;quot;]))
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+f = {}
++f[&#39;cargo&#39;] = util.BuildFactory()
++f[&#39;cargo&#39;].addStep(steps.Git(repourl=&#39;git://github.com/rust-lang/cargo.git&#39;, mode=&#39;full&#39;, method=&#39;fresh&#39;))
++f[&#39;cargo&#39;].addStep(steps.ShellCommand(command=[&amp;quot;/home/buildbot/.cargo/bin/cargo&amp;quot;, &amp;quot;build&amp;quot;, &amp;quot;--release&amp;quot;]))
+&lt;/span&gt;
+ c[&#39;builders&#39;] = []
+ c[&#39;builders&#39;].append(
+&lt;span class=&#34;gd&#34;&gt;-    util.BuilderConfig(name=&amp;quot;runtests&amp;quot;,
+-      workernames=[&amp;quot;example-worker&amp;quot;],
+-      factory=factory))
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+    util.BuilderConfig(name=&amp;quot;cargo1-runtests&amp;quot;,
++      workernames=[&amp;quot;rust-worker&amp;quot;],
++      factory=f[&#39;cargo&#39;],
++      builddir=&#39;builds/cargo1&#39;,
++      workerbuilddir=&#39;builds/cargo1&#39;))
++c[&#39;builders&#39;].append(
++    util.BuilderConfig(name=&amp;quot;cargo2-runtests&amp;quot;,
++      workernames=[&amp;quot;rust-worker&amp;quot;],
++      factory=f[&#39;cargo&#39;],
++      builddir=&#39;builds/cargo2&#39;,
++      workerbuilddir=&#39;builds/cargo2&#39;))
++c[&#39;builders&#39;].append(
++    util.BuilderConfig(name=&amp;quot;cargo3-runtests&amp;quot;,
++      workernames=[&amp;quot;rust-worker&amp;quot;],
++      factory=f[&#39;cargo&#39;],
++      builddir=&#39;builds/cargo3&#39;,
++      workerbuilddir=&#39;builds/cargo3&#39;))
+&lt;/span&gt;
+ ####### STATUS TARGETS
+
+&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -93,8 +106,8 &amp;#64;&amp;#64; c[&#39;status&#39;] = []
+&lt;/span&gt; # the &#39;title&#39; string will appear at the top of this buildbot installation&#39;s
+ # home pages (linked to the &#39;titleURL&#39;).
+
+&lt;span class=&#34;gd&#34;&gt;-c[&#39;title&#39;] = &amp;quot;Pyflakes&amp;quot;
+-c[&#39;titleURL&#39;] = &amp;quot;https://launchpad.net/pyflakes&amp;quot;
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+c[&#39;title&#39;] = &amp;quot;Rusty Stuffy&amp;quot;
++c[&#39;titleURL&#39;] = &amp;quot;https://www.rust-lang.org/en-US/&amp;quot;
+&lt;/span&gt;
+ # the &#39;buildbotURL&#39; string should point to the location where the buildbot&#39;s
+ # internal web server is visible. This typically uses the port number set in
+&lt;/pre&gt;
+&lt;p&gt;And deploy it with this &lt;tt class=&#34;docutils literal&#34;&gt;master.yaml&lt;/tt&gt;:&lt;/p&gt;
+&lt;pre class=&#34;code diff literal-block&#34;&gt;
+&lt;span class=&#34;gh&#34;&gt;diff --git a/blogpost/robust-master.yaml b/blogpost/robust-master.yaml
+index c7479e3..f75b4d6 100644
+&lt;/span&gt;&lt;span class=&#34;gd&#34;&gt;--- a/blogpost/robust-master.yaml
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+++ b/blogpost/robust-master.yaml
+&lt;/span&gt;&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -50,7 +50,7 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;         - name: BUILDBOT_CONFIG_DIR
+           value: config
+         - name: BUILDBOT_CONFIG_URL
+&lt;span class=&#34;gd&#34;&gt;-          value: &#39;https://raw.githubusercontent.com/ElijahCaine/buildbot-on-kubernetes/master/simple/master.cfg&#39;
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+          value: &#39;https://raw.githubusercontent.com/ElijahCaine/buildbot-on-kubernetes/master/robust/master.cfg&#39;
+&lt;/span&gt;         - name: BUILDBOT_WORKER_PORT
+           value: &#39;9989&#39;
+         - name: BUILDBOT_WEB_URL
+&lt;/pre&gt;
+&lt;p&gt;When we look at our setup in Buildbot it looks like this:&lt;/p&gt;
+&lt;img alt=&#34;Buildbot with ample workload.&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/ample-workload.png&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;p&gt;When each build is run it completely wipes away the old git clone and starts from scratch, which is &lt;em&gt;suuuper&lt;/em&gt; wasteful, but exactly what we want here.
+The purpose of this test is to create a heavy workload for our nodes to perform, and with this each build will &lt;em&gt;definitely&lt;/em&gt; be heavy.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;kubectl-autoscale&#34;&gt;
+&lt;h5&gt;kubectl autoscale&lt;/h5&gt;
+&lt;p&gt;Now to start scaling that build.
+In a perfect world we&#39;d get a request, that would start hogging our resources, and K8s would spin up a new worker instance to handle the next build in the queue.
+Based on the output of &lt;tt class=&#34;docutils literal&#34;&gt;kubectl &lt;span class=&#34;pre&#34;&gt;--help&lt;/span&gt;&lt;/tt&gt; it looks like &lt;tt class=&#34;docutils literal&#34;&gt;kubectl autoscale deployment worker&lt;/tt&gt; is the command we want... so let&#39;s do that:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl autoscale deployment worker --max=5 --min=1 --cpu-percent=50
+deployment &amp;quot;worker&amp;quot; autoscaled
+$ kubectl describe hpa
+Name:               worker
+Namespace:          default
+Labels:             &amp;lt;none&amp;gt;
+Annotations:            &amp;lt;none&amp;gt;
+CreationTimestamp:      Fri, 09 Dec 2016 11:13:15 -0800
+Reference:          Deployment/worker
+Target CPU utilization:     50%
+Current CPU utilization:    &amp;lt;unset&amp;gt;
+Min replicas:           1
+Max replicas:           5
+Events:
+  FirstSeen LastSeen    Count   From                SubobjectPath   Type        Reason          Message
+  --------- --------    -----   ----                -------------   --------    ------          -------
+  37s       11s     6   {horizontal-pod-autoscaler }            Warning     FailedGetMetrics    failed to get CPU consumption and request: failed to get pods metrics: the server could not find the requested resource (get services http:heapster:)
+  37s       11s     6   {horizontal-pod-autoscaler }            Warning     FailedComputeReplicas   failed to get CPU utilization: failed to get CPU consumption and request: failed to get pods metrics: the server could not find the requested resource (get services http:heapster:)
+&lt;/pre&gt;
+&lt;p&gt;Hmm... that output looks like things aren&#39;t working.
+Let&#39;s look around the internet and see if we find anything useful.
+I&#39;ll go East, you go West, and we&#39;ll meet back here in 20.&lt;/p&gt;
+&lt;p&gt;Great, what did you find?
+Me?
+Oh I found a bunch of Github issues &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#hpa-gh&#34; id=&#34;id5&#34;&gt;[4]&lt;/a&gt; and Stack Overflow posts &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#hpa-so&#34; id=&#34;id6&#34;&gt;[5]&lt;/a&gt;; lot of people mentioned this Heapster thing.
+The &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/kubernetes/heapster&#34;&gt;Heapster GitHub page&lt;/a&gt; says it does &lt;em&gt;Compute Resource Usage Analysis and Monitoring of Container Clusters&lt;/em&gt;, which sounds like what we want.
+I also found the &lt;a class=&#34;reference external&#34; href=&#34;http://kubernetes.io/docs/user-guide/horizontal-pod-autoscaling/&#34;&gt;K8s Autoscaling&lt;/a&gt; docs that point to a &lt;a class=&#34;reference external&#34; href=&#34;http://kubernetes.io/docs/user-guide/horizontal-pod-autoscaling/&#34;&gt;K8s Autoscaling Tutorial&lt;/a&gt;.
+That sounds super useful and confirms the suspicion that Heapster is useful.
+&lt;strong&gt;TLDR&lt;/strong&gt; things are pointing toward setting up Heapster.&lt;/p&gt;
+&lt;p&gt;As it turns out there is a &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/kubernetes/minikube/blob/master/README.md#add-ons&#34;&gt;Heapster addon for Minikube&lt;/a&gt; &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#heapster-release&#34; id=&#34;id7&#34;&gt;[6]&lt;/a&gt;, so let&#39;s get that setup.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ minikube addons enable heapster
+heapster was successfully enabled
+$ minikube addons open heapster
+Opening kubernetes service kube-system/monitoring-grafana in default browser...
+&lt;/pre&gt;
+&lt;img alt=&#34;Heapster working&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/hello-heapster.png&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;p&gt;Neato!&lt;/p&gt;
+&lt;p&gt;So now we&#39;ve got Heapster running, what&#39;s next?&lt;/p&gt;
+&lt;p&gt;Well the tutorial runs this line:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl run php-apache --image=gcr.io/google_containers/hpa-example --requests=cpu=200m --expose --port=80
+&lt;/pre&gt;
+&lt;p&gt;Which we can appropriate to get some YAML to shove in our &lt;tt class=&#34;docutils literal&#34;&gt;worker.yaml&lt;/tt&gt; to get a good template for our Buildbot worker Deployment.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl run test --image=busybox --requests=cpu=200m -o yaml
+apiVersion: extensions/v1beta1
+...
+spec:
+  ...
+  template:
+    ...
+    spec:
+      containers:
+      - args:
+        ...
+        resources:
+          requests:
+            cpu: 200m
+...
+&lt;/pre&gt;
+&lt;p&gt;So I added that section to &lt;tt class=&#34;docutils literal&#34;&gt;worker.yaml&lt;/tt&gt;...&lt;/p&gt;
+&lt;pre class=&#34;code diff literal-block&#34;&gt;
+&lt;span class=&#34;gh&#34;&gt;diff --git a/blogpost/robust-worker.yaml b/blogpost/robust-worker.yaml
+index e57db12..de52320 100644
+&lt;/span&gt;&lt;span class=&#34;gd&#34;&gt;--- a/blogpost/robust-worker.yaml
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+++ b/blogpost/robust-worker.yaml
+&lt;/span&gt;&lt;span class=&#34;gu&#34;&gt;&amp;#64;&amp;#64; -42,15 +42,18 &amp;#64;&amp;#64; spec:
+&lt;/span&gt;         tier: worker
+     spec:
+       containers:
+&lt;span class=&#34;gd&#34;&gt;-      - image: &amp;quot;buildbot/buildbot-worker:master&amp;quot;
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+      - image: &amp;quot;quay.io/elijahcaine/buildbot-rust-worker:master&amp;quot;
+&lt;/span&gt;         name: worker
+&lt;span class=&#34;gi&#34;&gt;+        resources:
++          requests:
++            cpu: 200m
+&lt;/span&gt;         env:
+         - name: BUILDMASTER
+           value: master
+         - name: BUILDMASTER_PORT
+           value: &#39;9989&#39;
+         - name: WORKERNAME
+&lt;span class=&#34;gd&#34;&gt;-          value: example-worker
+&lt;/span&gt;&lt;span class=&#34;gi&#34;&gt;+          value: rust-worker
+&lt;/span&gt;         - name: WORKERPASS
+           value: pass
+         - name: WORKER_ENVIRONMENT_BLACKLIST
+&lt;/pre&gt;
+&lt;p&gt;... and ran &lt;tt class=&#34;docutils literal&#34;&gt;kubectl replace &lt;span class=&#34;pre&#34;&gt;-f&lt;/span&gt; worker.yaml&lt;/tt&gt;, but did it work?
+Well, if you&#39;re impatient like me you&#39;ll keep refreshing, it won&#39;t look like it&#39;s working, and then you&#39;ll pull your hair out.
+If that happens to you, just wait.
+Wait like... a minute.
+Just get some tea, stare out the window for a second, &lt;em&gt;then&lt;/em&gt; see if it worked or not.&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+$ kubectl get hpa worker
+NAME              REFERENCE                    TARGET    CURRENT   MINPODS   MAXPODS   AGE
+worker            Deployment/worker            50%       0%        1         5         2m
+&lt;/pre&gt;
+&lt;p&gt;There. That looks good. Let&#39;s throw some work at it!&lt;/p&gt;
+&lt;p&gt;A few builds:&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+NAME              REFERENCE                    TARGET    CURRENT   MINPODS   MAXPODS   AGE
+worker            Deployment/worker            50%       536%      1         5         6m
+&lt;/pre&gt;
+&lt;p&gt;Great! Let&#39;s check up on Buildbot:&lt;/p&gt;
+&lt;img alt=&#34;Replication failing.&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/replicas-didnt-work.png&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;p&gt;Ruh-rohe that&#39;s not good...&lt;/p&gt;
+&lt;p&gt;Let&#39;s dig in a bit.&lt;/p&gt;
+&lt;img alt=&#34;Replication failing -- zoom, enhance.&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/failed-build.png&#34; style=&#34;width: 100%;&#34;/&gt;
+&lt;p&gt;That&#39;s not good...&lt;/p&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+[... end of git pull ...]
+75  security_updates_as_of=2016-10-07
+76  using PTY: False
+77  Cloning into &#39;.&#39;...
+78
+79  command interrupted, attempting to kill
+80  process killed by signal 15
+81  program finished with exit code -1
+82  elapsedTime=2.051445
+&lt;/pre&gt;
+&lt;pre class=&#34;code literal-block&#34;&gt;
+[... entirety of &#39;cancelled&#39; logs ...]
+0  no reason
+&lt;/pre&gt;
+&lt;p&gt;Well, it looks like that plan didn&#39;t work.&lt;/p&gt;
+&lt;p&gt;I did a bit more digging and I can say with certainty that the approach I took to scaling the workload did &lt;em&gt;not&lt;/em&gt; work.
+I can&#39;t say &lt;em&gt;why&lt;/em&gt; for sure, and I definitely can&#39;t say how to fix it, but honestly... it&#39;s late.
+I&#39;m tired and right now I&#39;m okay with throwing in the towel for now.
+Maybe we&#39;ll solve this in a &lt;strong&gt;Part 2&lt;/strong&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;debrief&#34;&gt;
+&lt;h4&gt;Debrief&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;First: This blogpost has a repo associated with it: &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/elijahcaine/buildbot-on-kubernetes&#34;&gt;https://github.com/elijahcaine/buildbot-on-kubernetes&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Please check that out, see what it has to offer, and make issues/pull requests.
+Right now it&#39;s just a copy of the configs used in this project and a little bit of documentation.&lt;/p&gt;
+&lt;p&gt;Happy hacking!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I&#39;m terrible at endings so I&#39;m just gonna braindump some stuff here and let you, the beautiful and charming reader, find your own closure from all of this.&lt;/p&gt;
+&lt;div class=&#34;section&#34; id=&#34;failure-its-what-s-on-the-menu&#34;&gt;
+&lt;h5&gt;Failure: its what&#39;s on the menu&lt;/h5&gt;
+&lt;p&gt;That&#39;s right, I didn&#39;t do what I set out to achieve.
+Is that a bad thing?
+&lt;strong&gt;Of course not!&lt;/strong&gt;
+To quote the great Jake the Dog:&lt;/p&gt;
+&lt;a class=&#34;reference external image-reference&#34; href=&#34;https://www.reddit.com/r/QuotesPorn/comments/18a7m2/sucking_at_something_is_the_first_step_jake_the/&#34;&gt;&lt;img alt=&#34;Sucking at something is just the first step to being kinda good at something...&#34; class=&#34;align-center&#34; src=&#34;http://elijahcaine.me/static/buildbot-on-k8s/sucking-quote.jpg&#34;/&gt;&lt;/a&gt;
+&lt;p&gt;Sure we didn&#39;t get the &lt;em&gt;perfect&lt;/em&gt; BuildBot+K8s but we learned a ton and got &lt;em&gt;really&lt;/em&gt; close!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;some-stuff-we-learned&#34;&gt;
+&lt;h5&gt;Some stuff we learned&lt;/h5&gt;
+&lt;p&gt;So what are some things we learned that we should probably write down?
+This is a pretty open question and if you followed along you&#39;ll &lt;em&gt;probably&lt;/em&gt; get a drastically different list than I have.
+Here&#39;s the big things I feel like I&#39;m walking away with:&lt;/p&gt;
+&lt;ul class=&#34;simple&#34;&gt;
+&lt;li&gt;&lt;cite&gt;kubectl &amp;lt;command&amp;gt; --dry-run -o yaml&lt;/cite&gt; is very useful for file-izing your infrastructure.&lt;/li&gt;
+&lt;li&gt;K8s is very well documented &lt;strong&gt;if&lt;/strong&gt; you are a very patient individual.&lt;/li&gt;
+&lt;li&gt;Storage in K8s is still not a perfectly solved problem.&lt;/li&gt;
+&lt;li&gt;K8s applications share private networking.&lt;/li&gt;
+&lt;li&gt;K8s Pods are really just containers.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I&#39;m sure there&#39;s a ton more I&#39;ve internalized and can&#39;t recall.
+I tried to take thorough notes during this entire experience to capture the failures as well as the successes, which is a harder skill than I expected.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;whats-next&#34;&gt;
+&lt;h5&gt;Whats next?&lt;/h5&gt;
+&lt;p&gt;I&#39;m sure I&#39;ll be posting more about K8s going forward.
+It is a very useful tool because of and despite it&#39;s complexities.
+As I use it I&#39;ll post more about it.&lt;/p&gt;
+&lt;p&gt;If you have any feedback on this post feel free to get in contact with me &lt;a class=&#34;reference external&#34; href=&#34;https://twitter.com/pastywhitenoise&#34;&gt;&amp;#64;PastyWhiteNoise&lt;/a&gt; on Twitter, &lt;tt class=&#34;docutils literal&#34;&gt;pop&lt;/tt&gt; on &lt;a class=&#34;reference external&#34; href=&#34;https://webchat.freenode.net/&#34;&gt;irc.freenode.net&lt;/a&gt; &lt;a class=&#34;footnote-reference&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#irc&#34; id=&#34;id8&#34;&gt;[8]&lt;/a&gt;, you can make an issue on &lt;a class=&#34;reference external&#34; href=&#34;https://github.com/elijahcaine/elijahcaine.github.io&#34;&gt;this website&#39;s Github Repository&lt;/a&gt;, and of course I can be reached by Carrier Pigeon..&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section&#34; id=&#34;errata&#34;&gt;
+&lt;h4&gt;Errata&lt;/h4&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;docs-should&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#id1&#34;&gt;[1]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;p class=&#34;first&#34;&gt;My job, at least a big part of it, is writing documentation.
+Docs are a notable part of my identify, and I have a belief in the power of good documentation, but at the end of the day they &lt;strong&gt;are&lt;/strong&gt; just a means to an end.&lt;/p&gt;
+&lt;p&gt;In a perfect world docs wouldn&#39;t &lt;em&gt;need&lt;/em&gt; to exist, so all docs should be enough to get whoever&#39;s readin them to the point where they can do cool shit on their own.
+Just like a great cinematographer is so good you don&#39;t notice the camera in a movie, great docs should be so good you don&#39;t &lt;strong&gt;notice&lt;/strong&gt; how good they are.&lt;/p&gt;
+&lt;p&gt;So that&#39;s why I like &lt;strong&gt;doing&lt;/strong&gt; cool shit over &lt;strong&gt;reading&lt;/strong&gt; about it.&lt;/p&gt;
+&lt;p class=&#34;last&#34;&gt;It&#39;s also fun to play with toys! Even if those toys are software.&lt;/p&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;theory-vs-practice&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#id2&#34;&gt;[2]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;If you read that and thought &amp;quot;You know what they say about theory versus practice!&amp;quot; then &lt;em&gt;yes&lt;/em&gt; -- but you&#39;re getting ahead of me.&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;same-app-note&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#id3&#34;&gt;[3]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;p class=&#34;first&#34;&gt;It wasn&#39;t painfully obvious to me so it&#39;s worth elaborating that for K8s services to communicate with one-another they need to be part of the same &lt;tt class=&#34;docutils literal&#34;&gt;app&lt;/tt&gt;.
+In the example the &lt;tt class=&#34;docutils literal&#34;&gt;postgres&lt;/tt&gt;, &lt;tt class=&#34;docutils literal&#34;&gt;worker&lt;/tt&gt;, and &lt;tt class=&#34;docutils literal&#34;&gt;master&lt;/tt&gt; containers are all part of the same &lt;tt class=&#34;docutils literal&#34;&gt;buildbot&lt;/tt&gt; app.&lt;/p&gt;
+&lt;p class=&#34;last&#34;&gt;It&#39;s not a terribly well documented &lt;strong&gt;key&lt;/strong&gt; piece of information so it seemed worth mentioning.&lt;/p&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;hpa-gh&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#id5&#34;&gt;[4]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;ul class=&#34;first last simple&#34;&gt;
+&lt;li&gt;&lt;a class=&#34;reference external&#34; href=&#34;https://github.com/openshift/origin/issues/6239&#34;&gt;https://github.com/openshift/origin/issues/6239&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;reference external&#34; href=&#34;https://github.com/kubernetes/kubernetes/issues/18652&#34;&gt;https://github.com/kubernetes/kubernetes/issues/18652&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;hpa-so&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#id6&#34;&gt;[5]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;ul class=&#34;first last simple&#34;&gt;
+&lt;li&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://stackoverflow.com/questions/38874145/autoscaling-hpa-failed-to-get-cpu-consumption-cannot-unmarshal-object-into-go&#34;&gt;http://stackoverflow.com/questions/38874145/autoscaling-hpa-failed-to-get-cpu-consumption-cannot-unmarshal-object-into-go&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;reference external&#34; href=&#34;http://stackoverflow.com/questions/37631008/kubernetes-hpa-cannot-get-cpu-consumption&#34;&gt;http://stackoverflow.com/questions/37631008/kubernetes-hpa-cannot-get-cpu-consumption&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;heapster-release&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#id7&#34;&gt;[6]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;div class=&#34;first last line-block&#34;&gt;
+&lt;div class=&#34;line&#34;&gt;Authors Note:&lt;/div&gt;
+&lt;div class=&#34;line&#34;&gt;The heapster addon was added to Minikube &lt;strong&gt;during the writing of this post&lt;/strong&gt;.
+How convenient!&lt;/div&gt;
+&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;accompanying-repo&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#id4&#34;&gt;[7]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;a class=&#34;reference external&#34; href=&#34;https://github.com/ElijahCaine/buildbot-on-kubernetes&#34;&gt;https://github.com/ElijahCaine/buildbot-on-kubernetes&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table class=&#34;docutils footnote&#34; frame=&#34;void&#34; id=&#34;irc&#34; rules=&#34;none&#34;&gt;
+&lt;colgroup&gt;&lt;col class=&#34;label&#34;/&gt;&lt;col /&gt;&lt;/colgroup&gt;
+&lt;tbody valign=&#34;top&#34;&gt;
+&lt;tr&gt;&lt;td class=&#34;label&#34;&gt;&lt;a class=&#34;fn-backref&#34; href=&#34;http://elijahcaine.me/blog/deploying-buildbot-on-kubernetes/index.html/#id8&#34;&gt;[8]&lt;/a&gt;&lt;/td&gt;&lt;td&gt;I usually hang out in the &lt;tt class=&#34;docutils literal&#34;&gt;&lt;span class=&#34;pre&#34;&gt;#osu-lug&lt;/span&gt;&lt;/tt&gt; channel.
+They&#39;re cool people, you should hang out with us!&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Mon, 12 Dec 2016 08:00:00 GMT</pubDate>
+        <guid isPermaLink="false">tag:elijahcaine.me,2016-12-12:/blog/deploying-buildbot-on-kubernetes/index.html</guid>
+    </item>
         
             <item>
         <title>Dollar Shave Club Impressions</title>
@@ -86,7 +1392,7 @@ boxes.&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Fri, 16 Sep 2016 07:00:00 GMT</pubDate>
+        <pubDate>Fri, 16 Sep 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-09-16:/blog/dollar-shave-club-impressions/index.html</guid>
     </item>
         
@@ -95,7 +1401,8 @@ boxes.&lt;/td&gt;&lt;/tr&gt;
         <link>http://elijahcaine.me/blog/lady-wangle/index.html</link>
         <description>&lt;div class=&#34;section&#34; id=&#34;magicrealismbot-story-august-23-2016&#34;&gt;
 &lt;h3&gt;MagicRealismBot Story: August 23, 2016&lt;/h3&gt;
-&lt;p&gt;Prompt&lt;/p&gt;
+&lt;div class=&#34;section&#34; id=&#34;prompt&#34;&gt;
+&lt;h4&gt;Prompt&lt;/h4&gt;
 &lt;blockquote&gt;
 A baroness looks at the Mona Lisa and sees her newborn baby in the
 background. - &lt;a class=&#34;reference external&#34; href=&#34;https://twitter.com/MagicRealismBot/status/768207599468634113&#34;&gt;MagicRealismBot&lt;/a&gt;&lt;/blockquote&gt;
@@ -167,8 +1474,9 @@ prompt&#39;.&lt;/p&gt;
 &lt;p&gt;Anyway, I&#39;m rambling now.  Thank you for reading, it means a lot.  I&#39;ll try to
 do something more -- I don&#39;t know --  &lt;strong&gt;more better&lt;/strong&gt; in the future.&lt;/p&gt;
 &lt;/div&gt;
+&lt;/div&gt;
 </description>
-        <pubDate>Wed, 14 Sep 2016 07:00:00 GMT</pubDate>
+        <pubDate>Wed, 14 Sep 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-09-14:/blog/lady-wangle/index.html</guid>
     </item>
         
@@ -177,11 +1485,11 @@ do something more -- I don&#39;t know --  &lt;strong&gt;more better&lt;/strong&g
         <link>http://elijahcaine.me/blog/paperweight-on-my-shoulders/index.html</link>
         <description>&lt;div class=&#34;section&#34; id=&#34;magicrealismbot-story-august-29-2016&#34;&gt;
 &lt;h3&gt;MagicRealismBot Story: August 29, 2016&lt;/h3&gt;
-&lt;dl class=&#34;docutils&#34;&gt;
-&lt;dt&gt;Prompt&lt;/dt&gt;
-&lt;dd&gt;A paperweight whispers to a mathematician: &amp;quot;I feel so depressed.&amp;quot; -
-&lt;a class=&#34;reference external&#34; href=&#34;https://twitter.com/MagicRealismBot/status/770382059319595008&#34;&gt;MagicRealismBot&lt;/a&gt;&lt;/dd&gt;
-&lt;/dl&gt;
+&lt;div class=&#34;section&#34; id=&#34;prompt&#34;&gt;
+&lt;h4&gt;Prompt&lt;/h4&gt;
+&lt;blockquote&gt;
+A paperweight whispers to a mathematician: &amp;quot;I feel so depressed.&amp;quot; -
+&lt;a class=&#34;reference external&#34; href=&#34;https://twitter.com/MagicRealismBot/status/770382059319595008&#34;&gt;MagicRealismBot&lt;/a&gt;&lt;/blockquote&gt;
 &lt;hr class=&#34;docutils&#34;/&gt;
 &lt;p&gt;Fredrick Gustav was working well into the night as he was known to do in the
 weeks preceding a publication of his work.  When he worked deep into the night
@@ -238,8 +1546,9 @@ house.  Even his paper weight didn&#39;t like him, how could expect his wife and
 children to do the same.  But he got up the next morning and did it all again.
 At least he&#39;d have his office to keep him company.&lt;/p&gt;
 &lt;/div&gt;
+&lt;/div&gt;
 </description>
-        <pubDate>Tue, 30 Aug 2016 07:00:00 GMT</pubDate>
+        <pubDate>Tue, 30 Aug 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-08-30:/blog/paperweight-on-my-shoulders/index.html</guid>
     </item>
         
@@ -398,7 +1707,7 @@ making the best of their situation with positive intentions.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Wed, 24 Aug 2016 07:00:00 GMT</pubDate>
+        <pubDate>Wed, 24 Aug 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-08-24:/blog/self-censorship-and-social-justice/index.html</guid>
     </item>
         
@@ -616,7 +1925,7 @@ I missed something, &lt;a class=&#34;reference external&#34; href=&#34;http://el
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Sun, 21 Aug 2016 07:00:00 GMT</pubDate>
+        <pubDate>Sun, 21 Aug 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-08-21:/blog/conceptual-hurdles-in-programming/index.html</guid>
     </item>
         
@@ -625,11 +1934,11 @@ I missed something, &lt;a class=&#34;reference external&#34; href=&#34;http://el
         <link>http://elijahcaine.me/blog/the-moonstone-discovery/index.html</link>
         <description>&lt;div class=&#34;section&#34; id=&#34;magicrealismbot-story-august-19-2016&#34;&gt;
 &lt;h3&gt;MagicRealismBot Story: August 19, 2016&lt;/h3&gt;
-&lt;dl class=&#34;docutils&#34;&gt;
-&lt;dt&gt;Prompt&lt;/dt&gt;
-&lt;dd&gt;By looking at a fireplace, a medieval sorcerer can turn stone into
-moonstones.  &lt;a class=&#34;reference external&#34; href=&#34;https://twitter.com/MagicRealismBot/status/766606956295356420&#34;&gt;MagicRealismBot&lt;/a&gt;&lt;/dd&gt;
-&lt;/dl&gt;
+&lt;div class=&#34;section&#34; id=&#34;prompt&#34;&gt;
+&lt;h4&gt;Prompt&lt;/h4&gt;
+&lt;blockquote&gt;
+By looking at a fireplace, a medieval sorcerer can turn stone into
+moonstones.  &lt;a class=&#34;reference external&#34; href=&#34;https://twitter.com/MagicRealismBot/status/766606956295356420&#34;&gt;MagicRealismBot&lt;/a&gt;&lt;/blockquote&gt;
 &lt;hr class=&#34;docutils&#34;/&gt;
 &lt;p&gt;Ellyn scrambled to take notes as fast as she could.  She had finally found a
 way to produce &lt;strong&gt;MoonStone&lt;/strong&gt; and it would change &lt;em&gt;everything&lt;/em&gt;!  With
@@ -683,8 +1992,9 @@ revoking his mentor ship?  Her years of study would be for naut.&lt;/p&gt;
 &lt;p&gt;Ellyn had always been prone to worry. She took a deep breath and with nothing
 else to do, she sat in wait.&lt;/p&gt;
 &lt;/div&gt;
+&lt;/div&gt;
 </description>
-        <pubDate>Fri, 19 Aug 2016 07:00:00 GMT</pubDate>
+        <pubDate>Fri, 19 Aug 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-08-19:/blog/the-moonstone-discovery/index.html</guid>
     </item>
         
@@ -748,7 +2058,7 @@ fetch                reflog               worktree
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Wed, 27 Jul 2016 07:00:00 GMT</pubDate>
+        <pubDate>Wed, 27 Jul 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-07-27:/blog/git-does-a-lot-of-things/index.html</guid>
     </item>
         
@@ -762,6 +2072,7 @@ fetch                reflog               worktree
 &lt;blockquote&gt;
 A ghoul and an archbishop are fighting over custody of their children.
 &lt;a class=&#34;reference external&#34; href=&#34;https://twitter.com/MagicRealismBot/status/749301833881915392&#34;&gt;MagicRealismBot&lt;/a&gt;&lt;/blockquote&gt;
+&lt;hr class=&#34;docutils&#34;/&gt;
 &lt;p&gt;Just like every Friday night, Debra picked up her two daughters from her
 ex-wife&#39;s house in Evanston and drove them downtown for the weekend.  As she
 drove away in her red 2008 Corolla with them she got a text message from her
@@ -822,7 +2133,7 @@ tomorrow afternoon.&amp;quot;&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Sat, 02 Jul 2016 07:00:00 GMT</pubDate>
+        <pubDate>Sat, 02 Jul 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-07-02:/blog/debra-the-ghoul/index.html</guid>
     </item>
         
@@ -831,11 +2142,11 @@ tomorrow afternoon.&amp;quot;&lt;/p&gt;
         <link>http://elijahcaine.me/blog/emperor-stan-of-stantinople/index.html</link>
         <description>&lt;div class=&#34;section&#34; id=&#34;magicrealismbot-story-august-19-2016&#34;&gt;
 &lt;h3&gt;MagicRealismBot Story: August 19, 2016&lt;/h3&gt;
-&lt;dl class=&#34;docutils&#34;&gt;
-&lt;dt&gt;Prompt&lt;/dt&gt;
-&lt;dd&gt;An emperor owns a steam-powered device which allows him to destroy the
-past.  &lt;a class=&#34;reference external&#34; href=&#34;https://twitter.com/MagicRealismBot/status/749120629308203009&#34;&gt;MagicRealismBot&lt;/a&gt;&lt;/dd&gt;
-&lt;/dl&gt;
+&lt;div class=&#34;section&#34; id=&#34;prompt&#34;&gt;
+&lt;h4&gt;Prompt&lt;/h4&gt;
+&lt;blockquote&gt;
+An emperor owns a steam-powered device which allows him to destroy the
+past.  &lt;a class=&#34;reference external&#34; href=&#34;https://twitter.com/MagicRealismBot/status/749120629308203009&#34;&gt;MagicRealismBot&lt;/a&gt;&lt;/blockquote&gt;
 &lt;hr class=&#34;docutils&#34;/&gt;
 &lt;p&gt;Emperor Stan of Stantinople, the most prosperous 1500 square feet in all of
 &lt;strong&gt;Oak Burch Sunrise Shire&lt;/strong&gt; &lt;em&gt;Suburban [Gated] Community&lt;/em&gt;, ruled with an &lt;em&gt;iron
@@ -907,8 +2218,9 @@ something for it on ebay.&amp;quot;&lt;/p&gt;
 it.&lt;/p&gt;
 &lt;p&gt;&amp;quot;Not bad.&amp;quot; He said when the bidding ended. &amp;quot;Not bad indeed.&amp;quot; and smiled.&lt;/p&gt;
 &lt;/div&gt;
+&lt;/div&gt;
 </description>
-        <pubDate>Fri, 01 Jul 2016 07:00:00 GMT</pubDate>
+        <pubDate>Fri, 01 Jul 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-07-01:/blog/emperor-stan-of-stantinople/index.html</guid>
     </item>
         
@@ -959,7 +2271,7 @@ a neat idea, but is looking forward to the end of this month.  He would
 never tell her that though.  He loves her too much.&lt;/p&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Fri, 17 Jun 2016 07:00:00 GMT</pubDate>
+        <pubDate>Fri, 17 Jun 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-06-17:/blog/the-try-new-things-couple/index.html</guid>
     </item>
         
@@ -1011,7 +2323,7 @@ interested in that sort of thing...&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Thu, 16 Jun 2016 07:00:00 GMT</pubDate>
+        <pubDate>Thu, 16 Jun 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-06-16:/blog/working-remote-five-points-coffee-roaster/index.html</guid>
     </item>
         
@@ -1154,7 +2466,7 @@ questions like&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Thu, 16 Jun 2016 07:00:00 GMT</pubDate>
+        <pubDate>Thu, 16 Jun 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-06-16:/blog/working-remote-the-fresh-pot/index.html</guid>
     </item>
         
@@ -1281,7 +2593,7 @@ Python?&lt;/a&gt;.&lt;/li&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Sun, 03 Apr 2016 07:00:00 GMT</pubDate>
+        <pubDate>Sun, 03 Apr 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-04-03:/blog/python-exceptions/index.html</guid>
     </item>
         
@@ -1363,7 +2675,7 @@ check out this &lt;a class=&#34;reference external&#34; href=&#34;http://stackov
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Fri, 25 Mar 2016 07:00:00 GMT</pubDate>
+        <pubDate>Fri, 25 Mar 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-03-25:/blog/how-to-develop-a-site-for-the-web/index.html</guid>
     </item>
         
@@ -1416,7 +2728,7 @@ Food for thought [citation needed].&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Sat, 05 Mar 2016 07:00:00 GMT</pubDate>
+        <pubDate>Sat, 05 Mar 2016 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2016-03-05:/blog/running-firefox-in-docker/index.html</guid>
     </item>
         
@@ -1430,7 +2742,7 @@ Food for thought [citation needed].&lt;/p&gt;
 &lt;/div&gt;
 &lt;/span&gt;&lt;/div&gt;
 </description>
-        <pubDate>Thu, 22 Oct 2015 07:00:00 GMT</pubDate>
+        <pubDate>Thu, 22 Oct 2015 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2015-10-22:/blog/induction/index.html</guid>
     </item>
         
@@ -1513,7 +2825,7 @@ the CAT. They throw a hellofan event.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Mon, 12 Oct 2015 07:00:00 GMT</pubDate>
+        <pubDate>Mon, 12 Oct 2015 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2015-10-12:/blog/cat-barcamp-2015/index.html</guid>
     </item>
         
@@ -1597,7 +2909,7 @@ excuse to write a blog, post now would it Ms. Smarty Pantz.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Wed, 07 Oct 2015 07:00:00 GMT</pubDate>
+        <pubDate>Wed, 07 Oct 2015 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2015-10-07:/blog/covertly-installing-packages-with-docker/index.html</guid>
     </item>
         
@@ -1665,7 +2977,7 @@ it could even be a startup...&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Tue, 29 Sep 2015 07:00:00 GMT</pubDate>
+        <pubDate>Tue, 29 Sep 2015 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2015-09-29:/blog/how-to-possibly-kinda-sorta-write-a-travelblog/index.html</guid>
     </item>
         
@@ -1694,7 +3006,7 @@ travel travel. Travel travel travel travel travel travel travel travel travel.&l
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Thu, 03 Sep 2015 07:00:00 GMT</pubDate>
+        <pubDate>Thu, 03 Sep 2015 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2015-09-03:/blog/travel-travel-travel/index.html</guid>
     </item>
         
@@ -1733,7 +3045,7 @@ capture it better.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Wed, 02 Sep 2015 07:00:00 GMT</pubDate>
+        <pubDate>Wed, 02 Sep 2015 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2015-09-02:/blog/a-personal-day-in-prague/index.html</guid>
     </item>
         
@@ -1799,7 +3111,7 @@ Network&lt;/a&gt; writer, both very interesting people.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Tue, 01 Sep 2015 07:00:00 GMT</pubDate>
+        <pubDate>Tue, 01 Sep 2015 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2015-09-01:/blog/write-the-docs-day-2/index.html</guid>
     </item>
         
@@ -1848,7 +3160,7 @@ Pub. Many conversations and laughs were had. I like this crowd.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Mon, 31 Aug 2015 07:00:00 GMT</pubDate>
+        <pubDate>Mon, 31 Aug 2015 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2015-08-31:/blog/write-the-docs-day-1/index.html</guid>
     </item>
         
@@ -1890,52 +3202,8 @@ conference. There was food and fabulous people.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Sun, 30 Aug 2015 07:00:00 GMT</pubDate>
+        <pubDate>Sun, 30 Aug 2015 08:00:00 GMT</pubDate>
         <guid isPermaLink="false">tag:elijahcaine.me,2015-08-30:/blog/wtd-city-tour-of-prague/index.html</guid>
-    </item>
-        
-            <item>
-        <title>To Prague!</title>
-        <link>http://elijahcaine.me/blog/to-prague/index.html</link>
-        <description>&lt;div class=&#34;section&#34; id=&#34;saturday-2015-08-29&#34;&gt;
-&lt;h3&gt;Saturday 2015-08-29&lt;/h3&gt;
-&lt;div class=&#34;section&#34; id=&#34;i-strongly-dislike-travel&#34;&gt;
-&lt;h4&gt;I Strongly Dislike Travel&lt;/h4&gt;
-&lt;p&gt;I would say I hate travel, but that level of hyperbole is literally the worst
-thing on the planet...&lt;/p&gt;
-&lt;p&gt;My strong dislike for travel comes mostly from my personal inability to trust
-the systems that will get me to where I am going. If I have a flight in one
-week and I have to take a bus or train to the airport, I will spend the entire
-week running through my head &amp;quot;When is my flight? Umm days, yeesh hours, and ack
-minutes. How am I getting there? The oh God bus leaving at some time, somewhere
-bound.  Once you get there you will go through security which will take between
-5 minutes and 2 hours. Budget your time appropriately.  Any of these systems
-can fail and based on experience they have&amp;quot; over and over and over. The stress
-is compounded when people don&#39;t always speak your language and you forgot to
-eat a proper meal the morning of.&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;That&lt;/em&gt; is why I am 3 hours early to my flight from Amsterdam to Prague. I
-regret nothing.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section&#34; id=&#34;currency-is-weird&#34;&gt;
-&lt;h4&gt;Currency is Weird&lt;/h4&gt;
-&lt;div class=&#34;figure align-center&#34;&gt;
-&lt;img alt=&#34;http://i.imgur.com/ggDSMW9.jpg&#34; src=&#34;http://i.imgur.com/ggDSMW9.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
-&lt;/div&gt;
-&lt;p&gt;It is going to take me forever to remember &lt;em&gt;25 here monies is about 1 home
-monies&lt;/em&gt;. Everything is gonna feel really expensive I bet...&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section&#34; id=&#34;i-made-it-to-prague&#34;&gt;
-&lt;h4&gt;I Made it to Prague&lt;/h4&gt;
-&lt;p&gt;I made it to Prague just fine. They have a cool train system.&lt;/p&gt;
-&lt;div class=&#34;figure align-center&#34;&gt;
-&lt;img alt=&#34;http://i.imgur.com/zC5TbMQ.jpg&#34; src=&#34;http://i.imgur.com/zC5TbMQ.jpg&#34; style=&#34;width: 100%;&#34;/&gt;
-&lt;/div&gt;
-&lt;p&gt;Way cooler than the underground train systems I&#39;m used to...&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Sat, 29 Aug 2015 07:00:00 GMT</pubDate>
-        <guid isPermaLink="false">tag:elijahcaine.me,2015-08-29:/blog/to-prague/index.html</guid>
     </item>
         </channel>
 </rss>
