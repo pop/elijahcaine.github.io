@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+  <title>How to develop a site for the web</title>
+
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta name="generator" content="Pelican" />
+  <link href="/" rel="canonical" />
+
+  <!-- Feed -->
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="elijahcaine.me Full Atom Feed" />
+          <link href="/feeds/tech.atom.xml" type="application/atom+xml" rel="alternate" title="elijahcaine.me Categories Atom Feed" />
+
+  <link href="/theme/css/style.css" type="text/css" rel="stylesheet" />
+
+  <!-- Code highlight color scheme -->
+      <link href="/theme/css/code_blocks/monokai.css" rel="stylesheet">
+
+
+  <!-- Custom fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+
+    <link href="/tech/how-to-develop-a-site-for-the-web" rel="canonical" />
+
+        <meta name="description" content="Testing your website with a web-server is important! Here's how to start testing http://localhost:8000 and stop testing...">
+
+        <meta name="author" content="Elijah Caine">
+
+        <meta name="tags" content="development">
+        <meta name="tags" content="guide">
+        <meta name="tags" content="pro-tip">
+        <meta name="tags" content="technical">
+
+
+
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="elijahcaine.me"/>
+<meta property="og:title" content="How to develop a site for the web"/>
+<meta property="og:description" content="Testing your website with a web-server is important! Here's how to start testing http://localhost:8000 and stop testing..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="/tech/how-to-develop-a-site-for-the-web"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2016-03-25 00:00:00-07:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="/author/elijah-caine">
+<meta property="article:section" content="tech"/>
+<meta property="article:tag" content="development"/>
+<meta property="article:tag" content="guide"/>
+<meta property="article:tag" content="pro-tip"/>
+<meta property="article:tag" content="technical"/>
+<meta property="og:image" content="//assets/images/cover.png">
+
+<!-- Twitter Card -->
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "name": "How to develop a site for the web",
+  "headline": "How to develop a site for the web",
+  "datePublished": "2016-03-25 00:00:00-07:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "Elijah Caine",
+    "url": "/author/elijah-caine"
+  },
+  "image": "//assets/images/cover.png",
+  "url": "/tech/how-to-develop-a-site-for-the-web",
+  "description": "Testing your website with a web-server is important! Here's how to start testing http://localhost:8000 and stop testing..."
+}
+</script>
+</head>
+<!-- TODO : Body class -->
+<body class="home-template">
+
+<nav id="menu">
+  <a class="close-button">Close</a>
+  <div class="nav-wrapper">
+    <p class="nav-label">Menu</p>
+    <ul>
+
+              <li role="presentation"><a href="/pages/awesome-things.html">Awesome things to share</a></li>
+
+    </ul>
+  </div>
+</nav>
+    <!-- Progressbar -->
+    <div class="progress-container">
+        <span class="progress-bar"></span>
+    </div>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header id="post-header" class="has-cover">
+      <div class="inner">
+        <nav id="navigation">
+            <span id="home-button" class="nav-button">
+                <a class="home-button" href="/" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
+            </span>
+          <span id="menu-button" class="nav-button">
+            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
+          </span>
+        </nav>
+        <h1 class="post-title">How to develop a site for the web</h1>
+        <!-- TODO : Proper class for headline -->
+        <span class="post-meta">
+                <a href="/author/elijah-caine">Elijah Caine</a>
+            | <time datetime="Fri 25 March 2016">Fri 25 March 2016</time>
+        </span>
+        <!-- TODO : Modified check -->
+            <div class="post-cover cover" style="background-image: url('//assets/images/cover.png')">
+      </div>
+    </header>
+
+  <section id="wrapper">
+    <a class="hidden-close"></a>
+
+    <!-- Post content -->
+    <main class="content" role="main">
+        <article class="post">
+        <div class="inner">
+            <section class="post-content">
+                <div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This post does not deal with the basics of HTML, CSS, or Javascript, but
+rather a simple and often overlooked part of the web-dev toolchain.</p>
+<p class="last">If you would like help with the basics of HTML, CSS, and Javascript I suggest
+<a class="reference external" href="https://codecademy.com/learn/make-a-website">Codecademy</a>.</p>
+</div>
+<p>Web Development, especially the front-endy stuff, is a great way to understand
+how computers <em>think</em> and can be a wonderful foray into computer programming.
+Anybody that's made a website probably remembers their first time:</p>
+<ol class="arabic simple">
+<li>Open up a text editor.</li>
+<li>Type something like the following in:</li>
+</ol>
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello world!<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>This is so cool!<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</pre></div>
+<ol class="arabic simple" start="3">
+<li><tt class="docutils literal">Save As index.html</tt>.</li>
+<li>Right click and open the file in your browser.</li>
+<li>Marvel at what you've created and hack away at it all night long.</li>
+</ol>
+<p>And there you go! You've got a website made and ready to roll. It's not on a
+server, and you can't tell your friends to go to it from <em>their</em> computer --
+but those are just technicalities. You can still celebrate doing a thing <em>like a
+boss</em>.</p>
+<p>Unfortunately, when you test your website by viewing local files you're missing
+out on a lot of advantages and quirks that you get when you host a website on a
+<em>real server</em> using something like <a class="reference external" href="https://en.wikipedia.org/wiki/Web_server">Apache or Nginx</a>.</p>
+<p>For instance, when you run check your website by clicking through
+<tt class="docutils literal"><span class="pre">file///home/username/project/files.html</span></tt> all of your hyperlinks that should
+point to <tt class="docutils literal"><span class="pre">http://mywebsite.ext/somepage/</span></tt> will take you to <tt class="docutils literal"><span class="pre">file:////somepage</span></tt>
+when they should take you to
+<tt class="docutils literal"><span class="pre">file:///home/username/projects/myawesomesite/somepage/index.html</span></tt>.</p>
+<div class="section" id="run-a-development-server-it-s-easy">
+<h2>Run A Development Server (it's easy!)</h2>
+<div class="section" id="the-short-answer">
+<h3>The Short Answer</h3>
+<p><strong>Use Python!</strong></p>
+<div class="highlight"><pre><span></span>$ python2 -m SimpleHTTPServer
+Serving HTTP on 0.0.0.0 port 8000 ...
+</pre></div>
+</div>
+<div class="section" id="the-longer-answer">
+<h3>The Longer Answer</h3>
+<p>You can run your own local webserver to serve files <em>locally</em>. This gets you
+all of the developmental advantages of running a webserver without having to
+rent or run a server in the cloud. The best part is that it's very easy to run
+a development web server.</p>
+<p>Here's how:</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://python.org/downloads/">Install Python</a></li>
+<li>Navigate to <tt class="docutils literal"><span class="pre">your-awesome-website</span></tt> directory/folder.</li>
+<li>Run <tt class="docutils literal">python <span class="pre">-m</span> SimpleHTTPServer</tt> if you installed <tt class="docutils literal">python2</tt> or run
+<tt class="docutils literal">python <span class="pre">-m</span> http.server</tt> if you installed <tt class="docutils literal">python3</tt>.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">These instructions assume you are doing things in a Unix environment (OSX
+or Linux) thought the commandline. If you are using Windows you should
+check out this <a class="reference external" href="http://stackoverflow.com/questions/17351016/set-up-python-simplehttpserver-on-windows">stack overflow post</a> for Windows-specific help.</p>
+</div>
+<p>Then in your web browser go to the address <tt class="docutils literal"><span class="pre">http://localhost:8000</span></tt> and bam!
+<strong>Your</strong> Website.</p>
+<img alt="'High Five' gif" class="align-center" src="/assets/images/gifs/high-five.gif" style="width: 100%;" />
+</div>
+</div>
+
+            </section>
+
+            <section class="post-info">
+                <div class="post-share">
+                    <a class="twitter" href="https://twitter.com/share?text=How to develop a site for the web&amp;url=/tech/how-to-develop-a-site-for-the-web" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <i class="ic ic-twitter"></i><span class="hidden">Twitter</span>
+                    </a>
+                    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=/tech/how-to-develop-a-site-for-the-web" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <i class="ic ic-facebook"></i><span class="hidden">Facebook</span>
+                    </a>
+                    <a class="googleplus" href="https://plus.google.com/share?url=/tech/how-to-develop-a-site-for-the-web" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <i class="ic ic-googleplus"></i><span class="hidden">Google+</span>
+                    </a>
+                    <div class="clear"></div>
+                </div>
+
+                <aside class="post-tags">
+<a href="/tag/development.html">development</a><a href="/tag/guide.html">guide</a><a href="/tag/pro-tip.html">pro-tip</a><a href="/tag/technical.html">technical</a>                </aside>
+
+                <div class="clear"></div>
+
+
+                </section>
+
+
+                <aside class="post-nav">
+                    <div class="clear"></div>
+                </aside>
+
+            </div>
+        </article>
+    </main>
+      <!-- TODO : Body class -->
+    <div id="body-class" style="display: none;" class=""></div>
+
+    <footer id="footer">
+      <div class="inner">
+        <section class="credits">
+
+
+          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
+          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
+        </section>
+      </div>
+    </footer>
+  </section>
+
+  <script type="text/javascript" src="/theme/js/script.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-48615202-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</body>
+</html>
