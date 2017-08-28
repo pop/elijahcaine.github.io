@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+  <title>Building a cloud platform part 1: My first etcd cluster</title>
+
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta name="generator" content="Pelican" />
+  <link href="/" rel="canonical" />
+
+  <!-- Feed -->
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="elijahcaine.me Full Atom Feed" />
+          <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="elijahcaine.me Full RSS Feed" />
+          <link href="/feeds/tech.atom.xml" type="application/atom+xml" rel="alternate" title="elijahcaine.me Categories Atom Feed" />
+
+  <link href="/theme/css/style.css" type="text/css" rel="stylesheet" />
+
+  <!-- Code highlight color scheme -->
+      <link href="/theme/css/code_blocks/monokai.css" rel="stylesheet">
+
+
+  <!-- Custom fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+
+    <link href="/drafts/tech/cloud-platform-v1-part-1" rel="canonical" />
+
+        <meta name="description" content="Nobody said it would be this hard...">
+
+        <meta name="author" content="Elijah Caine">
+
+        <meta name="tags" content="CoreOS">
+        <meta name="tags" content="kubernetes">
+        <meta name="tags" content="terraform">
+        <meta name="tags" content="cloud">
+        <meta name="tags" content="adventure">
+        <meta name="tags" content="etcd">
+
+
+
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="elijahcaine.me"/>
+<meta property="og:title" content="Building a cloud platform part 1: My first etcd cluster"/>
+<meta property="og:description" content="Nobody said it would be this hard..."/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="/drafts/tech/cloud-platform-v1-part-1"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2017-07-17 00:00:00-07:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="/author/elijah-caine">
+<meta property="article:section" content="tech"/>
+<meta property="article:tag" content="CoreOS"/>
+<meta property="article:tag" content="kubernetes"/>
+<meta property="article:tag" content="terraform"/>
+<meta property="article:tag" content="cloud"/>
+<meta property="article:tag" content="adventure"/>
+<meta property="article:tag" content="etcd"/>
+<meta property="og:image" content="//assets/images/cover.png">
+
+<!-- Twitter Card -->
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "name": "Building a cloud platform part 1: My first etcd cluster",
+  "headline": "Building a cloud platform part 1: My first etcd cluster",
+  "datePublished": "2017-07-17 00:00:00-07:00",
+  "dateModified": "",
+  "author": {
+    "@type": "Person",
+    "name": "Elijah Caine",
+    "url": "/author/elijah-caine"
+  },
+  "image": "//assets/images/cover.png",
+  "url": "/drafts/tech/cloud-platform-v1-part-1",
+  "description": "Nobody said it would be this hard..."
+}
+</script>
+</head>
+<!-- TODO : Body class -->
+<body class="home-template">
+
+<nav id="menu">
+  <a class="close-button">Close</a>
+  <div class="nav-wrapper">
+    <p class="nav-label">Menu</p>
+    <ul>
+
+              <li role="presentation"><a href="/about/">About</a></li>
+              <li role="presentation"><a href="/awesome-things/">Awesome things to share</a></li>
+              <li role="presentation"><a href="/contact/">Contact</a></li>
+              <li role="presentation"><a href="/portfolio/">Portfolio</a></li>
+
+    </ul>
+  </div>
+</nav>
+    <!-- Progressbar -->
+    <div class="progress-container">
+        <span class="progress-bar"></span>
+    </div>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header id="post-header" class="has-cover">
+      <div class="inner">
+        <nav id="navigation">
+            <span id="home-button" class="nav-button">
+                <a class="home-button" href="/" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
+            </span>
+          <span id="menu-button" class="nav-button">
+            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
+          </span>
+        </nav>
+        <h1 class="post-title">Building a cloud platform part 1: My first etcd cluster</h1>
+        <!-- TODO : Proper class for headline -->
+        <span class="post-meta">
+                <a href="/author/elijah-caine">Elijah Caine</a>
+            | <time datetime="Mon 17 July 2017">Mon 17 July 2017</time>
+        </span>
+        <!-- TODO : Modified check -->
+            <div class="post-cover cover" style="background-image: url('//assets/images/cover.png')">
+      </div>
+    </header>
+
+  <section id="wrapper">
+    <a class="hidden-close"></a>
+
+    <!-- Post content -->
+    <main class="content" role="main">
+        <article class="post">
+        <div class="inner">
+            <section class="post-content">
+                <dl class="docutils">
+<dt>Resources:</dt>
+<dd><a class="reference external" href="https://github.com/coreos/etcd/blob/master/hack/tls-setup/Procfile">https://github.com/coreos/etcd/blob/master/hack/tls-setup/Procfile</a>
+<a class="reference external" href="https://coreos.com/etcd/docs/latest/op-guide/configuration.html">https://coreos.com/etcd/docs/latest/op-guide/configuration.html</a>
+<a class="reference external" href="https://github.com/coreos/coreos-vagrant/">https://github.com/coreos/coreos-vagrant/</a></dd>
+</dl>
+<p>No preambles, just tech and gifs.</p>
+<a class="reference external image-reference" href="https://giphy.com/gifs/start-Axqr1hNEmGJiw"><img alt="Press Start to ops" src="/assets/images/cloud-platform/start.gif" /></a>
+<p>Anywhozle, the fist step to deploying a Kubernetes cluster is to deploy an etcd cluster, <a class="citation-reference" href="#obvs" id="id1">[obvs]</a>, so let's do that.</p>
+<!-- code from deploying the http:// node. -->
+<p>Cool. That wasn't so bad.
+Now let's make it <strong>secure</strong>.</p>
+<p>I was originally going to hack together some Terraform local shell execution to get local certs generated and deployed, but then I found the <a class="reference internal" href="#terraform-tls-provider">Terraform TLS provider</a>.
+I was hoping for a LetsEncrypt provider, but having already gotten ankle deep down the &quot;shell script execution in Terraform&quot; rabbit hole, I took what I could get.</p>
+<p>As much as I would like to show you <em>alllllll</em> of the intermittent failures I went through, including a lot of &quot;wait how do certs work?&quot; I'm going to skip ahead to the one that feels like the most reasonable to share as I am probably not the only person who got their dick caught in this fuck machine.</p>
+<p>The Terraform file:</p>
+<pre class="code terraform literal-block">
+<span class="kr">resource</span> <span class="s">&quot;tls_private_key&quot; &quot;root&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  algorithm</span>   <span class="o">=</span> <span class="s2">&quot;ECDSA&quot;</span>
+<span class="na">  ecdsa_curve</span> <span class="o">=</span> <span class="s2">&quot;P521&quot;</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;tls_self_signed_cert&quot; &quot;root&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  key_algorithm</span>   <span class="o">=</span> <span class="s2">&quot;ECDSA&quot;</span>
+<span class="na">  private_key_pem</span> <span class="o">=</span> <span class="s2">&quot;${tls_private_key.root.private_key_pem}&quot;</span>
+
+<span class="na">  validity_period_hours</span> <span class="o">=</span> <span class="m">26280</span>
+<span class="na">  early_renewal_hours</span>   <span class="o">=</span> <span class="m">8760</span>
+
+<span class="na">  is_ca_certificate</span> <span class="o">=</span> <span class="kt">true</span>
+
+<span class="na">  allowed_uses</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cert_signing&quot;, &quot;key_encipherment&quot;, &quot;server_auth&quot;, &quot;client_auth&quot;</span><span class="p">]</span>
+
+  <span class="err">subject</span> <span class="-Punctuation">{</span>
+<span class="na">    common_name</span> <span class="o">=</span> <span class="s2">&quot;Autogenerated Cert&quot;</span>
+  <span class="-Punctuation">}</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;tls_private_key&quot; &quot;etcd&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  algorithm</span>   <span class="o">=</span> <span class="s2">&quot;ECDSA&quot;</span>
+<span class="na">  ecdsa_curve</span> <span class="o">=</span> <span class="s2">&quot;P521&quot;</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;tls_cert_request&quot; &quot;etcd&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  key_algorithm</span>   <span class="o">=</span> <span class="s2">&quot;${tls_private_key.etcd.algorithm}&quot;</span>
+<span class="na">  private_key_pem</span> <span class="o">=</span> <span class="s2">&quot;${tls_private_key.etcd.private_key_pem}&quot;</span>
+
+  <span class="err">subject</span> <span class="-Punctuation">{</span>
+<span class="na">    common_name</span> <span class="o">=</span> <span class="s2">&quot;${var.etcd_dns}&quot;</span>
+  <span class="-Punctuation">}</span>
+
+<span class="na">  dns_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;${var.etcd_dns}&quot;, &quot;localhost&quot;</span><span class="p">]</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;tls_locally_signed_cert&quot; &quot;etcd&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  cert_request_pem</span> <span class="o">=</span> <span class="s2">&quot;${tls_cert_request.etcd.cert_request_pem}&quot;</span>
+
+<span class="na">  ca_key_algorithm</span>   <span class="o">=</span> <span class="s2">&quot;${tls_private_key.root.algorithm}&quot;</span>
+<span class="na">  ca_private_key_pem</span> <span class="o">=</span> <span class="s2">&quot;${tls_private_key.root.private_key_pem}&quot;</span>
+<span class="na">  ca_cert_pem</span>        <span class="o">=</span> <span class="s2">&quot;${tls_self_signed_cert.root.cert_pem}&quot;</span>
+<span class="na">  validity_period_hours</span> <span class="o">=</span> <span class="m">17520</span>
+<span class="na">  early_renewal_hours</span>   <span class="o">=</span> <span class="m">8760</span>
+
+<span class="na">  allowed_uses</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;server_auth&quot;, &quot;client_auth&quot;</span><span class="p">]</span>
+<span class="-Punctuation">}</span>
+
+<span class="err">data</span> <span class="s2">&quot;template_file&quot; &quot;config&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  template</span> <span class="o">=</span> <span class="s2">&quot;${file(&quot;config.tpl&quot;)}&quot;</span>
+
+  <span class="err">vars</span> <span class="-Punctuation">{</span>
+<span class="na">    ca_pem_path</span>   <span class="o">=</span> <span class="s2">&quot;/var/lib/etcd/certs/ca.pem&quot;</span>
+<span class="na">    ca_pem</span>        <span class="o">=</span> <span class="s2">&quot;${jsonencode(tls_self_signed_cert.root.cert_pem)}&quot;</span>
+
+<span class="na">    etcd_key_path</span> <span class="o">=</span> <span class="s2">&quot;/var/lib/etcd/certs/etcd.key&quot;</span>
+<span class="na">    etcd_key</span>      <span class="o">=</span> <span class="s2">&quot;${jsonencode(tls_private_key.etcd.private_key_pem)}&quot;</span>
+
+<span class="na">    etcd_pem_path</span> <span class="o">=</span> <span class="s2">&quot;/var/lib/etcd/certs/etcd.pem&quot;</span>
+<span class="na">    etcd_pem</span>      <span class="o">=</span> <span class="s2">&quot;${jsonencode(tls_locally_signed_cert.etcd.cert_pem)}&quot;</span>
+  <span class="-Punctuation">}</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;local_file&quot; &quot;config&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  content</span>  <span class="o">=</span> <span class="s2">&quot;${data.template_file.config.rendered}&quot;</span>
+<span class="na">  filename</span> <span class="o">=</span> <span class="s2">&quot;config.yaml&quot;</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;local_file&quot; &quot;ca&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  content</span>  <span class="o">=</span> <span class="s2">&quot;${tls_self_signed_cert.root.cert_pem}&quot;</span>
+<span class="na">  filename</span> <span class="o">=</span> <span class="s2">&quot;ca.pem&quot;</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;local_file&quot; &quot;key&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  content</span>  <span class="o">=</span> <span class="s2">&quot;${tls_locally_signed_cert.etcd.cert_pem}&quot;</span>
+<span class="na">  filename</span> <span class="o">=</span> <span class="s2">&quot;etcd.pem&quot;</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;local_file&quot; &quot;pem&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  content</span>  <span class="o">=</span> <span class="s2">&quot;${tls_private_key.etcd.private_key_pem}&quot;</span>
+<span class="na">  filename</span> <span class="o">=</span> <span class="s2">&quot;etcd.key&quot;</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;null_resource&quot; &quot;ct_render&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  depends_on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;local_file.config&quot;</span><span class="p">]</span>
+  <span class="kr">provisioner</span> <span class="s">&quot;local-exec&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">    command</span> <span class="o">=</span><span class="na"> &quot;ct --platform</span><span class="o">=</span><span class="err">digitalocean</span> <span class="err">&lt;</span> <span class="err">config</span><span class="p">.</span><span class="err">yaml</span> <span class="err">&gt;</span> <span class="err">config</span><span class="p">.</span><span class="err">json&quot;</span>
+  <span class="-Punctuation">}</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">provider</span> <span class="s">&quot;digitalocean&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  token</span> <span class="o">=</span> <span class="s2">&quot;${var.do_token}&quot;</span>
+<span class="-Punctuation">}</span>
+
+
+<span class="kr">resource</span> <span class="s">&quot;digitalocean_droplet&quot; &quot;etcd&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  depends_on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;null_resource.ct_render&quot;</span><span class="p">]</span>
+
+<span class="na">  ssh_keys</span>           <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;${var.do_ssh_key}&quot;</span><span class="p">]</span>
+<span class="na">  image</span>              <span class="o">=</span> <span class="s2">&quot;${var.do_image}&quot;</span>
+<span class="na">  region</span>             <span class="o">=</span> <span class="s2">&quot;${var.do_region}&quot;</span>
+<span class="na">  size</span>               <span class="o">=</span> <span class="s2">&quot;${var.do_size}&quot;</span>
+<span class="na">  private_networking</span> <span class="o">=</span> <span class="s2">&quot;${var.do_networking_private}&quot;</span>
+<span class="na">  backups</span>            <span class="o">=</span> <span class="s2">&quot;${var.do_backups}&quot;</span>
+<span class="na">  ipv6</span>               <span class="o">=</span> <span class="s2">&quot;${var.do_ipv6}&quot;</span>
+<span class="na">  name</span>               <span class="o">=</span> <span class="s2">&quot;${var.do_name}&quot;</span>
+<span class="na">  user_data</span>          <span class="o">=</span> <span class="s2">&quot;${file(&quot;config.json&quot;)}&quot;</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;digitalocean_domain&quot; &quot;etcd&quot;</span>  <span class="-Punctuation">{</span>
+<span class="na">  name</span>       <span class="o">=</span> <span class="s2">&quot;${var.etcd_dns}&quot;</span>
+<span class="na">  ip_address</span> <span class="o">=</span> <span class="s2">&quot;${digitalocean_droplet.etcd.ipv4_address}&quot;</span>
+<span class="-Punctuation">}</span>
+
+<span class="kr">resource</span> <span class="s">&quot;digitalocean_record&quot; &quot;etcd_dns&quot;</span> <span class="-Punctuation">{</span>
+<span class="na">  domain</span> <span class="o">=</span> <span class="s2">&quot;elijahcaine.me&quot;</span>
+<span class="na">  type</span>   <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+<span class="na">  name</span>   <span class="o">=</span> <span class="s2">&quot;${var.etcd_name}&quot;</span>
+<span class="na">  value</span>  <span class="o">=</span> <span class="s2">&quot;${digitalocean_droplet.etcd.ipv4_address}&quot;</span>
+<span class="na">  ttl</span>    <span class="o">=</span> <span class="s2">&quot;60&quot;</span>
+<span class="-Punctuation">}</span>
+</pre>
+<p>The Container Linux Config:</p>
+<pre class="code yaml literal-block">
+<span class="l-Scalar-Plain">etcd</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span>                     <span class="s">&quot;3.2.4&quot;</span>
+  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span>                        <span class="s">&quot;{HOSTNAME}&quot;</span>
+  <span class="l-Scalar-Plain">advertise_client_urls</span><span class="p-Indicator">:</span>       <span class="s">&quot;https://{PUBLIC_IPV4}:2379&quot;</span>
+  <span class="l-Scalar-Plain">listen_client_urls</span><span class="p-Indicator">:</span>          <span class="s">&quot;https://{PUBLIC_IPV4}:2379&quot;</span>
+  <span class="l-Scalar-Plain">initial_advertise_peer_urls</span><span class="p-Indicator">:</span> <span class="s">&quot;https://{PRIVATE_IPV4}:2380&quot;</span>
+  <span class="l-Scalar-Plain">listen_peer_urls</span><span class="p-Indicator">:</span>            <span class="s">&quot;https://{PRIVATE_IPV4}:2380&quot;</span>
+  <span class="l-Scalar-Plain">initial_cluster</span><span class="p-Indicator">:</span>             <span class="s">&quot;{HOSTNAME}=https://{PRIVATE_IPV4}:2380&quot;</span>
+  <span class="l-Scalar-Plain">trusted_ca_file</span><span class="p-Indicator">:</span>             <span class="s">&quot;${ca_pem_path}&quot;</span>
+  <span class="l-Scalar-Plain">cert_file</span><span class="p-Indicator">:</span>                   <span class="s">&quot;${etcd_pem_path}&quot;</span>
+  <span class="l-Scalar-Plain">key_file</span><span class="p-Indicator">:</span>                    <span class="s">&quot;${etcd_key_path}&quot;</span>
+  <span class="l-Scalar-Plain">peer_trusted_ca_file</span><span class="p-Indicator">:</span>        <span class="s">&quot;${ca_pem_path}&quot;</span>
+  <span class="l-Scalar-Plain">peer_cert_file</span><span class="p-Indicator">:</span>              <span class="s">&quot;${etcd_pem_path}&quot;</span>
+  <span class="l-Scalar-Plain">peer_key_file</span><span class="p-Indicator">:</span>               <span class="s">&quot;${etcd_key_path}&quot;</span>
+  <span class="l-Scalar-Plain">peer_client_cert_auth</span><span class="p-Indicator">:</span>       <span class="l-Scalar-Plain">true</span>
+  <span class="l-Scalar-Plain">client_cert_auth</span><span class="p-Indicator">:</span>            <span class="l-Scalar-Plain">true</span>
+<span class="l-Scalar-Plain">update</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">group</span><span class="p-Indicator">:</span>  <span class="s">&quot;alpha&quot;</span>
+<span class="l-Scalar-Plain">storage</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">files</span><span class="p-Indicator">:</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">filesystem</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root</span>
+    <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">${ca_pem_path}</span>
+    <span class="l-Scalar-Plain">contents</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">inline</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">${ca_pem}</span>
+    <span class="l-Scalar-Plain">mode</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0644</span>
+    <span class="l-Scalar-Plain">user</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">232</span>
+    <span class="l-Scalar-Plain">group</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">filesystem</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root</span>
+    <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">${etcd_pem_path}</span>
+    <span class="l-Scalar-Plain">contents</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">inline</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">${etcd_pem}</span>
+    <span class="l-Scalar-Plain">mode</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0644</span>
+    <span class="l-Scalar-Plain">user</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">232</span>
+    <span class="l-Scalar-Plain">group</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0</span>
+  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">filesystem</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root</span>
+    <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">${etcd_key_path}</span>
+    <span class="l-Scalar-Plain">contents</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">inline</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">${etcd_key}</span>
+    <span class="l-Scalar-Plain">mode</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0600</span>
+    <span class="l-Scalar-Plain">user</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">232</span>
+    <span class="l-Scalar-Plain">group</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0</span>
+</pre>
+<p>The output:</p>
+<pre class="code text literal-block">
+$ etcdctl --ca-file ca.pem --key-file etcd.key --cert-file etcd.pem --endpoints https://$PUBLIC_DNS_NAME:2379 cluster-health
+failed to check the health of member 2d6aa874eef6cb44 on https://$PUBLIC_IPV4:2379: Get https://$PUBLIC_IPV4:2379/health: x509: cannot validate certificate for $PUBLIC_IPV4 because it doesn't contain any IP SANs
+member 2d6aa874eef6cb44 is unreachable: [https://$PUBLIC_IPV4:2379] are all unreachable
+cluster is unhealthy
+</pre>
+<p>Dafauq?</p>
+<p><a class="reference external" href="https://github.com/coreos/etcd/issues/8328">So I made an issue</a></p>
+<p>And discovered this a few hours later:</p>
+<pre class="code text literal-block">
+$ curl --cert etcd.pem --key etcd.key --cacert ca.pem https://$PUBLIC_DNS_NAME:2379/v2/members
+{&quot;members&quot;:[{&quot;id&quot;:&quot;2d6aa874eef6cb44&quot;,&quot;name&quot;:&quot;$HOSTNAME&quot;,&quot;peerURLs&quot;:[&quot;https://$PRIVATE_IPV4:2380&quot;],&quot;clientURLs&quot;:[&quot;https://$PUBLIC_IPV4:2379&quot;]}]}
+</pre>
+<p>Wait, dafauq?
+I thought the cert -- but over there it failed -- wait no. Nooooooo.</p>
+<a class="reference external image-reference" href="https://giphy.com/gifs/YMGFnbPoy1IRy"><img alt="Come on certs, you know you my world." src="/assets/images/cloud-platform/distraught.gif" /></a>
+<p>I realized I might be using a version of etcd which introduced a bug, so I bumped <em>down</em> to <tt class="docutils literal">3.1.6</tt>.
+Same error.</p>
+<p><em>THEN</em> I realized I was using the v2 api in <tt class="docutils literal">etcdctl</tt></p>
+<pre class="code text literal-block">
+$ etcdctl --version
+etcdctl version: 3.0.6
+API version: 2
+</pre>
+<p>And so I tried setting the API to v3 and <em>of course</em> it just fucking worked.</p>
+<pre class="code text literal-block">
+$ ETCDCTL_API=3 etcdctl --cacert ca.pem --key etcd.key --cert etcd.pem --endpoints https://$PUBLIC_DNS_NAME:2379 member list
+a490e764e3257252, started, pipewrench, https://PRIVATE_IPV4:2380, https://PUBLIC_IPV4:2379
+</pre>
+<p>Goddamit.
+There goes a week of my life I'll never get back.</p>
+<div class="section" id="two-nodes-are-better-than-one">
+<h2>Two nodes are better than one</h2>
+</div>
+<div class="section" id="errata">
+<h2>Errata</h2>
+<span class="target" id="terraform-tls-provider"></span><table class="docutils citation" frame="void" id="obvs" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[obvs]</a></td><td>One does not simply &quot;Deploy a Kubernetes cluster&quot;... unless you use Tectonic! #5hi11Lyf3</td></tr>
+</tbody>
+</table>
+</div>
+
+            </section>
+
+            <section class="post-info">
+                <div class="post-share">
+                    <a class="twitter" href="https://twitter.com/share?text=Building a cloud platform part 1: My first etcd cluster&amp;url=/drafts/tech/cloud-platform-v1-part-1" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <i class="ic ic-twitter"></i><span class="hidden">Twitter</span>
+                    </a>
+                    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=/drafts/tech/cloud-platform-v1-part-1" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <i class="ic ic-facebook"></i><span class="hidden">Facebook</span>
+                    </a>
+                    <a class="googleplus" href="https://plus.google.com/share?url=/drafts/tech/cloud-platform-v1-part-1" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <i class="ic ic-googleplus"></i><span class="hidden">Google+</span>
+                    </a>
+                    <div class="clear"></div>
+                </div>
+
+                <aside class="post-tags">
+<a href="/tag/coreos.html">CoreOS</a><a href="/tag/kubernetes.html">kubernetes</a><a href="/tag/terraform.html">terraform</a><a href="/tag/cloud.html">cloud</a><a href="/tag/adventure.html">adventure</a><a href="/tag/etcd.html">etcd</a>                </aside>
+
+                <div class="clear"></div>
+
+
+                </section>
+
+
+                <aside class="post-nav">
+                    <div class="clear"></div>
+                </aside>
+
+            </div>
+        </article>
+    </main>
+      <!-- TODO : Body class -->
+    <div id="body-class" style="display: none;" class=""></div>
+
+    <footer id="footer">
+      <div class="inner">
+        <section class="credits">
+
+
+          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
+          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
+        </section>
+      </div>
+    </footer>
+  </section>
+
+  <script type="text/javascript" src="/theme/js/script.js"></script>
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-48615202-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</body>
+</html>
