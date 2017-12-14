@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>elijahcaine.me - tech</title><link href="/" rel="alternate"></link><link href="/feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2016-12-12T00:00:00-08:00</updated><entry><title>Deploying Buildbot on Kubernetes</title><link href="/tech/buildbot-on-kubernetes" rel="alternate"></link><published>2016-12-12T00:00:00-08:00</published><updated>2016-12-12T00:00:00-08:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-12-12:/tech/buildbot-on-kubernetes</id><summary type="html">&lt;p class="first last"&gt;An adventure where we learn [Kubernetes] by doing [a very straight forward project]; documenting every success, failure, and quip along the way.&lt;/p&gt;
-</summary><content type="html">&lt;div class="section" id="preamble"&gt;
+</summary><content type="html">&lt;hr class="docutils" /&gt;
+&lt;blockquote&gt;
+&lt;strong&gt;TLDR:&lt;/strong&gt; If you just want to see the end-result of this post, the results can be found at this GitHub Repository: &lt;a class="reference external" href="https://github.com/ElijahCaine/buildbot-on-kubernetes"&gt;https://github.com/ElijahCaine/buildbot-on-kubernetes&lt;/a&gt;&lt;/blockquote&gt;
+&lt;div class="section" id="preamble"&gt;
 &lt;h2&gt;Preamble&lt;/h2&gt;
 &lt;p&gt;I'm learning Kubernetes (K8s) for work and decided to try my hand at deploying Buildbot with K8s because we all know the universal law discovered made by Science McSmartyPants in the 1758 which stated: &lt;strong&gt;doing cool shit &amp;gt; reading docs&lt;/strong&gt; &lt;a class="citation-reference" href="#docs-should" id="id1"&gt;[docs-should]&lt;/a&gt;.
 I would describe K8s and Buildbot, but they each already did that:&lt;/p&gt;
@@ -1392,7 +1395,7 @@ Create some block device for the service, mount it to this point, and let your o
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/div&gt;
-</content><category term="CoreOS"></category><category term="kubernetes"></category><category term="buildbot"></category><category term="adventure&#10;&#10;TLDR: If you just want to see the end-result of this post"></category><category term="the results can be found at this GitHub Repository: https://github.com/ElijahCaine/buildbot-on-kubernetes"></category></entry><entry><title>Conceptual hurdles in programming</title><link href="/tech/programming-hurdles" rel="alternate"></link><published>2016-08-21T00:00:00-07:00</published><updated>2016-08-21T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-08-21:/tech/programming-hurdles</id><summary type="html">&lt;p class="first last"&gt;Sage advice for myself in Freshman year.&lt;/p&gt;
+</content><category term="CoreOS"></category><category term="Kubernetes"></category><category term="Buildbot"></category><category term="Adventure"></category></entry><entry><title>Conceptual hurdles in programming</title><link href="/tech/programming-hurdles" rel="alternate"></link><published>2016-08-21T00:00:00-07:00</published><updated>2016-08-21T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-08-21:/tech/programming-hurdles</id><summary type="html">&lt;p class="first last"&gt;Sage advice for myself in Freshman year.&lt;/p&gt;
 </summary><content type="html">&lt;p&gt;I've been actively learning programming for almost five years now. I started
 by taking a C++ class at Portland Community College.  That class was the best
 thing to happen to my engineering career because it taught me that
@@ -1600,7 +1603,7 @@ it's solution.&lt;/p&gt;
 &lt;p&gt;This list is far from complete but it still felt worth sharing.  If you think
 I missed something, &lt;a class="reference external" href="/about/#contact"&gt;contact me&lt;/a&gt; and I might do a follow-up post.&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="programming"></category><category term="reference"></category></entry><entry><title>Git Does a Lot of Things</title><link href="/tech/git-does-a-lot-of-things" rel="alternate"></link><published>2016-07-27T00:00:00-07:00</published><updated>2016-07-27T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-07-27:/tech/git-does-a-lot-of-things</id><summary type="html">&lt;p class="first last"&gt;The title is really an understatement...&lt;/p&gt;
+</content><category term="Programming"></category><category term="Reference"></category></entry><entry><title>Git Does a Lot of Things</title><link href="/tech/git-does-a-lot-of-things" rel="alternate"></link><published>2016-07-27T00:00:00-07:00</published><updated>2016-07-27T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-07-27:/tech/git-does-a-lot-of-things</id><summary type="html">&lt;p class="first last"&gt;The title is really an understatement...&lt;/p&gt;
 </summary><content type="html">&lt;p&gt;I should make a tool that extends &lt;tt class="docutils literal"&gt;git&lt;/tt&gt; to delete all of the files matched
 by the &lt;tt class="docutils literal"&gt;.gitginore&lt;/tt&gt;.  I spend way too much time crafting &lt;tt class="docutils literal"&gt;find &lt;span class="pre"&gt;&amp;lt;...&amp;gt;&lt;/span&gt; |
 xargs rm&lt;/tt&gt; commands.  I know, I'll call it &lt;tt class="docutils literal"&gt;git clean&lt;/tt&gt;.&lt;/p&gt;
@@ -1652,7 +1655,7 @@ fetch                reflog               worktree
 &lt;p class="first admonition-title"&gt;Note&lt;/p&gt;
 &lt;p class="last"&gt;The above output is from &lt;cite&gt;git 2.8.2&lt;/cite&gt;.&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="git"></category><category term="fun fact"></category></entry><entry><title>How to Get the Most out of Your Python Exceptions</title><link href="/tech/python-exceptions" rel="alternate"></link><published>2016-04-03T00:00:00-07:00</published><updated>2016-04-03T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-04-03:/tech/python-exceptions</id><summary type="html">&lt;p class="first last"&gt;One of the most useful features of Python are exceptions-- but how the heck do they work? Let's find out.&lt;/p&gt;
+</content><category term="Git"></category><category term="Fun Facts"></category></entry><entry><title>How to Get the Most out of Your Python Exceptions</title><link href="/tech/python-exceptions" rel="alternate"></link><published>2016-04-03T00:00:00-07:00</published><updated>2016-04-03T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-04-03:/tech/python-exceptions</id><summary type="html">&lt;p class="first last"&gt;One of the most useful features of Python are exceptions-- but how the heck do they work? Let's find out.&lt;/p&gt;
 </summary><content type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;input&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Please enter a number not equal to 0: &amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
     &lt;span class="n"&gt;var&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;float&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -1763,7 +1766,7 @@ Python?&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;And as always, search engines are your friends.&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="technical"></category><category term="pythonic"></category><category term="guide"></category></entry><entry><title>How to develop a site for the web</title><link href="/tech/how-to-develop-a-site-for-the-web" rel="alternate"></link><published>2016-03-25T00:00:00-07:00</published><updated>2016-03-25T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-03-25:/tech/how-to-develop-a-site-for-the-web</id><summary type="html">&lt;p class="first last"&gt;Testing your website with a web-server is important! Here's how to start testing &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;http://localhost:8000&lt;/span&gt;&lt;/tt&gt; and stop testing &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;file:///home/me/projects/website/site.html&lt;/span&gt;&lt;/tt&gt;.&lt;/p&gt;
+</content><category term="Technical"></category><category term="Pythonic"></category><category term="Guide"></category></entry><entry><title>How to develop a site for the web</title><link href="/tech/how-to-develop-a-site-for-the-web" rel="alternate"></link><published>2016-03-25T00:00:00-07:00</published><updated>2016-03-25T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-03-25:/tech/how-to-develop-a-site-for-the-web</id><summary type="html">&lt;p class="first last"&gt;Testing your website with a web-server is important! Here's how to start testing &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;http://localhost:8000&lt;/span&gt;&lt;/tt&gt; and stop testing &lt;tt class="docutils literal"&gt;&lt;span class="pre"&gt;file:///home/me/projects/website/site.html&lt;/span&gt;&lt;/tt&gt;.&lt;/p&gt;
 </summary><content type="html">&lt;div class="admonition note"&gt;
 &lt;p class="first admonition-title"&gt;Note&lt;/p&gt;
 &lt;p&gt;This post does not deal with the basics of HTML, CSS, or Javascript, but
@@ -1831,7 +1834,7 @@ check out this &lt;a class="reference external" href="http://stackoverflow.com/q
 &lt;img alt="'High Five' gif" class="align-center" src="/assets/images/gifs/high-five.gif" style="width: 100%;" /&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-</content><category term="development"></category><category term="guide"></category><category term="pro-tip"></category><category term="technical"></category></entry><entry><title>Running Firefox in Docker</title><link href="/tech/running-firefox-in-docker" rel="alternate"></link><published>2016-03-05T00:00:00-08:00</published><updated>2016-03-05T00:00:00-08:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-03-05:/tech/running-firefox-in-docker</id><summary type="html">&lt;p class="first last"&gt;You got Firefox in my Docker! You got Docker in my Firefox!&lt;/p&gt;
+</content><category term="Development"></category><category term="Guide"></category><category term="Pro-Tip"></category><category term="Technical"></category></entry><entry><title>Running Firefox in Docker</title><link href="/tech/running-firefox-in-docker" rel="alternate"></link><published>2016-03-05T00:00:00-08:00</published><updated>2016-03-05T00:00:00-08:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2016-03-05:/tech/running-firefox-in-docker</id><summary type="html">&lt;p class="first last"&gt;You got Firefox in my Docker! You got Docker in my Firefox!&lt;/p&gt;
 </summary><content type="html">&lt;p&gt;Turns out you can run Firefox in Docker. It's actually pretty easy:&lt;/p&gt;
 &lt;div class="section" id="code"&gt;
 &lt;h2&gt;Code&lt;/h2&gt;
@@ -1874,7 +1877,7 @@ Food for thought [citation needed].&lt;/p&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/div&gt;
-</content><category term="docker"></category><category term="guide"></category></entry><entry><title>Covertly Installing Packages with Docker</title><link href="/tech/covertly-install-packages-with-docker" rel="alternate"></link><published>2015-10-07T00:00:00-07:00</published><updated>2015-10-07T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2015-10-07:/tech/covertly-install-packages-with-docker</id><summary type="html">&lt;p class="first last"&gt;A simple guide on install $PACKAGE with $CONTAINER_RUNTIME.&lt;/p&gt;
+</content><category term="Docker"></category><category term="Guide"></category></entry><entry><title>Covertly Installing Packages with Docker</title><link href="/tech/covertly-install-packages-with-docker" rel="alternate"></link><published>2015-10-07T00:00:00-07:00</published><updated>2015-10-07T00:00:00-07:00</updated><author><name>Elijah Caine</name></author><id>tag:None,2015-10-07:/tech/covertly-install-packages-with-docker</id><summary type="html">&lt;p class="first last"&gt;A simple guide on install $PACKAGE with $CONTAINER_RUNTIME.&lt;/p&gt;
 </summary><content type="html">&lt;p&gt;&lt;a class="reference external" href="#the-deets-dockerfile-and-commands"&gt;Jump to the codey bits&lt;/a&gt;&lt;/p&gt;
 &lt;div class="section" id="the-problem-workstations"&gt;
 &lt;h2&gt;The Problem: Workstations&lt;/h2&gt;
@@ -1944,4 +1947,4 @@ excuse to write a blog, post now would it Ms. Smarty Pantz.&lt;/p&gt;
 &lt;hr class="docutils" /&gt;
 &lt;p&gt;&lt;strong&gt;drink the coolaid. come to the docker side.&lt;/strong&gt;&lt;/p&gt;
 &lt;/div&gt;
-</content><category term="docker"></category><category term="guide"></category></entry></feed>
+</content><category term="Docker"></category><category term="Guide"></category></entry></feed>
