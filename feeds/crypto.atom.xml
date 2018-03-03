@@ -850,7 +850,7 @@ They also provided a good list of further reading which was helpful in addition 
 &lt;/div&gt;
 &lt;div class="section" id="errata"&gt;
 &lt;h2&gt;Errata&lt;/h2&gt;
-&lt;iframe src="garbled-circuits-game.html" height="400px" width="100%"&gt;&lt;/iframe&gt;&lt;div class="admonition note"&gt;
+&lt;iframe src="/garbled-circuits-game.html" height="400px" width="100%"&gt;&lt;/iframe&gt;&lt;div class="admonition note"&gt;
 &lt;p class="first admonition-title"&gt;Note&lt;/p&gt;
 &lt;p class="last"&gt;Yes, the name is a misnomer.
 The goal is to &lt;em&gt;evaluate&lt;/em&gt; a garbled circuit, but that just doesn't roll off the tongue the same.&lt;/p&gt;
